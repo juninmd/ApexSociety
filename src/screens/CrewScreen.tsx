@@ -46,7 +46,13 @@ export default function CrewScreen() {
     );
 }
 
-const MenuItem = ({ icon, title, subtitle }) => (
+interface MenuItemProps {
+    icon: React.ReactNode;
+    title: string;
+    subtitle: string;
+}
+
+const MenuItem = ({ icon, title, subtitle }: MenuItemProps) => (
     <TouchableOpacity style={styles.menuItem}>
         <View style={styles.iconBox}>{icon}</View>
         <View style={styles.menuText}>
@@ -181,6 +187,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto_700Bold',
         fontSize: 14,
         marginBottom: 2,
+    },
+    menuText: {
+        flex: 1,
     },
     menuSubtitle: {
         color: '#888',
