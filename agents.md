@@ -20,9 +20,9 @@ ApexSociety is a social platform for car enthusiasts. It helps users find car me
 - `assets`: Static assets (images, fonts).
 
 ## Development Workflow
-1.  **Install Dependencies**: `npm install`
-2.  **Start Dev Server**: `npx expo start`
-3.  **Lint/Type Check**: `npm run lint` / `npm run type-check`
+1.  **Install Dependencies**: `pnpm install`
+2.  **Start Dev Server**: `pnpm expo start`
+3.  **Lint/Type Check**: `pnpm run lint` / `pnpm run type-check`
 
 ## CI/CD Pipeline
 The project uses GitHub Actions for continuous delivery.
