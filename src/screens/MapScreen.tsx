@@ -2,60 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const DARK_MAP_STYLE = [
-    {
-        "elementType": "geometry",
-        "stylers": [{ "color": "#212121" }]
-    },
-    {
-        "elementType": "labels.icon",
-        "stylers": [{ "visibility": "off" }]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#757575" }]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [{ "color": "#212121" }]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#757575" }]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#757575" }]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry.fill",
-        "stylers": [{ "color": "#2c2c2c" }]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#8a8a8a" }]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#373737" }]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#3c3c3c" }]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#000000" }]
-    }
-];
+import { DARK_MAP_STYLE } from '../constants/mapStyles';
 
 export default function MapScreen() {
     const [region] = useState({
@@ -86,10 +33,7 @@ export default function MapScreen() {
                 />
             </MapView>
 
-            <LinearGradient
-                colors={['transparent', 'rgba(0,0,0,0.8)']}
-                style={styles.overlay}
-            >
+            <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']} style={styles.overlay}>
                 <Text style={styles.timeText}>12:13 AM</Text>
                 <Text style={styles.speedText}>1 KM/H</Text>
 
@@ -165,5 +109,5 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'Roboto_700Bold',
         textAlign: 'right',
-    }
+    },
 });

@@ -2,6 +2,8 @@
   "expo": {
     "name": "ApexSociety",
     "slug": "ApexSociety",
+    "description": "ApexSociety is a social platform for car enthusiasts.",
+    "githubUrl": "https://github.com/apexsociety/apexsociety",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

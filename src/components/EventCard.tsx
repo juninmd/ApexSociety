@@ -12,15 +12,29 @@ interface EventCardProps {
     onPress?: () => void;
 }
 
-export default function EventCard({ title, host, location, time, attendees, isPrivate, onPress }: EventCardProps) {
+export default function EventCard({
+    title,
+    host,
+    location,
+    time,
+    attendees,
+    isPrivate,
+    onPress,
+}: EventCardProps) {
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styles.header}>
                 <Text style={styles.host}>HOSTED BY {host}</Text>
-                {isPrivate && <View style={styles.privateBadge}><Text style={styles.privateText}>PRIVATE</Text></View>}
+                {isPrivate && (
+                    <View style={styles.privateBadge}>
+                        <Text style={styles.privateText}>PRIVATE</Text>
+                    </View>
+                )}
             </View>
 
-            <Text style={styles.title} numberOfLines={1}>{title}</Text>
+            <Text style={styles.title} numberOfLines={1}>
+                {title}
+            </Text>
 
             <View style={styles.infoRow}>
                 <View style={styles.infoItem}>
@@ -118,6 +132,6 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         backgroundColor: '#FFD700',
-        transform: [{ rotate: '45deg' }]
-    }
+        transform: [{ rotate: '45deg' }],
+    },
 });

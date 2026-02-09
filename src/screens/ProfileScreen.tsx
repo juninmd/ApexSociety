@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { RootTabScreenProps } from '../navigation/types';
 
-export default function ProfileScreen({ route }: { route: any }) {
+export default function ProfileScreen({ route }: RootTabScreenProps<'Profile'>) {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{route.name}</Text>
@@ -21,5 +22,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Oswald_700Bold',
         fontSize: 30,
         textTransform: 'uppercase',
-    }
+    },
 });

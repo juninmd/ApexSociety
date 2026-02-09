@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { MapPin, Users, Calendar, Clock, Share2 } from 'lucide-react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { MapPin, Users, Clock } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function EventsScreen() {
@@ -194,5 +194,5 @@ const styles = StyleSheet.create({
         color: '#000',
         fontFamily: 'Oswald_700Bold',
         fontSize: 18,
-    }
+    },
 });

@@ -10,16 +10,24 @@ interface CrewBadgeProps {
 export default function CrewBadge({ name, rank, size = 'medium' }: CrewBadgeProps) {
     const getDimensions = () => {
         switch (size) {
-            case 'small': return { width: 40, height: 40, fontSize: 14 };
-            case 'medium': return { width: 60, height: 60, fontSize: 20 };
-            case 'large': return { width: 100, height: 100, fontSize: 36 };
+            case 'small':
+                return { width: 40, height: 40, fontSize: 14 };
+            case 'medium':
+                return { width: 60, height: 60, fontSize: 20 };
+            case 'large':
+                return { width: 100, height: 100, fontSize: 36 };
         }
     };
 
     const { width, height, fontSize } = getDimensions();
 
     // Extract initials
-    const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    const initials = name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .substring(0, 2)
+        .toUpperCase();
 
     return (
         <View style={styles.container}>
@@ -64,5 +72,5 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontFamily: 'Roboto_700Bold',
         textTransform: 'uppercase',
-    }
+    },
 });

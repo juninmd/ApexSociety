@@ -7,10 +7,11 @@ import { View } from 'react-native';
 import MapScreen from '../screens/MapScreen';
 import CrewScreen from '../screens/CrewScreen';
 import EventsScreen from '../screens/EventsScreen';
-import ProfileScreen from '../screens/ProfileScreen'; // Todo
-import MenuScreen from '../screens/MenuScreen'; // Todo
+import ProfileScreen from '../screens/ProfileScreen';
+import MenuScreen from '../screens/MenuScreen';
+import { RootTabParamList } from './types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export default function AppNavigator() {
     return (
@@ -37,7 +38,7 @@ export default function AppNavigator() {
                 component={MapScreen}
                 options={{
                     tabBarIcon: ({ color }) => <Map color={color} size={24} />,
-                    tabBarLabel: 'CHATS' // Based on mock, seems to be first tab
+                    tabBarLabel: 'CHATS', // Based on mock, seems to be first tab
                 }}
             />
             <Tab.Screen
@@ -45,7 +46,7 @@ export default function AppNavigator() {
                 component={EventsScreen}
                 options={{
                     tabBarIcon: ({ color }) => <Calendar color={color} size={24} />,
-                    tabBarLabel: 'EVENTS'
+                    tabBarLabel: 'EVENTS',
                 }}
             />
             <Tab.Screen
@@ -54,17 +55,23 @@ export default function AppNavigator() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ color }) => (
-                        <View style={{
-                            width: 50,
-                            height: 50,
-                            backgroundColor: '#FFD700',
-                            borderRadius: 25,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            bottom: 10,
-                            transform: [{ rotate: '45deg' }] // Diamond shape
-                        }}>
-                            <Menu color="#000" size={24} style={{ transform: [{ rotate: '-45deg' }] }} />
+                        <View
+                            style={{
+                                width: 50,
+                                height: 50,
+                                backgroundColor: '#FFD700',
+                                borderRadius: 25,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                bottom: 10,
+                                transform: [{ rotate: '45deg' }], // Diamond shape
+                            }}
+                        >
+                            <Menu
+                                color="#000"
+                                size={24}
+                                style={{ transform: [{ rotate: '-45deg' }] }}
+                            />
                         </View>
                     ),
                 }}
@@ -74,15 +81,15 @@ export default function AppNavigator() {
                 component={CrewScreen} // Using CrewScreen here for now from mocks
                 options={{
                     tabBarIcon: ({ color }) => <Users color={color} size={24} />, // Icon for crew
-                    tabBarLabel: 'MOMENTS'
+                    tabBarLabel: 'MOMENTS',
                 }}
             />
             <Tab.Screen
                 name="Profile"
-                component={ProfileScreen || View}
+                component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ color }) => <User color={color} size={24} />,
-                    tabBarLabel: 'PROFILE'
+                    tabBarLabel: 'PROFILE',
                 }}
             />
         </Tab.Navigator>
