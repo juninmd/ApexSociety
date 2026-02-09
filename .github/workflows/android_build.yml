@@ -38,6 +38,11 @@ jobs:
         run: pnpm add -g eas-cli
 
 
+      - name: Create gradle.properties
+        run: |
+          mkdir -p android
+          echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m" > android/gradle.properties
+
       - name: Prebuild (Generate Native Projects)
         run: npx expo prebuild --platform android
 
