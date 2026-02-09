@@ -7,35 +7,35 @@ import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    Oswald_400Regular,
-    Oswald_700Bold,
-    Roboto_400Regular,
-    Roboto_700Bold,
-  });
+    const [fontsLoaded] = useFonts({
+        Oswald_400Regular,
+        Oswald_700Bold,
+        Roboto_400Regular,
+        Roboto_700Bold,
+    });
 
-  if (!fontsLoaded) {
-    return null;
-  }
+    if (!fontsLoaded) {
+        return null;
+    }
 
-  const customTheme = {
-    ...DarkTheme,
-    colors: {
-      ...DarkTheme.colors,
-      background: '#121212',
-      primary: '#FFD700',
-      card: '#1E1E1E',
-      text: '#FFFFFF',
-      border: '#2C2C2C',
-    },
-  };
+    const customTheme = {
+        ...DarkTheme,
+        colors: {
+            ...DarkTheme.colors,
+            background: '#121212',
+            primary: '#FFD700',
+            card: '#1E1E1E',
+            text: '#FFFFFF',
+            border: '#2C2C2C',
+        },
+    };
 
-  return (
-    <SafeAreaProvider>
-      <NavigationContainer theme={customTheme}>
-        <StatusBar style="light" />
-        <AppNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
-  );
+    return (
+        <SafeAreaProvider>
+            <NavigationContainer theme={customTheme}>
+                <StatusBar style="light" />
+                <AppNavigator />
+            </NavigationContainer>
+        </SafeAreaProvider>
+    );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Settings, Users, UserPlus, Handshake } from 'lucide-react-native';
 
 export default function CrewScreen() {
@@ -29,7 +29,7 @@ export default function CrewScreen() {
                         <Text style={styles.bannerSubtitle}>FIR_ST2</Text>
                     </View>
                     <View style={styles.yearBadge}>
-                        <Text style={styles.yearText}>'25</Text>
+                        <Text style={styles.yearText}>&apos;25</Text>
                     </View>
                 </View>
             </View>
@@ -37,10 +37,26 @@ export default function CrewScreen() {
             <Text style={styles.sectionHeader}>MANAGE</Text>
 
             <View style={styles.menuList}>
-                <MenuItem icon={<Settings color="#FFF" />} title="CHANGE SETTINGS" subtitle="Edit crew appearance and settings" />
-                <MenuItem icon={<Users color="#FFF" />} title="CREW MEMBERS" subtitle="Manage invited or current members" />
-                <MenuItem icon={<UserPlus color="#FFF" />} title="INVITE MEMBERS" subtitle="Invite new members" />
-                <MenuItem icon={<Handshake color="#FFF" />} title="EVENT COLLAB INVITES" subtitle="See your invitations to collaborate" />
+                <MenuItem
+                    icon={<Settings color="#FFF" />}
+                    title="CHANGE SETTINGS"
+                    subtitle="Edit crew appearance and settings"
+                />
+                <MenuItem
+                    icon={<Users color="#FFF" />}
+                    title="CREW MEMBERS"
+                    subtitle="Manage invited or current members"
+                />
+                <MenuItem
+                    icon={<UserPlus color="#FFF" />}
+                    title="INVITE MEMBERS"
+                    subtitle="Invite new members"
+                />
+                <MenuItem
+                    icon={<Handshake color="#FFF" />}
+                    title="EVENT COLLAB INVITES"
+                    subtitle="See your invitations to collaborate"
+                />
             </View>
         </ScrollView>
     );
@@ -195,5 +211,5 @@ const styles = StyleSheet.create({
         color: '#888',
         fontFamily: 'Roboto_400Regular',
         fontSize: 12,
-    }
+    },
 });

@@ -20,5 +20,5 @@ const styles = StyleSheet.create({
         color: '#FFD700',
         fontFamily: 'Oswald_700Bold',
         fontSize: 30,
-    }
+    },
 });
