@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/apexsociety/apexsociety.git"
   },
+  "homepage": "https://apexsociety.github.io/apexsociety",
   "keywords": [
     "react-native",
     "expo",
@@ -20,13 +21,16 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "build:web": "expo export -p web",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "@expo-google-fonts/oswald": "^0.4.2",
     "@expo-google-fonts/roboto": "^0.4.2",
+    "@expo/metro-runtime": "~6.1.2",
     "@react-navigation/bottom-tabs": "^7.12.0",
     "@react-navigation/native": "^7.1.28",
     "@react-navigation/native-stack": "^7.12.0",
@@ -38,11 +42,13 @@
     "expo-status-bar": "~3.0.9",
     "lucide-react-native": "^0.563.0",
     "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-maps": "^1.27.1",
     "react-native-safe-area-context": "^5.6.2",
     "react-native-screens": "^4.23.0",
-    "react-native-svg": "^15.15.2"
+    "react-native-svg": "^15.15.2",
+    "react-native-web": "^0.21.2"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
@@ -50,8 +56,19 @@
     "eslint-config-expo": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "private": true
 }
