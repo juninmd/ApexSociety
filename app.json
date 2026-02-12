@@ -6,6 +6,12 @@
     "githubUrl": "https://github.com/apexsociety/apexsociety",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "apexsociety",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -27,6 +33,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     }
   }

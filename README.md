@@ -45,11 +45,22 @@ base64 release.keystore | pbcopy
 - **Development**: Push to `main` branch to trigger a build check.
 - **Production**: Create a tag starting with `v` (e.g., `v1.0.0`) to trigger a Release build (AAB) and GitHub Release.
 
-## 5. Project Structure
+## 5. Web Version
+The application is configured to be deployed as a static web app on GitHub Pages.
+- **Build**: `pnpm build:web`
+- **Deploy**: Automatically triggers on push to `main` branch.
+- **URL**: `https://apexsociety.github.io/apexsociety/`
+
+## 6. Code Quality
+We use Husky and lint-staged to ensure code quality.
+- **Pre-commit**: ESLint and Prettier run automatically on staged files.
+- **Manual Check**: `pnpm lint` / `pnpm type-check`
+
+## 7. Project Structure
 - `src/screens`: Main screens (Map, Crew, Events).
 - `src/components`: Reusable UI components.
 - `src/navigation`: Navigation setup.
 - `assets`: Images and fonts.
 
-## 6. Stitch Integration
+## 8. Stitch Integration
 UI designs were generated using Stitch.
