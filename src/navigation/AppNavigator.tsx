@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Map, Users, Calendar, User, Menu } from 'lucide-react-native';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 // Placeholder screens
 import MapScreen from '../screens/MapScreen';
@@ -18,19 +18,10 @@ export default function AppNavigator() {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-                tabBarStyle: {
-                    backgroundColor: '#000000',
-                    borderTopColor: '#333333',
-                    height: 80,
-                    paddingBottom: 20,
-                    paddingTop: 10,
-                },
+                tabBarStyle: styles.tabBar,
                 tabBarActiveTintColor: '#FFD700',
                 tabBarInactiveTintColor: '#666666',
-                tabBarLabelStyle: {
-                    fontFamily: 'Oswald_400Regular',
-                    fontSize: 12,
-                },
+                tabBarLabelStyle: styles.tabBarLabel,
             }}
         >
             <Tab.Screen
@@ -54,24 +45,9 @@ export default function AppNavigator() {
                 component={MenuScreen}
                 options={{
                     tabBarLabel: '',
-                    tabBarIcon: ({ color }) => (
-                        <View
-                            style={{
-                                width: 50,
-                                height: 50,
-                                backgroundColor: '#FFD700',
-                                borderRadius: 25,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                bottom: 10,
-                                transform: [{ rotate: '45deg' }], // Diamond shape
-                            }}
-                        >
-                            <Menu
-                                color="#000"
-                                size={24}
-                                style={{ transform: [{ rotate: '-45deg' }] }}
-                            />
+                    tabBarIcon: () => (
+                        <View style={styles.menuIconContainer}>
+                            <Menu color="#000" size={24} style={styles.menuIcon} />
                         </View>
                     ),
                 }}
@@ -95,3 +71,30 @@ export default function AppNavigator() {
         </Tab.Navigator>
     );
 }
+
+const styles = StyleSheet.create({
+    tabBar: {
+        backgroundColor: '#000000',
+        borderTopColor: '#333333',
+        height: 80,
+        paddingBottom: 20,
+        paddingTop: 10,
+    },
+    tabBarLabel: {
+        fontFamily: 'Oswald_400Regular',
+        fontSize: 12,
+    },
+    menuIconContainer: {
+        width: 50,
+        height: 50,
+        backgroundColor: '#FFD700',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        bottom: 10,
+        transform: [{ rotate: '45deg' }], // Diamond shape
+    },
+    menuIcon: {
+        transform: [{ rotate: '-45deg' }],
+    },
+});

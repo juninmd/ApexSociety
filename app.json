@@ -34,7 +34,15 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "ApexSociety",
+      "shortName": "ApexSociety",
+      "description": "The ultimate social platform for car enthusiasts.",
+      "startUrl": "/",
+      "scope": "/",
+      "display": "standalone",
+      "themeColor": "#000000",
+      "backgroundColor": "#000000"
     }
   }
 }
