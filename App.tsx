@@ -5,6 +5,7 @@ import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import { theme } from './src/theme';
 
 export default function App() {
     const [fontsLoaded] = useFonts({
@@ -22,11 +23,11 @@ export default function App() {
         ...DarkTheme,
         colors: {
             ...DarkTheme.colors,
-            background: '#121212',
-            primary: '#FFD700',
-            card: '#1E1E1E',
-            text: '#FFFFFF',
-            border: '#2C2C2C',
+            background: theme.colors.background,
+            primary: theme.colors.primary,
+            card: theme.colors.card,
+            text: theme.colors.text,
+            border: theme.colors.border,
         },
     };
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Linking, TouchableOpacity } from 'react-native';
 import { Map } from 'lucide-react-native';
+import { theme } from '../theme';
 
 export default function MapScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <Map size={64} color="#FFD700" style={styles.icon} />
+                <Map size={64} color={theme.colors.primary} style={styles.icon} />
                 <Text style={styles.title}>Map Experience</Text>
                 <Text style={styles.subtitle}>
                     The interactive map is optimized for our mobile app. Download ApexSociety to see
@@ -26,7 +27,7 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000000',
+        backgroundColor: theme.colors.black,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
@@ -39,28 +40,28 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     title: {
-        color: '#FFFFFF',
-        fontFamily: 'Oswald_400Regular',
+        color: theme.colors.text,
+        fontFamily: theme.fonts.primary.regular,
         fontSize: 32,
         marginBottom: 16,
         textAlign: 'center',
     },
     subtitle: {
-        color: '#AAAAAA',
+        color: theme.colors.textSecondary,
         fontSize: 16,
         textAlign: 'center',
         marginBottom: 32,
         lineHeight: 24,
     },
     button: {
-        backgroundColor: '#FFD700',
+        backgroundColor: theme.colors.primary,
         paddingHorizontal: 32,
         paddingVertical: 12,
         transform: [{ skewX: '-15deg' }],
     },
     buttonText: {
-        color: '#000000',
-        fontFamily: 'Oswald_400Regular',
+        color: theme.colors.black,
+        fontFamily: theme.fonts.primary.regular,
         fontSize: 16,
         fontWeight: 'bold',
         transform: [{ skewX: '15deg' }], // Counter-skew text
