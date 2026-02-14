@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Settings, Users, UserPlus, Handshake } from 'lucide-react-native';
+import { theme } from '../theme';
 
 export default function CrewScreen() {
     return (
@@ -13,7 +14,7 @@ export default function CrewScreen() {
                     </View>
                     <Text style={styles.crewName}>SPORTS CLUB US</Text>
                     <View style={styles.statsRow}>
-                        <Users color="#666" size={14} />
+                        <Users color={theme.colors.secondary} size={14} />
                         <Text style={styles.statsText}>1 MEMBERS</Text>
                         <Text style={styles.rankText}>♔ FIRST2</Text>
                     </View>
@@ -38,22 +39,22 @@ export default function CrewScreen() {
 
             <View style={styles.menuList}>
                 <MenuItem
-                    icon={<Settings color="#FFF" />}
+                    icon={<Settings color={theme.colors.text} />}
                     title="CHANGE SETTINGS"
                     subtitle="Edit crew appearance and settings"
                 />
                 <MenuItem
-                    icon={<Users color="#FFF" />}
+                    icon={<Users color={theme.colors.text} />}
                     title="CREW MEMBERS"
                     subtitle="Manage invited or current members"
                 />
                 <MenuItem
-                    icon={<UserPlus color="#FFF" />}
+                    icon={<UserPlus color={theme.colors.text} />}
                     title="INVITE MEMBERS"
                     subtitle="Invite new members"
                 />
                 <MenuItem
-                    icon={<Handshake color="#FFF" />}
+                    icon={<Handshake color={theme.colors.text} />}
                     title="EVENT COLLAB INVITES"
                     subtitle="See your invitations to collaborate"
                 />
@@ -81,7 +82,7 @@ const MenuItem = ({ icon, title, subtitle }: MenuItemProps) => (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
+        backgroundColor: theme.colors.background,
     },
     header: {
         padding: 20,
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
         paddingTop: 60,
     },
     card: {
-        backgroundColor: '#FFF',
+        backgroundColor: theme.colors.white,
         width: '100%',
         padding: 30,
         borderRadius: 20,
@@ -100,20 +101,20 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: '#FF4444',
+        backgroundColor: '#FF4444', // Keep literal for specific design element
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 15,
     },
     logoText: {
-        color: '#FFF',
-        fontFamily: 'Oswald_700Bold',
+        color: theme.colors.white,
+        fontFamily: theme.fonts.primary.bold,
         fontSize: 30,
     },
     crewName: {
         fontSize: 28,
-        fontFamily: 'Oswald_700Bold',
-        color: '#000',
+        fontFamily: theme.fonts.primary.bold,
+        color: theme.colors.black,
         marginBottom: 10,
         textTransform: 'uppercase',
     },
@@ -122,19 +123,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     statsText: {
-        fontFamily: 'Roboto_700Bold',
-        color: '#666',
+        fontFamily: theme.fonts.secondary.bold,
+        color: theme.colors.secondary,
         marginLeft: 5,
         marginRight: 15,
         fontSize: 12,
     },
     rankText: {
-        fontFamily: 'Roboto_700Bold',
-        color: '#000',
+        fontFamily: theme.fonts.secondary.bold,
+        color: theme.colors.black,
         fontSize: 12,
     },
     banner: {
-        backgroundColor: '#D32F2F', // Red banner
+        backgroundColor: theme.colors.error, // Red banner
         marginHorizontal: 15,
         padding: 15,
         borderRadius: 5,
@@ -150,22 +151,22 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#000',
+        backgroundColor: theme.colors.black,
         marginRight: 10,
     },
     bannerTitle: {
-        color: '#FFF',
-        fontFamily: 'Oswald_700Bold',
+        color: theme.colors.text,
+        fontFamily: theme.fonts.primary.bold,
         fontSize: 18,
     },
     bannerSubtitle: {
         color: '#FFCDD2',
-        fontFamily: 'Oswald_400Regular',
+        fontFamily: theme.fonts.primary.regular,
         fontSize: 24, // FIR_ST2 styled
         lineHeight: 24,
     },
     yearBadge: {
-        backgroundColor: '#FFF',
+        backgroundColor: theme.colors.white,
         width: 30,
         height: 30,
         justifyContent: 'center',
@@ -173,13 +174,13 @@ const styles = StyleSheet.create({
         borderRadius: 15,
     },
     yearText: {
-        color: '#000',
-        fontFamily: 'Oswald_700Bold',
+        color: theme.colors.black,
+        fontFamily: theme.fonts.primary.bold,
         fontSize: 12,
     },
     sectionHeader: {
-        color: '#666',
-        fontFamily: 'Roboto_700Bold',
+        color: theme.colors.secondary,
+        fontFamily: theme.fonts.secondary.bold,
         marginLeft: 20,
         marginTop: 30,
         marginBottom: 10,
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     menuItem: {
-        backgroundColor: '#1E1E1E',
+        backgroundColor: theme.colors.card,
         flexDirection: 'row',
         padding: 20,
         marginBottom: 10,
@@ -199,8 +200,8 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
     menuTitle: {
-        color: '#FFF',
-        fontFamily: 'Roboto_700Bold',
+        color: theme.colors.text,
+        fontFamily: theme.fonts.secondary.bold,
         fontSize: 14,
         marginBottom: 2,
     },
@@ -208,8 +209,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     menuSubtitle: {
-        color: '#888',
-        fontFamily: 'Roboto_400Regular',
+        color: '#888', // Keeping literal as it differs from secondary/textSecondary
+        fontFamily: theme.fonts.secondary.regular,
         fontSize: 12,
     },
 });

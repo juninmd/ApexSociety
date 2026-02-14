@@ -15,6 +15,25 @@ module.exports = [
     ...expo,
     prettierRecommended,
     {
+        files: ['**/*.test.ts', '**/*.test.tsx', 'jest.setup.js', 'jest.config.js'],
+        languageOptions: {
+            globals: {
+                jest: 'readonly',
+                describe: 'readonly',
+                it: 'readonly',
+                expect: 'readonly',
+                beforeAll: 'readonly',
+                afterAll: 'readonly',
+                beforeEach: 'readonly',
+                afterEach: 'readonly',
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-require-imports': 'off',
+            'no-undef': 'off', // globals are handled but sometimes flat config is tricky with implicit globals
+        },
+    },
+    {
         rules: {
             'prettier/prettier': 'error',
         },

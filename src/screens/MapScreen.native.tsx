@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
+import { theme } from '../theme';
 
 export default function MapScreen() {
     const [region] = useState({
@@ -23,7 +24,7 @@ export default function MapScreen() {
                 <Marker
                     coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
                     title="You"
-                    pinColor="#FFD700"
+                    pinColor={theme.colors.primary}
                 />
                 <Marker
                     coordinate={{ latitude: 37.78325, longitude: -122.4424 }}
@@ -33,7 +34,10 @@ export default function MapScreen() {
                 />
             </MapView>
 
-            <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']} style={styles.overlay}>
+            <LinearGradient
+                colors={[theme.colors.mapOverlayStart, theme.colors.mapOverlayEnd]}
+                style={styles.overlay}
+            >
                 <Text style={styles.timeText}>12:13 AM</Text>
                 <Text style={styles.speedText}>1 KM/H</Text>
 
@@ -51,7 +55,7 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000',
+        backgroundColor: theme.colors.black,
     },
     map: {
         width: Dimensions.get('window').width,
@@ -70,14 +74,14 @@ const styles = StyleSheet.create({
         pointerEvents: 'box-none',
     },
     timeText: {
-        color: '#FFD700',
-        fontFamily: 'Oswald_700Bold',
+        color: theme.colors.primary,
+        fontFamily: theme.fonts.primary.bold,
         fontSize: 24,
         textAlign: 'right',
     },
     speedText: {
-        color: '#FFF',
-        fontFamily: 'Oswald_400Regular',
+        color: theme.colors.text,
+        fontFamily: theme.fonts.primary.regular,
         fontSize: 18,
         textAlign: 'right',
     },
@@ -86,28 +90,28 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     eventHost: {
-        color: '#FFF',
+        color: theme.colors.text,
         fontSize: 12,
-        fontFamily: 'Roboto_700Bold',
+        fontFamily: theme.fonts.secondary.bold,
         textAlign: 'right',
     },
     eventTitle: {
-        color: '#FFF',
+        color: theme.colors.text,
         fontSize: 32,
-        fontFamily: 'Oswald_700Bold',
+        fontFamily: theme.fonts.primary.bold,
         textAlign: 'right',
         textTransform: 'uppercase',
     },
     eventTime: {
-        color: '#CCC',
+        color: theme.colors.textSecondary, // Using textSecondary instead of #CCC
         fontSize: 14,
-        fontFamily: 'Roboto_400Regular',
+        fontFamily: theme.fonts.secondary.regular,
         textAlign: 'right',
     },
     eventStatus: {
-        color: '#999',
+        color: theme.colors.secondary, // Using secondary instead of #999
         fontSize: 12,
-        fontFamily: 'Roboto_700Bold',
+        fontFamily: theme.fonts.secondary.bold,
         textAlign: 'right',
     },
 });

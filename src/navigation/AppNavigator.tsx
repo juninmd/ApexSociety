@@ -10,6 +10,7 @@ import EventsScreen from '../screens/EventsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MenuScreen from '../screens/MenuScreen';
 import { RootTabParamList } from './types';
+import { theme } from '../theme';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
@@ -19,8 +20,8 @@ export default function AppNavigator() {
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: styles.tabBar,
-                tabBarActiveTintColor: '#FFD700',
-                tabBarInactiveTintColor: '#666666',
+                tabBarActiveTintColor: theme.colors.primary,
+                tabBarInactiveTintColor: theme.colors.secondary,
                 tabBarLabelStyle: styles.tabBarLabel,
             }}
         >
@@ -47,7 +48,7 @@ export default function AppNavigator() {
                     tabBarLabel: '',
                     tabBarIcon: () => (
                         <View style={styles.menuIconContainer}>
-                            <Menu color="#000" size={24} style={styles.menuIcon} />
+                            <Menu color={theme.colors.menuIcon} size={24} style={styles.menuIcon} />
                         </View>
                     ),
                 }}
@@ -74,20 +75,20 @@ export default function AppNavigator() {
 
 const styles = StyleSheet.create({
     tabBar: {
-        backgroundColor: '#000000',
-        borderTopColor: '#333333',
+        backgroundColor: theme.colors.black,
+        borderTopColor: theme.colors.border,
         height: 80,
         paddingBottom: 20,
         paddingTop: 10,
     },
     tabBarLabel: {
-        fontFamily: 'Oswald_400Regular',
+        fontFamily: theme.fonts.primary.regular,
         fontSize: 12,
     },
     menuIconContainer: {
         width: 50,
         height: 50,
-        backgroundColor: '#FFD700',
+        backgroundColor: theme.colors.menuIconBg,
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
