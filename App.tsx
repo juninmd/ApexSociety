@@ -7,6 +7,19 @@ import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { theme } from './src/theme';
 
+const linking = {
+    prefixes: ['apexsociety://', 'https://apexsociety.github.io/apexsociety'],
+    config: {
+        screens: {
+            Map: 'map',
+            Events: 'events',
+            Menu: 'menu',
+            Moments: 'moments',
+            Profile: 'profile',
+        },
+    },
+};
+
 export default function App() {
     const [fontsLoaded] = useFonts({
         Oswald_400Regular,
@@ -33,7 +46,7 @@ export default function App() {
 
     return (
         <SafeAreaProvider>
-            <NavigationContainer theme={customTheme}>
+            <NavigationContainer theme={customTheme} linking={linking}>
                 <StatusBar style="light" />
                 <AppNavigator />
             </NavigationContainer>
