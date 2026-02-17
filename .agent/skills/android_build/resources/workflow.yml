@@ -1,71 +1,71 @@
 name: Android Build & Release
 
 on:
-  push:
-    tags:
-      - 'v*' # Trigger on version tags, e.g. v1.0.0
-  workflow_dispatch: # Allow manual trigger
+    push:
+        tags:
+            - 'v*' # Trigger on version tags, e.g. v1.0.0
+    workflow_dispatch: # Allow manual trigger
 
 jobs:
-  build:
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: write # Required for creating releases
+    build:
+        runs-on: ubuntu-22.04
+        permissions:
+            contents: write # Required for creating releases
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-          cache: 'gradle'
+            - name: Setup Java
+              uses: actions/setup-java@v4
+              with:
+                  distribution: 'zulu'
+                  java-version: '17'
+                  cache: 'gradle'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
-      - name: Expo Prebuild
-        run: npx expo prebuild --platform android --no-install
+            - name: Expo Prebuild
+              run: npx expo prebuild --platform android --no-install
 
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
+            - name: Decode Keystore
+              run: |
+                  echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
 
-      - name: Build Android Artifacts
-        run: |
-          cd android
-          ./gradlew assembleRelease bundleRelease \
-            -Pandroid.injected.signing.store.file=$(pwd)/app/release.keystore \
-            -Pandroid.injected.signing.store.password=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
-            -Pandroid.injected.signing.key.alias=${{ secrets.ANDROID_KEY_ALIAS }} \
-            -Pandroid.injected.signing.key.password=${{ secrets.ANDROID_KEY_PASSWORD }}
+            - name: Build Android Artifacts
+              run: |
+                  cd android
+                  ./gradlew assembleRelease bundleRelease \
+                    -Pandroid.injected.signing.store.file=$(pwd)/app/release.keystore \
+                    -Pandroid.injected.signing.store.password=${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
+                    -Pandroid.injected.signing.key.alias=${{ secrets.ANDROID_KEY_ALIAS }} \
+                    -Pandroid.injected.signing.key.password=${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-builds
-          path: |
-            android/app/build/outputs/apk/release/*.apk
-            android/app/build/outputs/bundle/release/*.aab
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: android-builds
+                  path: |
+                      android/app/build/outputs/apk/release/*.apk
+                      android/app/build/outputs/bundle/release/*.aab
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            android/app/build/outputs/apk/release/*.apk
-            android/app/build/outputs/bundle/release/*.aab
-          generate_release_notes: true
+            - name: Create Release
+              uses: softprops/action-gh-release@v2
+              if: startsWith(github.ref, 'refs/tags/')
+              with:
+                  files: |
+                      android/app/build/outputs/apk/release/*.apk
+                      android/app/build/outputs/bundle/release/*.aab
+                  generate_release_notes: true

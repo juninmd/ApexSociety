@@ -21,6 +21,7 @@ Please report security vulnerabilities by emailing `security@apexsociety.com` wi
 ### What to Include
 
 Please include as much information as possible to help us reproduce and fix the issue:
+
 - A description of the vulnerability.
 - Steps to reproduce the issue.
 - Any relevant logs or screenshots.
