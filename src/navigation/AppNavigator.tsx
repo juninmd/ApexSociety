@@ -30,7 +30,7 @@ export default function AppNavigator() {
                 component={MapScreen}
                 options={{
                     tabBarIcon: ({ color }) => <Map color={color} size={24} />,
-                    tabBarLabel: 'CHATS', // Based on mock, seems to be first tab
+                    tabBarLabel: 'MAP',
                 }}
             />
             <Tab.Screen
