@@ -1,31 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Location from 'expo-location';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 
 export default function MapScreen() {
-    const [region] = useState({
+    const [region, setRegion] = useState({
         latitude: 37.78825,
         longitude: -122.4324,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     });
 
+    useEffect(() => {
+        (async () => {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                return;
+            }
+
+            const location = await Location.getCurrentPositionAsync({});
+            setRegion({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            });
+        })();
+    }, []);
+
     return (
         <View style={styles.container}>
             <MapView
                 provider={PROVIDER_DEFAULT}
                 style={styles.map}
-                initialRegion={region}
+                region={region}
+                onRegionChangeComplete={setRegion}
                 customMapStyle={DARK_MAP_STYLE}
+                showsUserLocation={true}
             >
-                <Marker
-                    coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-                    title="You"
-                    pinColor={theme.colors.primary}
-                />
                 <Marker
                     coordinate={{ latitude: 37.78325, longitude: -122.4424 }}
                     title="Sports Club US"
@@ -103,13 +118,13 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
     },
     eventTime: {
-        color: theme.colors.textSecondary, // Using textSecondary instead of #CCC
+        color: theme.colors.textSecondary,
         fontSize: 14,
         fontFamily: theme.fonts.secondary.regular,
         textAlign: 'right',
     },
     eventStatus: {
-        color: theme.colors.secondary, // Using secondary instead of #999
+        color: theme.colors.secondary,
         fontSize: 12,
         fontFamily: theme.fonts.secondary.bold,
         textAlign: 'right',
