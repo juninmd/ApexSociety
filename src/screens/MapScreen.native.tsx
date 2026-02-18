@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
+import { MOCK_USERS, MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
 
 export default function MapScreen() {
     const [region, setRegion] = useState({
@@ -13,6 +14,10 @@ export default function MapScreen() {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     });
+
+    // Mock "next event" for the overlay - simply taking the first one
+    const nextEvent = MOCK_EVENTS[0];
+    const nextEventHost = MOCK_CREWS.find((c) => c.id === nextEvent.hostId)?.name || 'Unknown Host';
 
     useEffect(() => {
         (async () => {
@@ -41,27 +46,47 @@ export default function MapScreen() {
                 customMapStyle={DARK_MAP_STYLE}
                 showsUserLocation={true}
             >
-                <Marker
-                    coordinate={{ latitude: 37.78325, longitude: -122.4424 }}
-                    title="Sports Club US"
-                    description="NOSHOW Event"
-                    pinColor="#FF0000"
-                />
+                {MOCK_USERS.map((user) => (
+                    <Marker
+                        key={user.id}
+                        coordinate={{
+                            latitude: user.location.latitude,
+                            longitude: user.location.longitude,
+                        }}
+                        title={user.username}
+                        description={`Last active: ${user.lastActive}`}
+                        pinColor={theme.colors.primary} // Yellow for users
+                    />
+                ))}
+
+                {MOCK_EVENTS.map((event) => (
+                    <Marker
+                        key={event.id}
+                        coordinate={{
+                            latitude: event.location.latitude,
+                            longitude: event.location.longitude,
+                        }}
+                        title={event.title}
+                        description={event.startTime}
+                        pinColor={theme.colors.error} // Red for events
+                    />
+                ))}
             </MapView>
 
-            <LinearGradient
-                colors={[theme.colors.mapOverlayStart, theme.colors.mapOverlayEnd]}
-                style={styles.overlay}
-            >
+            <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)']} style={styles.overlay}>
                 <Text style={styles.timeText}>12:13 AM</Text>
                 <Text style={styles.speedText}>1 KM/H</Text>
 
-                <View style={styles.eventCard}>
-                    <Text style={styles.eventHost}>SPORTS CLUB US ★</Text>
-                    <Text style={styles.eventTitle}>NOSHOW</Text>
-                    <Text style={styles.eventTime}>24 Feb 2025 / 21:17</Text>
-                    <Text style={styles.eventStatus}>PRIVATE • 2</Text>
-                </View>
+                {nextEvent && (
+                    <View style={styles.eventCard}>
+                        <Text style={styles.eventHost}>{nextEventHost} ★</Text>
+                        <Text style={styles.eventTitle}>{nextEvent.title}</Text>
+                        <Text style={styles.eventTime}>{nextEvent.startTime}</Text>
+                        <Text style={styles.eventStatus}>
+                            {nextEvent.isPrivate ? 'PRIVATE' : 'PUBLIC'} • {nextEvent.attendees}
+                        </Text>
+                    </View>
+                )}
             </LinearGradient>
         </View>
     );

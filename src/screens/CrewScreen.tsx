@@ -2,21 +2,33 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Settings, Users, UserPlus, Handshake } from 'lucide-react-native';
 import { theme } from '../theme';
+import { MOCK_CREWS } from '../data/mock';
 
 export default function CrewScreen() {
+    const crew = MOCK_CREWS[0];
+
+    const getInitials = (name: string) => {
+        return name
+            .split(' ')
+            .map((n) => n[0])
+            .join('')
+            .substring(0, 2)
+            .toUpperCase();
+    };
+
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
                 {/* Crew Card */}
                 <View style={styles.card}>
                     <View style={styles.logoPlaceholder}>
-                        <Text style={styles.logoText}>SC</Text>
+                        <Text style={styles.logoText}>{getInitials(crew.name)}</Text>
                     </View>
-                    <Text style={styles.crewName}>SPORTS CLUB US</Text>
+                    <Text style={styles.crewName}>{crew.name}</Text>
                     <View style={styles.statsRow}>
                         <Users color={theme.colors.secondary} size={14} />
-                        <Text style={styles.statsText}>1 MEMBERS</Text>
-                        <Text style={styles.rankText}>♔ FIRST2</Text>
+                        <Text style={styles.statsText}>{crew.memberCount} MEMBERS</Text>
+                        <Text style={styles.rankText}>{crew.rank}</Text>
                     </View>
                 </View>
             </View>
@@ -26,11 +38,11 @@ export default function CrewScreen() {
                 <View style={styles.bannerContent}>
                     <View style={styles.bannerLogoSmall} />
                     <View>
-                        <Text style={styles.bannerTitle}>SPORTS CLUB US</Text>
-                        <Text style={styles.bannerSubtitle}>FIR_ST2</Text>
+                        <Text style={styles.bannerTitle}>{crew.name}</Text>
+                        <Text style={styles.bannerSubtitle}>{crew.tag}</Text>
                     </View>
                     <View style={styles.yearBadge}>
-                        <Text style={styles.yearText}>&apos;25</Text>
+                        <Text style={styles.yearText}>{crew.foundedYear}</Text>
                     </View>
                 </View>
             </View>
