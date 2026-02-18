@@ -1,15 +1,15 @@
 import { ExpoConfig, ConfigContext } from 'expo/config';
+import metadata from './src/constants/metadata.json';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
-    name: 'ApexSociety',
-    slug: 'ApexSociety',
-    description:
-        'ApexSociety - The social platform for car enthusiasts. Find meets, join crews, and share your automotive lifestyle.',
-    githubUrl: 'https://github.com/apexsociety/apexsociety',
-    version: '1.0.0',
+    name: metadata.name,
+    slug: metadata.slug,
+    description: metadata.description,
+    githubUrl: metadata.githubUrl,
+    version: metadata.version,
     orientation: 'portrait',
-    scheme: 'apexsociety',
+    scheme: metadata.scheme,
     platforms: ['ios', 'android', 'web'],
     icon: './assets/icon.png',
     userInterfaceStyle: 'light',
@@ -34,10 +34,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     web: {
         bundler: 'metro',
         favicon: './assets/favicon.png',
-        name: 'ApexSociety',
-        shortName: 'ApexSociety',
-        description:
-            'ApexSociety - The social platform for car enthusiasts. Find meets, join crews, and share your automotive lifestyle.',
+        name: metadata.name,
+        shortName: metadata.name,
+        description: metadata.description,
         startUrl: '/',
         scope: '/',
         display: 'standalone',

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Linking, TouchableOpacity } from 'react-native'
 import { Map } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme';
+import metadata from '../constants/metadata.json';
 
 export default function MapScreen() {
     return (
@@ -15,12 +16,12 @@ export default function MapScreen() {
                 <Map size={64} color={theme.colors.primary} style={styles.icon} />
                 <Text style={styles.title}>Map Experience</Text>
                 <Text style={styles.subtitle}>
-                    The interactive map is optimized for our mobile app. Download ApexSociety to see
+                    The interactive map is optimized for our mobile app. Download {metadata.name} to see
                     who&apos;s around you!
                 </Text>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => Linking.openURL('https://github.com/apexsociety/apexsociety')}
+                    onPress={() => Linking.openURL(metadata.githubUrl)}
                     activeOpacity={0.8}
                 >
                     <Text style={styles.buttonText}>GET THE APP</Text>
