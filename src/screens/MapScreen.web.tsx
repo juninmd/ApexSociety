@@ -16,8 +16,8 @@ export default function MapScreen() {
                 <Map size={64} color={theme.colors.primary} style={styles.icon} />
                 <Text style={styles.title}>Map Experience</Text>
                 <Text style={styles.subtitle}>
-                    The interactive map is optimized for our mobile app. Download {metadata.name} to see
-                    who&apos;s around you!
+                    The interactive map is optimized for our mobile app. Download {metadata.name} to
+                    see who&apos;s around you!
                 </Text>
                 <TouchableOpacity
                     style={styles.button}

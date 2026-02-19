@@ -11,7 +11,9 @@ describe('Metadata Consistency', () => {
     });
 
     it('should have correct og:title', () => {
-        expect(publicIndexHtml).toContain(`<meta property="og:title" content="${metadata.name}" />`);
+        expect(publicIndexHtml).toContain(
+            `<meta property="og:title" content="${metadata.name}" />`,
+        );
     });
 
     it('should have correct og:description', () => {
@@ -19,6 +21,8 @@ describe('Metadata Consistency', () => {
     });
 
     it('should have correct og:url', () => {
-        expect(publicIndexHtml).toContain(`<meta property="og:url" content="${metadata.homepage}" />`);
+        expect(publicIndexHtml).toContain(
+            `<meta property="og:url" content="${metadata.homepage}" />`,
+        );
     });
 });

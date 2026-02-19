@@ -1,101 +1,20 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Map, Users, Calendar, User, Menu } from 'lucide-react-native';
-import { View, StyleSheet } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import TabNavigator from './TabNavigator';
+import CreateEventScreen from '../screens/CreateEventScreen';
+import { RootStackParamList } from './types';
 
-// Placeholder screens
-import MapScreen from '../screens/MapScreen';
-import CrewScreen from '../screens/CrewScreen';
-import EventsScreen from '../screens/EventsScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import MenuScreen from '../screens/MenuScreen';
-import { RootTabParamList } from './types';
-import { theme } from '../theme';
-
-const Tab = createBottomTabNavigator<RootTabParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
     return (
-        <Tab.Navigator
-            screenOptions={{
-                headerShown: false,
-                tabBarStyle: styles.tabBar,
-                tabBarActiveTintColor: theme.colors.primary,
-                tabBarInactiveTintColor: theme.colors.secondary,
-                tabBarLabelStyle: styles.tabBarLabel,
-            }}
-        >
-            <Tab.Screen
-                name="Map"
-                component={MapScreen}
-                options={{
-                    tabBarIcon: ({ color }) => <Map color={color} size={24} />,
-                    tabBarLabel: 'MAP',
-                }}
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Main" component={TabNavigator} />
+            <Stack.Screen
+                name="CreateEvent"
+                component={CreateEventScreen}
+                options={{ presentation: 'modal' }}
             />
-            <Tab.Screen
-                name="Events"
-                component={EventsScreen}
-                options={{
-                    tabBarIcon: ({ color }) => <Calendar color={color} size={24} />,
-                    tabBarLabel: 'EVENTS',
-                }}
-            />
-            <Tab.Screen
-                name="Menu"
-                component={MenuScreen}
-                options={{
-                    tabBarLabel: '',
-                    tabBarIcon: () => (
-                        <View style={styles.menuIconContainer}>
-                            <Menu color={theme.colors.menuIcon} size={24} style={styles.menuIcon} />
-                        </View>
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Moments"
-                component={CrewScreen} // Using CrewScreen here for now from mocks
-                options={{
-                    tabBarIcon: ({ color }) => <Users color={color} size={24} />, // Icon for crew
-                    tabBarLabel: 'MOMENTS',
-                }}
-            />
-            <Tab.Screen
-                name="Profile"
-                component={ProfileScreen}
-                options={{
-                    tabBarIcon: ({ color }) => <User color={color} size={24} />,
-                    tabBarLabel: 'PROFILE',
-                }}
-            />
-        </Tab.Navigator>
+        </Stack.Navigator>
     );
 }
-
-const styles = StyleSheet.create({
-    tabBar: {
-        backgroundColor: theme.colors.black,
-        borderTopColor: theme.colors.border,
-        height: 80,
-        paddingBottom: 20,
-        paddingTop: 10,
-    },
-    tabBarLabel: {
-        fontFamily: theme.fonts.primary.regular,
-        fontSize: 12,
-    },
-    menuIconContainer: {
-        width: 50,
-        height: 50,
-        backgroundColor: theme.colors.menuIconBg,
-        borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        bottom: 10,
-        transform: [{ rotate: '45deg' }], // Diamond shape
-    },
-    menuIcon: {
-        transform: [{ rotate: '-45deg' }],
-    },
-});
