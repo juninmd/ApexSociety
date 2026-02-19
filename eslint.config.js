@@ -34,6 +34,21 @@ module.exports = [
         },
     },
     {
+        files: ['scripts/*.js'],
+        languageOptions: {
+            globals: {
+                process: 'readonly',
+                __dirname: 'readonly',
+                console: 'readonly',
+                require: 'readonly',
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-require-imports': 'off',
+            'no-undef': 'off',
+        },
+    },
+    {
         rules: {
             'prettier/prettier': 'error',
         },
