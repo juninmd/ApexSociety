@@ -77,10 +77,18 @@ pnpm run build:web
 npx serve dist
 ```
 
-## 6. Code Quality
+## 6. Code Quality & CI
 
-We use Husky and lint-staged to ensure code quality.
+We use Husky and lint-staged to ensure code quality on commit. We also provide a script to run the full CI suite locally, which is useful if GitHub Actions are unavailable or blocked.
 
+### Local CI Validation
+To run the full suite of checks (Install, Lint, Type-Check, Test) locally:
+
+```bash
+bash scripts/validate.sh
+```
+
+### Checks
 - **Pre-commit**: ESLint and Prettier run automatically on staged files.
 - **Manual Check**: `pnpm lint` / `pnpm type-check`
 
