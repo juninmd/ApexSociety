@@ -1,9 +1,11 @@
 name: CI
 
 on:
-    pull_request:
-        branches:
-            - main
+    # Disabled due to GitHub billing issues
+    # pull_request:
+    #     branches:
+    #         - main
+    workflow_dispatch:
 
 jobs:
     validate:

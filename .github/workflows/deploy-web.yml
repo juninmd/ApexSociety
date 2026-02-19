@@ -1,9 +1,10 @@
 name: Deploy Web to GitHub Pages
 
 on:
-    push:
-        branches:
-            - main
+    # Disabled due to GitHub billing issues
+    # push:
+    #     branches:
+    #         - main
     workflow_dispatch:
 
 permissions:
