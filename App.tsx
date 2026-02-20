@@ -1,14 +1,15 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme, LinkingOptions } from '@react-navigation/native';
 import { EventProvider } from './src/context/EventContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { theme } from './src/theme';
+import { RootStackParamList } from './src/navigation/types';
 
-const linking = {
+const linking: LinkingOptions<RootStackParamList> = {
     prefixes: ['apexsociety://', 'https://apexsociety.github.io/apexsociety'],
     config: {
         screens: {
