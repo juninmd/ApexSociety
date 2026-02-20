@@ -1,10 +1,39 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { RootTabParamList } from '../navigation/types';
+import CustomButton from '../components/CustomButton';
+import { theme } from '../theme';
 
 export default function MenuScreen() {
+    const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
+
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>MENU</Text>
+            <View style={styles.menuContainer}>
+                <CustomButton
+                    title="PROFILE"
+                    onPress={() => navigation.navigate('Profile')}
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="MAP"
+                    onPress={() => navigation.navigate('Map')}
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="EVENTS"
+                    onPress={() => navigation.navigate('Events')}
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="SETTINGS"
+                    onPress={() => Alert.alert('Coming Soon', 'Settings are under development.')}
+                    variant="secondary"
+                    style={styles.button}
+                />
+            </View>
         </View>
     );
 }
@@ -12,13 +41,14 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212',
+        backgroundColor: theme.colors.background,
         justifyContent: 'center',
-        alignItems: 'center',
+        padding: 40,
     },
-    text: {
-        color: '#FFD700',
-        fontFamily: 'Oswald_700Bold',
-        fontSize: 30,
+    menuContainer: {
+        gap: 20,
+    },
+    button: {
+        width: '100%',
     },
 });

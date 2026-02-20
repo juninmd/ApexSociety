@@ -12,9 +12,12 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { theme } from '../theme';
 import { RootStackParamList } from '../navigation/types';
+import { useEvents } from '../context/EventContext';
+import { Event } from '../types';
 
 export default function CreateEventScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const { addEvent } = useEvents();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
@@ -27,8 +30,24 @@ export default function CreateEventScreen() {
             return;
         }
 
-        // Mock creation logic
-        console.log('Creating event:', { title, description, date, time, location });
+        const newEvent: Event = {
+            id: Date.now().toString(),
+            title,
+            description,
+            hostId: 'user-current', // Mock host ID
+            location: {
+                latitude: 0,
+                longitude: 0,
+                address: location,
+            },
+            startTime: `${date} @ ${time}`,
+            endTime: `${date} @ ${time}`, // Simplified
+            attendees: 1, // Just the creator
+            isPrivate: false,
+        };
+
+        addEvent(newEvent);
+
         Alert.alert('Success', 'Event created successfully!', [
             { text: 'OK', onPress: () => navigation.goBack() },
         ]);
