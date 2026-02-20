@@ -4,12 +4,14 @@ import { Plus } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { theme } from '../theme';
-import { MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
+import { MOCK_CREWS } from '../data/mock';
 import EventCard from '../components/EventCard';
 import { RootStackParamList } from '../navigation/types';
+import { useEvents } from '../context/EventContext';
 
 export default function EventsScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const { events } = useEvents();
 
     return (
         <ScrollView style={styles.container}>
@@ -20,7 +22,7 @@ export default function EventsScreen() {
                 </TouchableOpacity>
             </View>
             <View style={styles.list}>
-                {MOCK_EVENTS.map((event) => {
+                {events.map((event) => {
                     const host = MOCK_CREWS.find((c) => c.id === event.hostId);
                     return (
                         <EventCard

@@ -2,6 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { EventProvider } from './src/context/EventContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
@@ -11,11 +12,16 @@ const linking = {
     prefixes: ['apexsociety://', 'https://apexsociety.github.io/apexsociety'],
     config: {
         screens: {
-            Map: 'map',
-            Events: 'events',
-            Menu: 'menu',
-            Moments: 'moments',
-            Profile: 'profile',
+            Main: {
+                screens: {
+                    Map: 'map',
+                    Events: 'events',
+                    Menu: 'menu',
+                    Moments: 'moments',
+                    Profile: 'profile',
+                },
+            },
+            CreateEvent: 'create-event',
         },
     },
 };
@@ -46,10 +52,12 @@ export default function App() {
 
     return (
         <SafeAreaProvider>
-            <NavigationContainer theme={customTheme} linking={linking}>
-                <StatusBar style="light" />
-                <AppNavigator />
-            </NavigationContainer>
+            <EventProvider>
+                <NavigationContainer theme={customTheme} linking={linking}>
+                    <StatusBar style="light" />
+                    <AppNavigator />
+                </NavigationContainer>
+            </EventProvider>
         </SafeAreaProvider>
     );
 }
