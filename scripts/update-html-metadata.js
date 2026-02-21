@@ -19,10 +19,13 @@ try {
     };
 
     // Helper to replace or insert meta tags
-    const updateMeta = (property, content) => {
+    const updateMeta = (key, content, attribute = 'property') => {
         const escapedContent = escapeHtml(content);
-        const tag = `<meta property="${property}" content="${escapedContent}" />`;
-        const regex = new RegExp(`<meta\\s+property="${property}"[\\s\\S]*?\\/>`, 'g');
+        const tag = `<meta ${attribute}="${key}" content="${escapedContent}" />`;
+
+        // Regex to match existing tag with either 'name' or 'property'
+        // Handles optional spaces around attributes
+        const regex = new RegExp(`<meta\\s+(?:name|property)="${key}"[\\s\\S]*?\\/>`, 'g');
 
         if (regex.test(html)) {
             html = html.replace(regex, tag);
@@ -32,7 +35,7 @@ try {
                 html = html.replace('</head>', `    ${tag}\n    </head>`);
             } else {
                 console.warn(
-                    `Warning: Could not find </head> tag to insert meta property "${property}".`,
+                    `Warning: Could not find </head> tag to insert meta ${attribute}="${key}".`,
                 );
             }
         }
@@ -48,19 +51,24 @@ try {
         }
     }
 
-    updateMeta('og:title', metadata.name);
-    updateMeta('og:description', metadata.description);
-    updateMeta('og:url', metadata.homepage);
+    // Open Graph (uses property)
+    updateMeta('og:type', 'website', 'property');
+    updateMeta('og:title', metadata.name, 'property');
+    updateMeta('og:description', metadata.description, 'property');
+    updateMeta('og:url', metadata.homepage, 'property');
 
     const imageUrl = `${metadata.homepage}/icon.png`;
-    updateMeta('og:image', imageUrl);
+    updateMeta('og:image', imageUrl, 'property');
 
-    updateMeta('twitter:title', metadata.name);
-    updateMeta('twitter:description', metadata.description);
-    updateMeta('twitter:url', metadata.homepage);
-    updateMeta('twitter:image', imageUrl);
-    // Twitter card type
-    updateMeta('twitter:card', 'summary_large_image');
+    // Twitter (uses name)
+    updateMeta('twitter:card', 'summary_large_image', 'name');
+    updateMeta('twitter:title', metadata.name, 'name');
+    updateMeta('twitter:description', metadata.description, 'name');
+    updateMeta('twitter:url', metadata.homepage, 'name');
+    updateMeta('twitter:image', imageUrl, 'name');
+
+    // Standard description
+    updateMeta('description', metadata.description, 'name');
 
     fs.writeFileSync(htmlPath, html, 'utf8');
     console.log('Successfully updated public/index.html with metadata.');
