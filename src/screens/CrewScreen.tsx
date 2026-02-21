@@ -1,11 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Settings, Users, UserPlus, Handshake } from 'lucide-react-native';
+import { useRoute } from '@react-navigation/native';
 import { theme } from '../theme';
 import { MOCK_CREWS } from '../data/mock';
 
 export default function CrewScreen() {
-    const crew = MOCK_CREWS[0];
+    const route = useRoute();
+    const params = route.params as { crewId?: string } | undefined;
+    const crewId = params?.crewId;
+
+    // Use specific crew if ID provided, otherwise default to first (Moments tab behavior)
+    const crew = crewId ? MOCK_CREWS.find((c) => c.id === crewId) : MOCK_CREWS[0];
+
+    if (!crew) {
+        return (
+            <View style={[styles.container, styles.center]}>
+                <Text style={styles.errorText}>Crew not found</Text>
+            </View>
+        );
+    }
 
     const getInitials = (name: string) => {
         return name
@@ -95,6 +109,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,
+    },
+    center: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errorText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 18,
     },
     header: {
         padding: 20,

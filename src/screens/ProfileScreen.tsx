@@ -2,9 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MapPin, Share2, Car } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { theme } from '../theme';
 import CustomButton from '../components/CustomButton';
 import CrewBadge from '../components/CrewBadge';
+import { RootStackParamList } from '../navigation/types';
 
 const USER = {
     name: 'ALEX RACER',
@@ -34,13 +37,14 @@ const USER = {
         },
     ],
     crews: [
-        { id: '1', name: 'Midnight Runners', rank: 'LEADER' },
-        { id: '2', name: 'Drift Spirits', rank: 'MEMBER' },
-        { id: '3', name: 'Touge Society', rank: 'MEMBER' },
+        { id: 'crew-1', name: 'SPORTS CLUB US', rank: 'LEADER' },
+        { id: 'crew-2', name: 'NIGHT RUNNERS', rank: 'MEMBER' },
     ],
 };
 
 export default function ProfileScreen() {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             {/* Header / Cover */}
@@ -153,12 +157,16 @@ export default function ProfileScreen() {
                     contentContainerStyle={styles.crewsList}
                 >
                     {USER.crews.map((crew) => (
-                        <View key={crew.id} style={styles.crewItem}>
+                        <TouchableOpacity
+                            key={crew.id}
+                            style={styles.crewItem}
+                            onPress={() => navigation.navigate('CrewDetails', { crewId: crew.id })}
+                        >
                             <CrewBadge name={crew.name} rank={crew.rank} size="medium" />
                             <Text style={styles.crewName} numberOfLines={1}>
                                 {crew.name}
                             </Text>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                 </ScrollView>
             </View>
