@@ -70,6 +70,15 @@ try {
     // Standard description
     updateMeta('description', metadata.description, 'name');
 
+    // Additional metadata
+    if (metadata.author) updateMeta('author', metadata.author, 'name');
+    if (metadata.keywords) updateMeta('keywords', metadata.keywords, 'name');
+    if (metadata.themeColor) updateMeta('theme-color', metadata.themeColor, 'name');
+
+    // PWA
+    updateMeta('apple-mobile-web-app-capable', 'yes', 'name');
+    updateMeta('apple-mobile-web-app-status-bar-style', 'black-translucent', 'name');
+
     fs.writeFileSync(htmlPath, html, 'utf8');
     console.log('Successfully updated public/index.html with metadata.');
 } catch (error) {

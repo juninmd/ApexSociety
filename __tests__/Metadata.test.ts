@@ -25,4 +25,31 @@ describe('Metadata Consistency', () => {
             `<meta property="og:url" content="${metadata.homepage}" />`,
         );
     });
+
+    it('should have correct author', () => {
+        expect(publicIndexHtml).toContain(
+            `<meta name="author" content="${metadata.author}" />`,
+        );
+    });
+
+    it('should have correct keywords', () => {
+        expect(publicIndexHtml).toContain(
+            `<meta name="keywords" content="${metadata.keywords}" />`,
+        );
+    });
+
+    it('should have correct theme-color', () => {
+        expect(publicIndexHtml).toContain(
+            `<meta name="theme-color" content="${metadata.themeColor}" />`,
+        );
+    });
+
+    it('should have correct PWA meta tags', () => {
+        expect(publicIndexHtml).toContain(
+            `<meta name="apple-mobile-web-app-capable" content="yes" />`,
+        );
+        expect(publicIndexHtml).toContain(
+            `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />`,
+        );
+    });
 });
