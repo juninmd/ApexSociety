@@ -13,6 +13,7 @@ export type RootTabParamList = {
 export type RootStackParamList = {
     Main: NavigatorScreenParams<RootTabParamList>;
     CreateEvent: undefined;
+    CreateCrew: undefined;
     CrewDetails: { crewId: string };
 };
 

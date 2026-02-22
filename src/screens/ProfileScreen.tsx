@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MapPin, Share2, Car } from 'lucide-react-native';
+import { MapPin, Share2, Car, UserPlus } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { theme } from '../theme';
@@ -168,6 +168,17 @@ export default function ProfileScreen() {
                             </Text>
                         </TouchableOpacity>
                     ))}
+                    <TouchableOpacity
+                        style={styles.crewItem}
+                        onPress={() => navigation.navigate('CreateCrew')}
+                    >
+                        <View style={styles.addCrewBadge}>
+                            <UserPlus color={theme.colors.secondary} size={24} />
+                        </View>
+                        <Text style={styles.crewName} numberOfLines={1}>
+                            CREATE
+                        </Text>
+                    </TouchableOpacity>
                 </ScrollView>
             </View>
 
@@ -391,5 +402,15 @@ const styles = StyleSheet.create({
         color: theme.colors.textSecondary,
         marginTop: 5,
         textAlign: 'center',
+    },
+    addCrewBadge: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: theme.colors.secondary,
+        borderStyle: 'dashed',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
