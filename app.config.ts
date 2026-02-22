@@ -40,8 +40,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         startUrl: '/',
         scope: '/',
         display: 'standalone',
-        themeColor: '#000000',
-        backgroundColor: '#000000',
+        themeColor: metadata.themeColor,
+        backgroundColor: metadata.themeColor,
     },
     experiments: {
         baseUrl: process.env.GH_PAGES ? '/apexsociety' : '/',

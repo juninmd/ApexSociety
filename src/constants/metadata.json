@@ -5,5 +5,8 @@
     "githubUrl": "https://github.com/apexsociety/apexsociety",
     "version": "1.0.0",
     "scheme": "apexsociety",
-    "homepage": "https://apexsociety.github.io/apexsociety"
+    "homepage": "https://apexsociety.github.io/apexsociety",
+    "author": "ApexSociety",
+    "keywords": "cars, social, meetups, crews, automotive, lifestyle, react-native, expo",
+    "themeColor": "#000000"
 }
