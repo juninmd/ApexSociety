@@ -27,9 +27,7 @@ describe('Metadata Consistency', () => {
     });
 
     it('should have correct author', () => {
-        expect(publicIndexHtml).toContain(
-            `<meta name="author" content="${metadata.author}" />`,
-        );
+        expect(publicIndexHtml).toContain(`<meta name="author" content="${metadata.author}" />`);
     });
 
     it('should have correct keywords', () => {

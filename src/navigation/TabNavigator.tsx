@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 
 // Placeholder screens
 import MapScreen from '../screens/MapScreen';
-import CrewScreen from '../screens/CrewScreen';
+import CrewListScreen from '../screens/CrewListScreen';
 import EventsScreen from '../screens/EventsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MenuScreen from '../screens/MenuScreen';
@@ -54,11 +54,11 @@ export default function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name="Moments"
-                component={CrewScreen} // Using CrewScreen here for now from mocks
+                name="Crews"
+                component={CrewListScreen}
                 options={{
                     tabBarIcon: ({ color }) => <Users color={color} size={24} />, // Icon for crew
-                    tabBarLabel: 'MOMENTS',
+                    tabBarLabel: 'CREWS',
                 }}
             />
             <Tab.Screen
