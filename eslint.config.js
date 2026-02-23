@@ -1,4 +1,4 @@
-const expo = require('eslint-config-expo/flat');
+const expo = require('eslint-config-expo/flat.js');
 const prettierRecommended = require('eslint-plugin-prettier/recommended');
 
 module.exports = [

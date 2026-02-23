@@ -2,86 +2,33 @@ const fs = require('fs');
 const path = require('path');
 
 const metadataPath = path.join(__dirname, '../src/constants/metadata.json');
-const htmlPath = path.join(__dirname, '../public/index.html');
+const templatePath = path.join(__dirname, '../public/index.template.html');
+const outputPath = path.join(__dirname, '../public/index.html');
 
 try {
     const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
-    let html = fs.readFileSync(htmlPath, 'utf8');
-
-    // Helper to escape HTML special characters for attributes
-    const escapeHtml = (unsafe) => {
-        return unsafe
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    };
-
-    // Helper to replace or insert meta tags
-    const updateMeta = (key, content, attribute = 'property') => {
-        const escapedContent = escapeHtml(content);
-        const tag = `<meta ${attribute}="${key}" content="${escapedContent}" />`;
-
-        // Regex to match existing tag with either 'name' or 'property'
-        // Handles optional spaces around attributes
-        const regex = new RegExp(`<meta\\s+(?:name|property)="${key}"[\\s\\S]*?\\/>`, 'g');
-
-        if (regex.test(html)) {
-            html = html.replace(regex, tag);
-        } else {
-            // Insert before </head>
-            if (html.includes('</head>')) {
-                html = html.replace('</head>', `    ${tag}\n    </head>`);
-            } else {
-                console.warn(
-                    `Warning: Could not find </head> tag to insert meta ${attribute}="${key}".`,
-                );
-            }
-        }
-    };
-
-    // Update <title>
-    const titleTag = `<title>${escapeHtml(metadata.name)}</title>`;
-    if (/<title>[\s\S]*?<\/title>/.test(html)) {
-        html = html.replace(/<title>[\s\S]*?<\/title>/, titleTag);
-    } else {
-        if (html.includes('</head>')) {
-            html = html.replace('</head>', `    ${titleTag}\n    </head>`);
-        }
-    }
-
-    // Open Graph (uses property)
-    updateMeta('og:type', 'website', 'property');
-    updateMeta('og:title', metadata.name, 'property');
-    updateMeta('og:description', metadata.description, 'property');
-    updateMeta('og:url', metadata.homepage, 'property');
+    let html = fs.readFileSync(templatePath, 'utf8');
 
     const imageUrl = `${metadata.homepage}/icon.png`;
-    updateMeta('og:image', imageUrl, 'property');
 
-    // Twitter (uses name)
-    updateMeta('twitter:card', 'summary_large_image', 'name');
-    updateMeta('twitter:title', metadata.name, 'name');
-    updateMeta('twitter:description', metadata.description, 'name');
-    updateMeta('twitter:url', metadata.homepage, 'name');
-    updateMeta('twitter:image', imageUrl, 'name');
+    const replacements = {
+        '{{TITLE}}': metadata.name,
+        '{{DESCRIPTION}}': metadata.description,
+        '{{URL}}': metadata.homepage,
+        '{{IMAGE_URL}}': imageUrl,
+        '{{AUTHOR}}': metadata.author,
+        '{{KEYWORDS}}': metadata.keywords,
+        '{{THEME_COLOR}}': metadata.themeColor,
+    };
 
-    // Standard description
-    updateMeta('description', metadata.description, 'name');
+    Object.entries(replacements).forEach(([placeholder, value]) => {
+        // Replace all occurrences using split/join as a global replace
+        html = html.split(placeholder).join(value || '');
+    });
 
-    // Additional metadata
-    if (metadata.author) updateMeta('author', metadata.author, 'name');
-    if (metadata.keywords) updateMeta('keywords', metadata.keywords, 'name');
-    if (metadata.themeColor) updateMeta('theme-color', metadata.themeColor, 'name');
-
-    // PWA
-    updateMeta('apple-mobile-web-app-capable', 'yes', 'name');
-    updateMeta('apple-mobile-web-app-status-bar-style', 'black-translucent', 'name');
-
-    fs.writeFileSync(htmlPath, html, 'utf8');
-    console.log('Successfully updated public/index.html with metadata.');
+    fs.writeFileSync(outputPath, html, 'utf8');
+    console.log('Successfully generated public/index.html from template with metadata.');
 } catch (error) {
-    console.error('Error updating metadata:', error);
+    console.error('Error generating index.html:', error);
     process.exit(1);
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, DarkTheme, LinkingOptions } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
 import { EventProvider } from './src/context/EventContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
@@ -10,7 +11,7 @@ import { theme } from './src/theme';
 import { RootStackParamList } from './src/navigation/types';
 
 const linking: LinkingOptions<RootStackParamList> = {
-    prefixes: ['apexsociety://', 'https://apexsociety.github.io/apexsociety'],
+    prefixes: [Linking.createURL('/'), 'https://apexsociety.github.io/apexsociety'],
     config: {
         screens: {
             Main: {
