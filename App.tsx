@@ -18,7 +18,7 @@ const linking: LinkingOptions<RootStackParamList> = {
                     Map: 'map',
                     Events: 'events',
                     Menu: 'menu',
-                    Moments: 'moments',
+                    Crews: 'crews',
                     Profile: 'profile',
                 },
             },

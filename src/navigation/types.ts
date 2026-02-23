@@ -6,7 +6,7 @@ export type RootTabParamList = {
     Map: undefined;
     Events: undefined;
     Menu: undefined;
-    Moments: undefined; // CrewScreen
+    Crews: undefined;
     Profile: undefined;
 };
 
