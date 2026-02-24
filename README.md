@@ -62,9 +62,13 @@ The application is configured to be deployed as a static web app on GitHub Pages
 We have implemented an automated script (`scripts/update-html-metadata.js`) that runs before every web build to ensure `public/index.html` metadata (title, description, OG tags) matches `src/constants/metadata.json`.
 
 ### GitHub Pages
-- **Build Command**: `pnpm run build:gh-pages` (Handles subpath `/apexsociety` and updates metadata)
+- **Build Command**: `pnpm run build:gh-pages` (Handles subpath `/apexsociety`, updates metadata, and generates `404.html` for SPA routing)
 - **Deploy**: Automatically triggers on push to `main` branch via GitHub Actions.
 - **URL**: `https://apexsociety.github.io/apexsociety/`
+
+### Security & SEO
+- **Robots.txt**: `public/robots.txt` is included to guide crawlers.
+- **Security**: `public/.well-known/security.txt` provides security contact information.
 
 ### Netlify
 - **Build Command**: `pnpm run build:web` (Assumes root path `/` and updates metadata)

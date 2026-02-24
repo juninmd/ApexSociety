@@ -24,8 +24,9 @@
         "web": "expo start --web",
         "build:web": "expo export -p web",
         "prebuild:web": "node scripts/update-html-metadata.js",
-        "build:gh-pages": "cross-env GH_PAGES=true expo export -p web",
+        "build:gh-pages": "cross-env GH_PAGES=true expo export -p web && node scripts/cp-404.js",
         "prebuild:gh-pages": "node scripts/update-html-metadata.js",
+        "test:ci": "jest --ci --coverage",
         "type-check": "tsc --noEmit",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
@@ -71,6 +72,7 @@
         "jest-expo": "^54.0.17",
         "lint-staged": "^16.2.7",
         "prettier": "^3.8.1",
+        "prettier-plugin-organize-imports": "^4.3.0",
         "react-test-renderer": "^19.1.0",
         "typescript": "~5.9.3"
     },
