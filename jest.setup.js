@@ -46,3 +46,7 @@ jest.mock('@react-navigation/native', () => {
 jest.mock('expo-status-bar', () => ({
     StatusBar: () => null,
 }));
+
+jest.mock('expo-linking', () => ({
+    createURL: (url) => url,
+}));
