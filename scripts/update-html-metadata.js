@@ -9,12 +9,17 @@ try {
     const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
     let html = fs.readFileSync(templatePath, 'utf8');
 
-    const imageUrl = `${metadata.homepage}/icon.png`;
+    // Allow environment variables to override metadata
+    const homepage = process.env.HOMEPAGE || metadata.homepage;
+    // Remove trailing slash if present for consistency, although URL usually doesn't have it in metadata.json
+    const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
+
+    const imageUrl = `${cleanHomepage}/icon.png`;
 
     const replacements = {
         '{{TITLE}}': metadata.name,
         '{{DESCRIPTION}}': metadata.description,
-        '{{URL}}': metadata.homepage,
+        '{{URL}}': cleanHomepage,
         '{{IMAGE_URL}}': imageUrl,
         '{{AUTHOR}}': metadata.author,
         '{{KEYWORDS}}': metadata.keywords,
