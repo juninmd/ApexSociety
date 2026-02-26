@@ -50,4 +50,16 @@ describe('Metadata Consistency', () => {
             `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />`,
         );
     });
+
+    it('should have correct social metadata', () => {
+        expect(publicIndexHtml).toContain(
+            `<meta name="twitter:site" content="${metadata.twitterUsername}" />`,
+        );
+        expect(publicIndexHtml).toContain(
+            `<meta property="og:site_name" content="${metadata.siteName}" />`,
+        );
+        expect(publicIndexHtml).toContain(
+            `<meta property="og:locale" content="${metadata.locale}" />`,
+        );
+    });
 });

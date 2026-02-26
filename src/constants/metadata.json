@@ -8,5 +8,8 @@
     "homepage": "https://apexsociety.github.io/apexsociety",
     "author": "ApexSociety",
     "keywords": "cars, social, meetups, crews, automotive, lifestyle, react-native, expo",
-    "themeColor": "#000000"
+    "themeColor": "#000000",
+    "twitterUsername": "@apexsociety",
+    "locale": "en_US",
+    "siteName": "ApexSociety"
 }
