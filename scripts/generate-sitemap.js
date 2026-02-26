@@ -8,7 +8,10 @@ try {
     const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
 
     // Allow environment variables to override metadata
-    const homepage = process.env.HOMEPAGE || metadata.homepage;
+    // Check PUBLIC_URL (standard), URL (Netlify), or HOMEPAGE (legacy/GitHub Pages)
+    const homepage =
+        process.env.PUBLIC_URL || process.env.URL || process.env.HOMEPAGE || metadata.homepage;
+    // Remove trailing slash if present for consistency
     const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
 
     // Current date in YYYY-MM-DD format
@@ -26,7 +29,7 @@ try {
 </urlset>`;
 
     fs.writeFileSync(outputPath, sitemap, 'utf8');
-    console.log('Successfully generated public/sitemap.xml');
+    console.log(`Successfully generated public/sitemap.xml with homepage: ${cleanHomepage}`);
 } catch (error) {
     console.error('Error generating sitemap.xml:', error);
     process.exit(1);

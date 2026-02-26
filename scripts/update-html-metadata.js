@@ -10,8 +10,10 @@ try {
     let html = fs.readFileSync(templatePath, 'utf8');
 
     // Allow environment variables to override metadata
-    const homepage = process.env.HOMEPAGE || metadata.homepage;
-    // Remove trailing slash if present for consistency, although URL usually doesn't have it in metadata.json
+    // Check PUBLIC_URL (standard), URL (Netlify), or HOMEPAGE (legacy/GitHub Pages)
+    const homepage =
+        process.env.PUBLIC_URL || process.env.URL || process.env.HOMEPAGE || metadata.homepage;
+    // Remove trailing slash if present for consistency
     const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
 
     const imageUrl = `${cleanHomepage}/icon.png`;
@@ -24,6 +26,9 @@ try {
         '{{AUTHOR}}': metadata.author,
         '{{KEYWORDS}}': metadata.keywords,
         '{{THEME_COLOR}}': metadata.themeColor,
+        '{{TWITTER_USERNAME}}': metadata.twitterUsername,
+        '{{SITE_NAME}}': metadata.siteName,
+        '{{LOCALE}}': metadata.locale,
     };
 
     Object.entries(replacements).forEach(([placeholder, value]) => {
@@ -32,7 +37,9 @@ try {
     });
 
     fs.writeFileSync(outputPath, html, 'utf8');
-    console.log('Successfully generated public/index.html from template with metadata.');
+    console.log(
+        `Successfully generated public/index.html with homepage: ${cleanHomepage}`,
+    );
 } catch (error) {
     console.error('Error generating index.html:', error);
     process.exit(1);
