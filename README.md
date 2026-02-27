@@ -1,5 +1,12 @@
 # ApexSociety Setup Guide
 
+## Live Demo
+
+You can access the latest web version of the application here:
+[**Launch ApexSociety Web**](https://apexsociety.github.io/apexsociety/)
+
+*Note: The interactive Map feature is optimized for mobile and shows a landing page on the web. You can explore Events, Crews, and Profiles.*
+
 ## 1. Prerequisites
 
 - Node.js 20+
