@@ -2,10 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, Linking, TouchableOpacity } from 'react-native';
 import { Map } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
+import { RootTabParamList } from '../navigation/types';
 
 export default function MapScreen() {
+    const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
+
     return (
         <LinearGradient
             colors={[theme.colors.background, theme.colors.card]}
@@ -25,6 +30,14 @@ export default function MapScreen() {
                     activeOpacity={0.8}
                 >
                     <Text style={styles.buttonText}>GET THE APP</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.secondaryButton}
+                    onPress={() => navigation.navigate('Events')}
+                    activeOpacity={0.8}
+                >
+                    <Text style={styles.secondaryButtonText}>EXPLORE EVENTS</Text>
                 </TouchableOpacity>
             </View>
         </LinearGradient>
@@ -87,6 +100,22 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: theme.colors.black,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 18,
+        fontWeight: 'bold',
+        transform: [{ skewX: '20deg' }],
+        letterSpacing: 1,
+    },
+    secondaryButton: {
+        marginTop: 20,
+        paddingHorizontal: 48,
+        paddingVertical: 16,
+        borderWidth: 2,
+        borderColor: theme.colors.primary,
+        transform: [{ skewX: '-20deg' }],
+    },
+    secondaryButtonText: {
+        color: theme.colors.primary,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 18,
         fontWeight: 'bold',

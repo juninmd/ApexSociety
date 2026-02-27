@@ -37,9 +37,7 @@ try {
     });
 
     fs.writeFileSync(outputPath, html, 'utf8');
-    console.log(
-        `Successfully generated public/index.html with homepage: ${cleanHomepage}`,
-    );
+    console.log(`Successfully generated public/index.html with homepage: ${cleanHomepage}`);
 } catch (error) {
     console.error('Error generating index.html:', error);
     process.exit(1);
