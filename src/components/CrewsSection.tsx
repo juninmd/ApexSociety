@@ -41,7 +41,7 @@ export default function CrewsSection({ crews }: CrewsSectionProps) {
                         style={styles.crewItem}
                         onPress={() => navigation.navigate('CrewDetails', { crewId: crew.id })}
                     >
-                        <CrewBadge name={crew.name} rank={crew.rank as any} size="medium" />
+                        <CrewBadge name={crew.name} rank={crew.rank} size="medium" />
                         <Text style={styles.crewName} numberOfLines={1}>
                             {crew.name}
                         </Text>
