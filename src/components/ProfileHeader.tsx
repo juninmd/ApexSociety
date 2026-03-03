@@ -21,7 +21,7 @@ export default function ProfileHeader({ user, coverImageUrl }: ProfileHeaderProp
             <View style={styles.profileInfoContainer}>
                 <View style={styles.avatarContainer}>
                     <View style={styles.avatarPlaceholder}>
-                        <Text style={styles.avatarText}>{user.name.charAt(0)}</Text>
+                        <Text style={styles.avatarText}>{user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}</Text>
                     </View>
                     <View style={styles.onlineBadge} />
                 </View>
