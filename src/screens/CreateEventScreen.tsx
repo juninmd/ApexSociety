@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    ScrollView,
-    Alert,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { theme } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 import { useEvents } from '../context/EventContext';
 import { Event } from '../types';
+import FormInput from '../components/FormInput';
 
 export default function CreateEventScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -29,25 +22,18 @@ export default function CreateEventScreen() {
             Alert.alert('Error', 'Please fill in all required fields');
             return;
         }
-
         const newEvent: Event = {
             id: Date.now().toString(),
             title,
             description,
-            hostId: 'user-current', // Mock host ID
-            location: {
-                latitude: 0,
-                longitude: 0,
-                address: location,
-            },
+            hostId: 'user-current',
+            location: { latitude: 0, longitude: 0, address: location },
             startTime: `${date} @ ${time}`,
-            endTime: `${date} @ ${time}`, // Simplified
-            attendees: 1, // Just the creator
+            endTime: `${date} @ ${time}`,
+            attendees: 1,
             isPrivate: false,
         };
-
         addEvent(newEvent);
-
         Alert.alert('Success', 'Event created successfully!', [
             { text: 'OK', onPress: () => navigation.goBack() },
         ]);
@@ -58,72 +44,50 @@ export default function CreateEventScreen() {
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>CREATE EVENT</Text>
             </View>
-
             <View style={styles.form}>
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>EVENT TITLE</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Ex: Friday Night Meet"
-                        placeholderTextColor={theme.colors.secondary}
-                        value={title}
-                        onChangeText={setTitle}
-                    />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>DESCRIPTION</Text>
-                    <TextInput
-                        style={[styles.input, styles.textArea]}
-                        placeholder="What's the plan?"
-                        placeholderTextColor={theme.colors.secondary}
-                        value={description}
-                        onChangeText={setDescription}
-                        multiline
-                        numberOfLines={4}
-                    />
-                </View>
-
+                <FormInput
+                    label="EVENT TITLE"
+                    placeholder="Ex: Friday Night Meet"
+                    value={title}
+                    onChangeText={setTitle}
+                />
+                <FormInput
+                    label="DESCRIPTION"
+                    placeholder="What's the plan?"
+                    value={description}
+                    onChangeText={setDescription}
+                    isTextArea
+                />
                 <View style={styles.row}>
-                    <View style={[styles.inputGroup, styles.halfInput]}>
-                        <Text style={styles.label}>DATE</Text>
-                        <TextInput
-                            style={styles.input}
+                    <View style={styles.halfWidth}>
+                        <FormInput
+                            label="DATE"
                             placeholder="MM/DD/YYYY"
-                            placeholderTextColor={theme.colors.secondary}
                             value={date}
                             onChangeText={setDate}
                         />
                     </View>
-                    <View style={[styles.inputGroup, styles.halfInput]}>
-                        <Text style={styles.label}>TIME</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="HH:MM AM/PM"
-                            placeholderTextColor={theme.colors.secondary}
+                    <View style={styles.halfWidth}>
+                        <FormInput
+                            label="TIME"
+                            placeholder="HH:MM PM"
                             value={time}
                             onChangeText={setTime}
                         />
                     </View>
                 </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>LOCATION</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Address or Spot Name"
-                        placeholderTextColor={theme.colors.secondary}
-                        value={location}
-                        onChangeText={setLocation}
-                    />
-                </View>
-
+                <FormInput
+                    label="LOCATION (ADDRESS OR SPOT)"
+                    placeholder="Where are we meeting?"
+                    value={location}
+                    onChangeText={setLocation}
+                />
                 <TouchableOpacity style={styles.createButton} onPress={handleCreate}>
-                    <Text style={styles.createButtonText}>CREATE EVENT</Text>
+                    <View style={styles.buttonBackground} />
+                    <Text style={styles.buttonText}>PUBLISH EVENT</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.goBack()}>
-                    <Text style={styles.cancelButtonText}>CANCEL</Text>
+                    <Text style={styles.cancelText}>CANCEL</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -131,80 +95,54 @@ export default function CreateEventScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: theme.colors.background,
-    },
+    container: { flex: 1, backgroundColor: theme.colors.background },
     header: {
-        padding: 20,
         paddingTop: 60,
-        backgroundColor: theme.colors.card,
+        paddingBottom: 20,
+        paddingHorizontal: 20,
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border,
+        alignItems: 'center',
     },
     headerTitle: {
-        color: theme.colors.text,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 24,
-        textTransform: 'uppercase',
-        textAlign: 'center',
+        color: theme.colors.primary,
+        letterSpacing: 2,
     },
-    form: {
-        padding: 20,
-    },
-    inputGroup: {
-        marginBottom: 20,
-    },
-    label: {
-        color: theme.colors.secondary,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 12,
-        marginBottom: 8,
-        textTransform: 'uppercase',
-    },
-    input: {
-        backgroundColor: theme.colors.card,
-        color: theme.colors.text,
-        fontFamily: theme.fonts.secondary.regular,
-        padding: 15,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-        fontSize: 16,
-    },
-    textArea: {
-        height: 100,
-        textAlignVertical: 'top',
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    halfInput: {
-        width: '48%',
-    },
+    form: { padding: 20 },
+    row: { flexDirection: 'row', justifyContent: 'space-between' },
+    halfWidth: { width: '48%' },
     createButton: {
-        backgroundColor: theme.colors.primary,
-        padding: 18,
-        borderRadius: 8,
+        marginTop: 30,
+        height: 55,
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
-        marginBottom: 15,
+        position: 'relative',
+        overflow: 'hidden',
     },
-    createButtonText: {
-        color: theme.colors.black,
+    buttonBackground: { ...StyleSheet.absoluteFillObject, backgroundColor: theme.colors.primary },
+    buttonText: {
         fontFamily: theme.fonts.primary.bold,
+        color: '#000',
         fontSize: 18,
-        textTransform: 'uppercase',
+        letterSpacing: 2,
+        position: 'relative',
+        zIndex: 1,
     },
     cancelButton: {
-        padding: 15,
+        marginTop: 20,
+        height: 50,
+        justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+        marginBottom: 40,
     },
-    cancelButtonText: {
-        color: theme.colors.secondary,
+    cancelText: {
         fontFamily: theme.fonts.secondary.bold,
+        color: theme.colors.textSecondary,
         fontSize: 14,
-        textTransform: 'uppercase',
+        letterSpacing: 1,
     },
 });
