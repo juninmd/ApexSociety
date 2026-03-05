@@ -5,7 +5,7 @@ import { theme } from '../theme';
 interface CrewBannerProps {
     name: string;
     tag: string;
-    foundedYear: number;
+    foundedYear: string;
 }
 
 export default function CrewBanner({ name, tag, foundedYear }: CrewBannerProps) {
