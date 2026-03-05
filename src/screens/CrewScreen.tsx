@@ -30,7 +30,7 @@ export default function CrewScreen() {
             <CrewHeader name={crew.name} memberCount={crew.memberCount} rank={crew.rank} />
 
             {/* Red Banner */}
-            <CrewBanner name={crew.name} tag={crew.tag} foundedYear={crew.foundedYear} />
+            <CrewBanner name={crew.name} tag={crew.tag} foundedYear={crew.foundedYear || "'23"} />
 
             <Text style={styles.sectionHeader}>MANAGE</Text>
 
