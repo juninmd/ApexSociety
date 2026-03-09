@@ -1,5 +1,7 @@
-const expo = require('eslint-config-expo/flat.js');
+const { FlatCompat } = require('@eslint/eslintrc');
 const prettierRecommended = require('eslint-plugin-prettier/recommended');
+
+const compat = new FlatCompat();
 
 module.exports = [
     {
@@ -12,7 +14,7 @@ module.exports = [
             'metro.config.js',
         ],
     },
-    ...expo,
+    ...compat.extends('expo'),
     prettierRecommended,
     {
         files: ['**/*.test.ts', '**/*.test.tsx', 'jest.setup.js', 'jest.config.js'],
