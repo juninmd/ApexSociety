@@ -3,7 +3,8 @@
 ## Live Demo
 
 You can access the latest web version of the application here:
-[**Launch ApexSociety Web**](https://apexsociety.github.io/apexsociety/)
+- **GitHub Pages:** [Launch ApexSociety Web](https://apexsociety.github.io/apexsociety/)
+- **Netlify:** (Your Netlify project URL will appear here once linked and deployed on pushes to `main`)
 
 *Note: The interactive Map feature is optimized for mobile and shows a landing page on the web. You can explore Events, Crews, and Profiles.*
 

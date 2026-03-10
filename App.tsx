@@ -9,9 +9,10 @@ import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { theme } from './src/theme';
 import { RootStackParamList } from './src/navigation/types';
+import metadata from './src/constants/metadata.json';
 
 const linking: LinkingOptions<RootStackParamList> = {
-    prefixes: [Linking.createURL('/'), 'https://apexsociety.github.io/apexsociety'],
+    prefixes: [Linking.createURL('/'), metadata.homepage],
     config: {
         screens: {
             Main: {
