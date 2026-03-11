@@ -18,6 +18,19 @@ try {
 
     const imageUrl = `${cleanHomepage}/icon.png`;
 
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: metadata.name,
+        url: cleanHomepage,
+        description: metadata.description,
+        author: {
+            '@type': 'Organization',
+            name: metadata.author,
+        },
+        image: imageUrl,
+    };
+
     const replacements = {
         '{{TITLE}}': metadata.name,
         '{{DESCRIPTION}}': metadata.description,
@@ -29,6 +42,7 @@ try {
         '{{TWITTER_USERNAME}}': metadata.twitterUsername,
         '{{SITE_NAME}}': metadata.siteName,
         '{{LOCALE}}': metadata.locale,
+        '{{JSON_LD}}': JSON.stringify(jsonLd, null, 4).replace(/\n/g, '\n        '), // Indent for proper HTML formatting
     };
 
     Object.entries(replacements).forEach(([placeholder, value]) => {
