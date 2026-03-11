@@ -68,7 +68,7 @@ describe('<CreateCrewScreen />', () => {
         expect(Alert.alert).toHaveBeenCalledWith(
             'Success',
             'Crew created successfully!',
-            expect.any(Array)
+            expect.any(Array),
         );
 
         // Extract the OK button's onPress from the alert and call it to simulate user pressing OK

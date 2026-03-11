@@ -16,7 +16,9 @@ describe('<CrewBadge />', () => {
         const initials = getByText('SC');
 
         expect(initials).toBeTruthy();
-        expect(initials.props.style).toEqual(expect.arrayContaining([expect.objectContaining({ fontSize: 14 })]));
+        expect(initials.props.style).toEqual(
+            expect.arrayContaining([expect.objectContaining({ fontSize: 14 })]),
+        );
     });
 
     it('applies large size styling correctly', () => {
@@ -24,6 +26,8 @@ describe('<CrewBadge />', () => {
         const initials = getByText('LC');
 
         expect(initials).toBeTruthy();
-        expect(initials.props.style).toEqual(expect.arrayContaining([expect.objectContaining({ fontSize: 36 })]));
+        expect(initials.props.style).toEqual(
+            expect.arrayContaining([expect.objectContaining({ fontSize: 36 })]),
+        );
     });
 });
