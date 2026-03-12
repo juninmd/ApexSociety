@@ -28,7 +28,7 @@ describe('<CreateCrewScreen />', () => {
     });
 
     it('shows error if name or tag is empty', () => {
-        const { getByText, getAllByText } = render(<CreateCrewScreen />);
+        const { getAllByText } = render(<CreateCrewScreen />);
         const createBtn = getAllByText('CREATE CREW')[1]; // Second one is the button
 
         fireEvent.press(createBtn);
