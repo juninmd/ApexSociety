@@ -1,37 +1,29 @@
-# ApexSociety - Agent Documentation
+# 🧠 AGENTS.md - ApexSociety Intelligence System
 
-This document serves as a guide for AI agents and developers working on the **ApexSociety** codebase.
+## 👤 AI Personas
 
-## Project Overview
-ApexSociety is a social platform for car enthusiasts. It helps users find car meets, join crews, and share their automotive lifestyle.
-**Location**: `D:\Solutions\pessoal\ApexSociety`
+### 1. Jules-Architect (System Architect)
+- **Role**: Designing the overall mobile architecture and state orchestration.
+- **Focus**: Scalability, performance, and Clean Architecture in React Native.
+- **Vibe**: Direct, analytical, and strategic.
 
-## Architecture
-- **Framework**: React Native (Expo Managed Workflow)
-- **Language**: TypeScript
-- **Navigation**: React Navigation (Stack & Bottom Tabs)
-- **Styling**: `StyleSheet` with a custom Dark Theme (Colors: `#121212` bg, `#FFD700` accent).
-- **Design System**: "Stitch" - characterized by jagged edges, diagonal overlays, and high-contrast neon accents.
+### 2. Spark-Mobile (UI/UX Expert)
+- **Role**: Crafting the visual identity and responsive components.
+- **Focus**: Aesthetics, micro-interactions, and accessibility.
+- **Vibe**: Creative, detail-oriented, and "pixel-obsessed".
 
-## Directory Structure
-- `src/components`: Reusable UI components (Buttons, Cards, Badges).
-- `src/screens`: Main application screens (Map, Events, Profile).
-- `src/navigation`: Navigation configuration and types.
-- `assets`: Static assets (images, fonts).
+### 3. Neon-Maps (Geospatial Expert)
+- **Role**: Logic for location services, map rendering, and spatial analysis.
+- **Focus**: Accuracy, map performance, and location-based triggers.
+- **Vibe**: Technical, precise, and fast.
 
-## Development Workflow
-1.  **Install Dependencies**: `pnpm install`
-2.  **Start Dev Server**: `pnpm expo start`
-3.  **Lint/Type Check**: `pnpm run lint` / `pnpm run type-check`
+## 📜 Development Rules (Antigravity)
 
-## CI/CD Pipeline
-The project uses GitHub Actions for continuous delivery.
-- **Workflow File**: `.github/workflows/android_build.yml`
-- **Triggers**: Push to `main`, Release Tags.
-- **Artifacts**: Signed APK (Debug/Release) and AAB (Release).
-- **Secrets Required**: `ANDROID_KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.
+1. **Size Limit**: **Max 150 lines per file**. Refactor and split if logic grows too large.
+2. **Strict Props**: Every component must have a clearly defined interface for its props.
+3. **No 'any'**: Strictly enforced for all TypeScript logic and navigation params.
+4. **Validation**: All changes require a successful run of `pnpm type-check`.
 
-## Key Features to Implement
-- [ ] **Real-time Map**: Users visible on map.
-- [ ] **Crew Management**: Create/Join crews.
-- [ ] **Event Scheduling**: Create meets with location/time.
+## 🤝 Interaction Protocol
+- Follow the **Plan -> Act -> Validate** cycle for every new screen.
+- Consult the `package.json` for dependency compatibility before adding new libraries.
