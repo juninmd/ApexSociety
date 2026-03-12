@@ -9,22 +9,36 @@ interface CustomButtonProps {
     textStyle?: TextStyle;
 }
 
-export default function CustomButton({ title, onPress, variant = 'primary', style, textStyle }: CustomButtonProps) {
+export default function CustomButton({
+    title,
+    onPress,
+    variant = 'primary',
+    style,
+    textStyle,
+}: CustomButtonProps) {
     const getBackgroundColor = () => {
         switch (variant) {
-            case 'primary': return '#FFD700';
-            case 'secondary': return '#333333';
-            case 'danger': return '#D32F2F';
-            default: return '#FFD700';
+            case 'primary':
+                return '#FFD700';
+            case 'secondary':
+                return '#333333';
+            case 'danger':
+                return '#D32F2F';
+            default:
+                return '#FFD700';
         }
     };
 
     const getTextColor = () => {
         switch (variant) {
-            case 'primary': return '#000000';
-            case 'secondary': return '#FFFFFF';
-            case 'danger': return '#FFFFFF';
-            default: return '#000000';
+            case 'primary':
+                return '#000000';
+            case 'secondary':
+                return '#FFFFFF';
+            case 'danger':
+                return '#FFFFFF';
+            default:
+                return '#000000';
         }
     };
 

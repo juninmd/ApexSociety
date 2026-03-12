@@ -1,115 +1,114 @@
 name: Build Android App
 
 on:
-  push:
-    branches: [ "main" ]
-    tags: [ "v*" ]
-  workflow_dispatch:
+    push:
+        branches: ['main']
+        tags: ['v*']
+    workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 9
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
+            - name: Setup Java
+              uses: actions/setup-java@v4
+              with:
+                  distribution: 'zulu'
+                  java-version: '17'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
-      - name: Install EAS CLI
-        run: pnpm add -g eas-cli
+            - name: Install EAS CLI
+              run: pnpm add -g eas-cli
 
+            - name: Create gradle.properties
+              run: |
+                  mkdir -p android
+                  echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m" > android/gradle.properties
 
-      - name: Create gradle.properties
-        run: |
-          mkdir -p android
-          echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m" > android/gradle.properties
+            - name: Prebuild (Generate Native Projects)
+              run: npx expo prebuild --platform android
 
-      - name: Prebuild (Generate Native Projects)
-        run: npx expo prebuild --platform android
+            - name: Cache Gradle packages
+              uses: actions/cache@v3
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+            - name: Decode Keystore
+              env:
+                  ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+              run: |
+                  echo $ANDROID_KEYSTORE_BASE64 | base64 --decode > android/app/release.keystore
 
-      - name: Decode Keystore
-        env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-        run: |
-          echo $ANDROID_KEYSTORE_BASE64 | base64 --decode > android/app/release.keystore
+            - name: Configure Keystore Signing
+              run: |
+                  echo '
+                   android {
+                       signingConfigs {
+                           release {
+                               storeFile file("release.keystore")
+                               storePassword System.getenv("KEYSTORE_PASSWORD")
+                               keyAlias System.getenv("KEY_ALIAS")
+                               keyPassword System.getenv("KEY_PASSWORD")
+                           }
+                       }
+                       buildTypes {
+                           release {
+                               signingConfig signingConfigs.release
+                           }
+                       }
+                   }
+                  ' >> android/app/build.gradle
 
-      - name: Configure Keystore Signing
-        run: |
-           echo '
-            android {
-                signingConfigs {
-                    release {
-                        storeFile file("release.keystore")
-                        storePassword System.getenv("KEYSTORE_PASSWORD")
-                        keyAlias System.getenv("KEY_ALIAS")
-                        keyPassword System.getenv("KEY_PASSWORD")
-                    }
-                }
-                buildTypes {
-                    release {
-                        signingConfig signingConfigs.release
-                    }
-                }
-            }
-           ' >> android/app/build.gradle
+            - name: Build APK (Debug)
+              working-directory: android
+              run: ./gradlew assembleDebug
 
-      - name: Build APK (Debug)
-        working-directory: android
-        run: ./gradlew assembleDebug
+            - name: Build AAB (Release)
+              working-directory: android
+              env:
+                  KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+                  KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+                  KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+              run: ./gradlew bundleRelease
 
-      - name: Build AAB (Release)
-        working-directory: android
-        env:
-           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew bundleRelease
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: app-debug
+                  path: android/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+            - name: Generate Tag
+              id: tag
+              run: echo "TAG_NAME=v1.0.0-${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      - name: Generate Tag
-        id: tag
-        run: echo "TAG_NAME=v1.0.0-${GITHUB_SHA::7}" >> $GITHUB_ENV
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          files: |
-            android/app/build/outputs/apk/debug/app-debug.apk
-            android/app/build/outputs/bundle/release/app-release.aab
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Create Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  tag_name: ${{ env.TAG_NAME }}
+                  files: |
+                      android/app/build/outputs/apk/debug/app-debug.apk
+                      android/app/build/outputs/bundle/release/app-release.aab
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

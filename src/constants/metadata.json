@@ -1,0 +1,15 @@
+{
+    "name": "ApexSociety",
+    "slug": "ApexSociety",
+    "description": "ApexSociety - The social platform for car enthusiasts. Find meets, join crews, and share your automotive lifestyle.",
+    "githubUrl": "https://github.com/apexsociety/apexsociety",
+    "version": "1.0.0",
+    "scheme": "apexsociety",
+    "homepage": "https://apexsociety.github.io/apexsociety",
+    "author": "ApexSociety",
+    "keywords": "cars, social, meetups, crews, automotive, lifestyle, react-native, expo",
+    "themeColor": "#000000",
+    "twitterUsername": "@apexsociety",
+    "locale": "en_US",
+    "siteName": "ApexSociety"
+}

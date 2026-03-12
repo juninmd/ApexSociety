@@ -32,11 +32,17 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
 
 # typescript
 *.tsbuildinfo
 
+# coverage
+coverage/
+
 # generated native folders
 /ios
 /android
+public/index.html
+public/sitemap.xml
