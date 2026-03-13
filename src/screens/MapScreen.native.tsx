@@ -6,6 +6,7 @@ import * as Location from 'expo-location';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_USERS, MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
+import EventCardOverlay from '../components/EventCardOverlay';
 
 export default function MapScreen() {
     const [region, setRegion] = useState({
@@ -78,14 +79,7 @@ export default function MapScreen() {
                 <Text style={styles.speedText}>1 KM/H</Text>
 
                 {nextEvent && (
-                    <View style={styles.eventCard}>
-                        <Text style={styles.eventHost}>{nextEventHost} ★</Text>
-                        <Text style={styles.eventTitle}>{nextEvent.title}</Text>
-                        <Text style={styles.eventTime}>{nextEvent.startTime}</Text>
-                        <Text style={styles.eventStatus}>
-                            {nextEvent.isPrivate ? 'PRIVATE' : 'PUBLIC'} • {nextEvent.attendees}
-                        </Text>
-                    </View>
+                    <EventCardOverlay nextEvent={nextEvent} nextEventHost={nextEventHost} />
                 )}
             </LinearGradient>
         </View>
@@ -123,35 +117,6 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
         fontFamily: theme.fonts.primary.regular,
         fontSize: 18,
-        textAlign: 'right',
-    },
-    eventCard: {
-        alignSelf: 'flex-end',
-        marginBottom: 40,
-    },
-    eventHost: {
-        color: theme.colors.text,
-        fontSize: 12,
-        fontFamily: theme.fonts.secondary.bold,
-        textAlign: 'right',
-    },
-    eventTitle: {
-        color: theme.colors.text,
-        fontSize: 32,
-        fontFamily: theme.fonts.primary.bold,
-        textAlign: 'right',
-        textTransform: 'uppercase',
-    },
-    eventTime: {
-        color: theme.colors.textSecondary,
-        fontSize: 14,
-        fontFamily: theme.fonts.secondary.regular,
-        textAlign: 'right',
-    },
-    eventStatus: {
-        color: theme.colors.secondary,
-        fontSize: 12,
-        fontFamily: theme.fonts.secondary.bold,
         textAlign: 'right',
     },
 });

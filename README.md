@@ -3,9 +3,20 @@
 [![Expo](https://img.shields.io/badge/Expo-54.x-000000?logo=expo)](https://expo.dev/)
 [![React Native](https://img.shields.io/badge/React_Native-0.81-61DAFB?logo=react)](https://reactnative.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/apexsociety/deploy-status)](https://apexsociety.netlify.app/)
+[![GitHub Pages Status](https://github.com/apexsociety/apexsociety/actions/workflows/deploy.yml/badge.svg)](https://apexsociety.github.io/apexsociety/)
 [![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
 
 > A modern, high-performance mobile application built with Expo and React Native, featuring geolocalização and immersive UI components. Orchestrated by **Jules-Architect** and **Spark-Mobile**.
+
+## 🌐 Web Version (Disponível)
+
+The web version of ApexSociety is readily available to visualize the application without installing it:
+
+- **[View on GitHub Pages](https://apexsociety.github.io/apexsociety/)** (Primary Web App)
+- **[View on Netlify](https://apexsociety.netlify.app/)** (Alternative Deployment)
+
+Deployment workflows for both GitHub Pages and Netlify are configured to update automatically on pushes to `main`.
 
 ## ✨ Features
 
