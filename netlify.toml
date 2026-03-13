@@ -1,6 +1,7 @@
 [build]
   command = "pnpm run build:web"
   publish = "dist"
+  environment = { NODE_VERSION = "20" }
 
 [[redirects]]
   from = "/*"

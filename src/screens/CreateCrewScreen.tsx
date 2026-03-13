@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    ScrollView,
-    Alert,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { theme } from '../theme';
 import { RootStackParamList } from '../navigation/types';
+import CrewFormInputs from '../components/CrewFormInputs';
 
 export default function CreateCrewScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -45,41 +38,14 @@ export default function CreateCrewScreen() {
             </View>
 
             <View style={styles.form}>
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>CREW NAME</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Ex: Night Runners"
-                        placeholderTextColor={theme.colors.secondary}
-                        value={name}
-                        onChangeText={setName}
-                    />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>TAG (MAX 5 CHARS)</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Ex: NRUN"
-                        placeholderTextColor={theme.colors.secondary}
-                        value={tag}
-                        onChangeText={(text) => setTag(text.toUpperCase())}
-                        maxLength={5}
-                    />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>DESCRIPTION</Text>
-                    <TextInput
-                        style={[styles.input, styles.textArea]}
-                        placeholder="What is your crew about?"
-                        placeholderTextColor={theme.colors.secondary}
-                        value={description}
-                        onChangeText={setDescription}
-                        multiline
-                        numberOfLines={4}
-                    />
-                </View>
+                <CrewFormInputs
+                    name={name}
+                    setName={setName}
+                    tag={tag}
+                    setTag={setTag}
+                    description={description}
+                    setDescription={setDescription}
+                />
 
                 <TouchableOpacity style={styles.createButton} onPress={handleCreate}>
                     <Text style={styles.createButtonText}>CREATE CREW</Text>
@@ -114,30 +80,6 @@ const styles = StyleSheet.create({
     },
     form: {
         padding: 20,
-    },
-    inputGroup: {
-        marginBottom: 20,
-    },
-    label: {
-        color: theme.colors.secondary,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 12,
-        marginBottom: 8,
-        textTransform: 'uppercase',
-    },
-    input: {
-        backgroundColor: theme.colors.card,
-        color: theme.colors.text,
-        fontFamily: theme.fonts.secondary.regular,
-        padding: 15,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-        fontSize: 16,
-    },
-    textArea: {
-        height: 100,
-        textAlignVertical: 'top',
     },
     createButton: {
         backgroundColor: theme.colors.primary,
