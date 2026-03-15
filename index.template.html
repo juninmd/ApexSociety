@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{LOCALE}}">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,7 +9,7 @@
         <link rel="canonical" href="{{URL}}" />
 
         <!-- Security -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https: wss:;" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https: wss:; script-src 'self'; style-src 'self';" />
         <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
         <!-- Open Graph / Facebook -->
@@ -19,7 +19,7 @@
         <meta property="og:description" content="{{DESCRIPTION}}" />
         <meta property="og:image" content="{{IMAGE_URL}}" />
         <meta property="og:site_name" content="{{SITE_NAME}}" />
-        <meta property="og:locale" content="{{LOCALE}}" />
+        <meta property="og:locale" content="{{OG_LOCALE}}" />
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
@@ -52,6 +52,8 @@
         <meta name="theme-color" content="{{THEME_COLOR}}" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="apple-touch-icon" href="{{URL}}/icon.png" />
+        <link rel="manifest" href="{{URL}}/manifest.json" />
 
         <script type="application/ld+json">
         {{JSON_LD}}
