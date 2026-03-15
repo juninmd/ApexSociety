@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../navigation/types';
 import CustomButton from '../components/CustomButton';
 import { theme } from '../theme';
+import metadata from '../constants/metadata.json';
 
 export default function MenuScreen() {
     const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
@@ -30,6 +31,12 @@ export default function MenuScreen() {
                 <CustomButton
                     title="SETTINGS"
                     onPress={() => Alert.alert('Coming Soon', 'Settings are under development.')}
+                    variant="secondary"
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="WEB VERSION"
+                    onPress={() => Linking.openURL(metadata.homepage)}
                     variant="secondary"
                     style={styles.button}
                 />

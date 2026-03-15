@@ -59,7 +59,7 @@ describe('Metadata Consistency', () => {
             `<meta property="og:site_name" content="${metadata.siteName}" />`,
         );
         expect(publicIndexHtml).toContain(
-            `<meta property="og:locale" content="${metadata.locale}" />`,
+            `<meta property="og:locale" content="${metadata.locale.replace('-', '_')}" />`,
         );
     });
 });

@@ -42,6 +42,7 @@ try {
         '{{TWITTER_USERNAME}}': metadata.twitterUsername,
         '{{SITE_NAME}}': metadata.siteName,
         '{{LOCALE}}': metadata.locale,
+        '{{OG_LOCALE}}': metadata.locale.replace('-', '_'),
         '{{JSON_LD}}': JSON.stringify(jsonLd, null, 4)
             .replace(/</g, '\\u003c')
             .replace(/\n/g, '\n        '), // Indent for proper HTML formatting
