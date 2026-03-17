@@ -1,5 +1,5 @@
 ## Deploying Web Version
-The web version is already configured to deploy automatically via GitHub Pages. Any pushes to `main` branch will automatically build and update `https://apexsociety.github.io/apexsociety/` using the `.github/workflows/deploy-web.yml` workflow.
+The web version is already configured to deploy automatically via GitHub Pages. Any pushes to `main` branch will automatically build and update `https://apexsociety.github.io/apexsociety/` using the `.github/workflows/deploy.yml` workflow.
 
 If you specifically want to deploy to **Netlify**, the configuration is already fully present in `netlify.toml`. All you have to do is:
 1. Log into Netlify.
