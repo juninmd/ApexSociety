@@ -9,14 +9,14 @@
 
 > A modern, high-performance mobile application built with Expo and React Native, featuring geolocalização and immersive UI components. Orchestrated by **Jules-Architect** and **Spark-Mobile**.
 
-## 🌐 Web Version (Disponível)
+## 🌐 Web Version (Disponibilizado)
 
 The web version of ApexSociety is readily available to visualize the application without installing it:
 
+- **[🚀 Play on Netlify](https://apexsociety.netlify.app/)**
 - **[View on GitHub Pages](https://apexsociety.github.io/apexsociety/)** (Primary Web App)
-- **[View on Netlify](https://apexsociety.netlify.app/)** (Alternative Deployment)
 
-Deployment workflows for both GitHub Pages and Netlify are configured to update automatically on pushes to `main`.
+Deployment workflows for both GitHub Pages and Netlify are fully configured to update automatically on pushes to `main` via `.github/workflows/deploy.yml` and `.github/workflows/netlify.yml`.
 
 ## ✨ Features
 
