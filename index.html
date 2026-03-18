@@ -9,7 +9,7 @@
         <link rel="canonical" href="https://apexsociety.github.io/apexsociety" />
 
         <!-- Security -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https: wss:; script-src 'self'; style-src 'self';" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' wss: https:; font-src 'self' data: https:;" />
         <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
         <!-- Open Graph / Facebook -->
@@ -18,6 +18,9 @@
         <meta property="og:title" content="ApexSociety" />
         <meta property="og:description" content="ApexSociety - The social platform for car enthusiasts. Find meets, join crews, and share your automotive lifestyle." />
         <meta property="og:image" content="https://apexsociety.github.io/apexsociety/icon.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="ApexSociety" />
         <meta property="og:site_name" content="ApexSociety" />
         <meta property="og:locale" content="en_US" />
 
@@ -46,6 +49,7 @@
                 flex: 1;
             }
         </style>
+        <meta name="application-name" content="ApexSociety" />
         <meta name="description" content="ApexSociety - The social platform for car enthusiasts. Find meets, join crews, and share your automotive lifestyle." />
         <meta name="author" content="ApexSociety" />
         <meta name="keywords" content="cars, social, meetups, crews, automotive, lifestyle, react-native, expo" />
