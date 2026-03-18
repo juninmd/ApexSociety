@@ -9,7 +9,7 @@
 
 > A modern, high-performance mobile application built with Expo and React Native, featuring geolocalização and immersive UI components. Orchestrated by **Jules-Architect** and **Spark-Mobile**.
 
-## 🌐 Web Version (Disponibilizado)
+## 🌐 Web Version (Available)
 
 The web version of ApexSociety is readily available to visualize the application without installing it:
 
