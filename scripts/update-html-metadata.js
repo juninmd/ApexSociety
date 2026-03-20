@@ -49,6 +49,8 @@ try {
             console.warn('Warning: Could not find </head> tag to insert title tag.');
         }
     }
+        }
+    }
 
     updateMeta('og:title', metadata.name);
     updateMeta('og:description', metadata.description);
