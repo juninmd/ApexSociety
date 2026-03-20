@@ -16,8 +16,7 @@ We take the security of ApexSociety seriously. If you have found a vulnerability
 
 ### How to Report
 
-Please report security vulnerabilities by opening a new issue in our [GitHub repository](https://github.com/apexsociety/apexsociety/issues).
-Select the "Security Vulnerability" template if available, or clearly state that it is a security issue in the title.
+Please report security vulnerabilities privately by navigating to the "Security" tab of our repository and selecting "Report a vulnerability". Please do not create a public issue.
 
 ### What to Include
 
