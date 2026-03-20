@@ -35,7 +35,7 @@ The project uses GitHub Actions for continuous delivery.
 - **Workflow File**: `.github/workflows/android_build.yml`
 - **Triggers**: Push to `main`, Release Tags.
 - **Artifacts**: Signed APK (Debug/Release) and AAB (Release).
-- **Secrets Required**: `ANDROID_KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.
+- **Secrets Required**: `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`.
 
 ## Key Features to Implement
 
