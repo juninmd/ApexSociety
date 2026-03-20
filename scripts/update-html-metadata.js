@@ -11,7 +11,10 @@ try {
 
     // Allow environment variables to override metadata
     const homepage = process.env.HOMEPAGE || metadata.homepage;
-    // Remove trailing slash if present for consistency, although URL usually doesn't have it in metadata.json
+    if (!homepage) {
+        throw new Error('homepage is not defined in metadata.json or as a HOMEPAGE environment variable.');
+    }
+    // Remove trailing slash if present for consistency
     const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
 
     const imageUrl = `${cleanHomepage}/icon.png`;
