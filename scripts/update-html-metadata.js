@@ -24,8 +24,8 @@ try {
         const tag = `<meta ${attribute}="${key}" content="${escapedContent}" />`;
 
         // Regex to match existing tag with either 'name' or 'property'
-        // Handles optional spaces around attributes
-        const regex = new RegExp(`<meta\\s+(?:name|property)="${key}"[\\s\\S]*?\\/>`, 'g');
+        // Handles attributes in any order, different quote types, and optional closing slash
+        const regex = new RegExp('<meta\\s+[^>]*?(?:name|property)=[\"\']' + key + '[\"\'][^>]*?\\/?>', 'g');
 
         if (regex.test(html)) {
             html = html.replace(regex, tag);
