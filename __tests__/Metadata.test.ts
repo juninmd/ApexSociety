@@ -15,7 +15,7 @@ describe('Metadata Consistency', () => {
     });
 
     it('should have correct og:description', () => {
-        expect(publicIndexHtml).toContain(metadata.description);
+        expect(publicIndexHtml).toMatch(new RegExp(`<meta\\s+property="og:description"\\s+content="${metadata.description}"`));
     });
 
     it('should have correct og:url', () => {
