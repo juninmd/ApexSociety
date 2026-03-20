@@ -22,6 +22,9 @@ try {
     }
     // Remove trailing slash if present for consistency
     const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
+    }
+    // Remove trailing slash if present for consistency
+    const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
 
     const imageUrl = `${cleanHomepage}/icon.png`;
 
