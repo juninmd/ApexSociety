@@ -33,7 +33,7 @@
         "lint:fix": "eslint . --fix",
         "test": "jest",
         "prepare": "husky",
-        "preview": "npx serve dist"
+        "preview": "serve dist"
     },
     "dependencies": {
         "@expo-google-fonts/oswald": "^0.4.2",
