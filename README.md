@@ -28,9 +28,9 @@ To enable the build pipeline, you must set the following secrets in your GitHub 
 | Secret Name               | Description                                             |
 | ------------------------- | ------------------------------------------------------- |
 | `ANDROID_KEYSTORE_BASE64` | Base64 encoded content of your `release.keystore` file. |
-| `KEYSTORE_PASSWORD`       | Password for the keystore.                              |
-| `KEY_ALIAS`               | Alias of the key in the keystore.                       |
-| `KEY_PASSWORD`            | Password for the key.                                   |
+| `ANDROID_KEYSTORE_PASSWORD`       | Password for the keystore.                              |
+| `ANDROID_KEY_ALIAS`               | Alias of the key in the keystore.                       |
+| `ANDROID_KEY_PASSWORD`            | Password for the key.                                   |
 
 ### Generating a Keystore
 
