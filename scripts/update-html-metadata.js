@@ -22,7 +22,7 @@ try {
     const updateMeta = (property, content) => {
         const escapedContent = escapeHtml(content);
         const tag = `<meta property="${property}" content="${escapedContent}" />`;
-        const regex = new RegExp(`<meta\\s+property="${property}"[\\s\\S]*?\\/>`, 'g');
+        const regex = new RegExp('<meta\\s+property="' + property + '"[^>]*>', 'g');
 
         if (regex.test(html)) {
             html = html.replace(regex, tag);
@@ -44,7 +44,9 @@ try {
         html = html.replace(/<title>[\s\S]*?<\/title>/, titleTag);
     } else {
         if (html.includes('</head>')) {
-            html = html.replace('</head>', `    ${titleTag}\n    </head>`);
+            html = html.replace('</head>', '    ' + titleTag + '\n    </head>');
+        } else {
+            console.warn('Warning: Could not find </head> tag to insert title tag.');
         }
     }
 
