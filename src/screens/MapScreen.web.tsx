@@ -21,7 +21,7 @@ export default function MapScreen() {
                 </Text>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => Linking.openURL(metadata.githubUrl)}
+                    onPress={() => Linking.openURL(metadata.homepage)}
                     activeOpacity={0.8}
                 >
                     <Text style={styles.buttonText}>GET THE APP</Text>
