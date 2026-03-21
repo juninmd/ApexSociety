@@ -91,6 +91,8 @@ try {
     }
         }
     }
+        }
+    }
 
     updateMeta('og:title', metadata.name);
     updateMeta('og:description', metadata.description);
