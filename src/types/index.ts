@@ -36,4 +36,5 @@ export interface Event {
     attendees: number;
     isPrivate: boolean;
     description?: string;
+    eventType?: 'meet' | 'race' | 'checkpoint';
 }

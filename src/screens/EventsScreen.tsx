@@ -33,6 +33,7 @@ export default function EventsScreen() {
                             time={event.startTime}
                             attendees={event.attendees}
                             isPrivate={event.isPrivate}
+                            eventType={event.eventType}
                             onPress={() => {}} // No-op for now
                         />
                     );
