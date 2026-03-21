@@ -9,7 +9,7 @@ interface EventCardProps {
     time: string;
     attendees: number;
     isPrivate?: boolean;
-    eventType?: string;
+    eventType?: 'meet' | 'race' | 'checkpoint';
     onPress?: () => void;
 }
 
