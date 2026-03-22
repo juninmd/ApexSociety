@@ -1,15 +1,15 @@
 {
     "name": "ApexSociety",
     "slug": "ApexSociety",
-    "description": "ApexSociety - The ultimate community for car enthusiasts. Mark street races, organize car events, build your crew, and share your automotive passion.",
+    "description": "ApexSociety - A comunidade definitiva de entusiastas de carros. Marque corridas de rua, encontros locais, crie sua equipe e receba alertas de postos de controle policial em tempo real.",
     "githubUrl": "https://github.com/apexsociety/apexsociety",
     "version": "1.0.0",
     "scheme": "apexsociety",
     "homepage": "https://apexsociety.github.io/apexsociety",
     "author": "ApexSociety",
-    "keywords": "cars, social, meetups, crews, street racing, alerts, police checkpoints, automotive, lifestyle, react-native, expo",
+    "keywords": "carros, social, encontros, equipes, corrida de rua, alertas, blitz, automotivo, estilo de vida, react-native, expo",
     "themeColor": "#000000",
     "twitterUsername": "@apexsociety",
-    "locale": "en-US",
+    "locale": "pt-BR",
     "siteName": "ApexSociety"
 }
