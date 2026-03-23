@@ -19,17 +19,17 @@ export default function MapScreen() {
             <View style={styles.overlay} />
             <View style={styles.content}>
                 <Map size={64} color={theme.colors.primary} style={styles.icon} />
-                <Text style={styles.title}>Map Experience</Text>
+                <Text style={styles.title}>Experiência no Mapa</Text>
                 <Text style={styles.subtitle}>
-                    The interactive map is optimized for our mobile app. Download {metadata.name} to
-                    see who&apos;s around you!
+                    O mapa interativo é otimizado para nosso aplicativo mobile. Baixe o {metadata.name} para
+                    ver quem está perto de você!
                 </Text>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => Linking.openURL(metadata.githubUrl)}
                     activeOpacity={0.8}
                 >
-                    <Text style={styles.buttonText}>GET THE APP</Text>
+                    <Text style={styles.buttonText}>BAIXE O APP</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -37,7 +37,7 @@ export default function MapScreen() {
                     onPress={() => navigation.navigate('Events')}
                     activeOpacity={0.8}
                 >
-                    <Text style={styles.secondaryButtonText}>EXPLORE EVENTS</Text>
+                    <Text style={styles.secondaryButtonText}>EXPLORAR EVENTOS</Text>
                 </TouchableOpacity>
             </View>
         </LinearGradient>

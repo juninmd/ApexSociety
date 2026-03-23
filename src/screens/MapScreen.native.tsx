@@ -7,6 +7,7 @@ import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_USERS, MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
 import EventCardOverlay from '../components/EventCardOverlay';
+import ReportCheckpointButton from '../components/ReportCheckpointButton';
 
 export default function MapScreen() {
     const [region, setRegion] = useState({
@@ -75,8 +76,13 @@ export default function MapScreen() {
             </MapView>
 
             <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)']} style={styles.overlay}>
-                <Text style={styles.timeText}>12:13 AM</Text>
-                <Text style={styles.speedText}>1 KM/H</Text>
+                <View style={styles.topOverlay}>
+                    <ReportCheckpointButton />
+                    <View>
+                        <Text style={styles.timeText}>12:13 AM</Text>
+                        <Text style={styles.speedText}>1 KM/H</Text>
+                    </View>
+                </View>
 
                 {nextEvent && (
                     <EventCardOverlay nextEvent={nextEvent} nextEventHost={nextEventHost} />
@@ -118,5 +124,10 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.primary.regular,
         fontSize: 18,
         textAlign: 'right',
+    },
+    topOverlay: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
     },
 });
