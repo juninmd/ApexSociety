@@ -19,10 +19,11 @@ export default function MapScreen() {
             <View style={styles.overlay} />
             <View style={styles.content}>
                 <Map size={64} color={theme.colors.primary} style={styles.icon} />
-                <Text style={styles.title}>Experiência no Mapa</Text>
+                <Text style={styles.title}>Corridas de Rua & Eventos</Text>
                 <Text style={styles.subtitle}>
-                    O mapa interativo é otimizado para nosso aplicativo mobile. Baixe o {metadata.name} para
-                    ver quem está perto de você!
+                    O mapa interativo é otimizado para nosso aplicativo mobile. Baixe o{' '}
+                    {metadata.name} para marcar corridas de rua, eventos de carro e ver quem está
+                    perto de você!
                 </Text>
                 <TouchableOpacity
                     style={styles.button}
