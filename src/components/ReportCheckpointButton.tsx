@@ -7,7 +7,7 @@ export default function ReportCheckpointButton() {
         Alert.alert(
             'Checkpoint Reportado',
             'Motoristas nas proximidades foram notificados sobre a blitz.',
-            [{ text: 'OK', style: 'default' }]
+            [{ text: 'OK', style: 'default' }],
         );
     };
 
