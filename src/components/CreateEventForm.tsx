@@ -24,7 +24,7 @@ export default function CreateEventForm() {
             return;
         }
         const newEvent: Event = {
-            id: Date.now().toString(),
+            id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
             title,
             description,
             hostId: 'user-current',
