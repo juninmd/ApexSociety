@@ -313,6 +313,9 @@ try {
         throw new Error('homepage is not defined in metadata.json or as a HOMEPAGE environment variable.');
     }
     const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
+        throw new Error('homepage is not defined in metadata.json or as a HOMEPAGE environment variable.');
+    }
+    const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
 
     // Current date in YYYY-MM-DD format
     const lastMod = new Date().toISOString().split('T')[0];
