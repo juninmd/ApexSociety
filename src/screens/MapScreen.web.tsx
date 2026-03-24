@@ -11,6 +11,12 @@ import { RootTabParamList } from '../navigation/types';
 export default function MapScreen() {
     const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
 
+    const handleReportBlitz = () => {
+        if (typeof window !== 'undefined') {
+            window.alert('Blitz reportada! Alerta emitido para a rede ApexSociety.');
+        }
+    };
+
     return (
         <LinearGradient
             colors={[theme.colors.background, theme.colors.card]}
@@ -19,18 +25,27 @@ export default function MapScreen() {
             <View style={styles.overlay} />
             <View style={styles.content}>
                 <Map size={64} color={theme.colors.primary} style={styles.icon} />
-                <Text style={styles.title}>Corridas de Rua & Eventos</Text>
+                <Text style={styles.title}>Corridas de Rua, Eventos & Alertas de Blitz</Text>
                 <Text style={styles.subtitle}>
-                    O mapa interativo é otimizado para nosso aplicativo mobile. Baixe o{' '}
-                    {metadata.name} para marcar corridas de rua, eventos de carro e ver quem está
-                    perto de você!
+                    O mapa interativo em tempo real é otimizado para nosso aplicativo mobile. Baixe o{' '}
+                    {metadata.name} para marcar corridas de rua, visualizar alertas de blitz e ver quem está
+                    na sua área!
                 </Text>
+
+                <TouchableOpacity
+                    style={styles.reportButton}
+                    onPress={handleReportBlitz}
+                    activeOpacity={0.8}
+                >
+                    <Text style={styles.reportButtonText}>REPORTAR BLITZ</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => Linking.openURL(metadata.githubUrl)}
                     activeOpacity={0.8}
                 >
-                    <Text style={styles.buttonText}>BAIXE O APP</Text>
+                    <Text style={styles.buttonText}>BAIXE O APP MOBILE</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -117,6 +132,26 @@ const styles = StyleSheet.create({
     },
     secondaryButtonText: {
         color: theme.colors.primary,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 18,
+        fontWeight: 'bold',
+        transform: [{ skewX: '20deg' }],
+        letterSpacing: 1,
+    },
+    reportButton: {
+        backgroundColor: theme.colors.error,
+        paddingHorizontal: 48,
+        paddingVertical: 16,
+        transform: [{ skewX: '-20deg' }],
+        shadowColor: theme.colors.error,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+        elevation: 5,
+        marginBottom: 20,
+    },
+    reportButtonText: {
+        color: theme.colors.white,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 18,
         fontWeight: 'bold',
