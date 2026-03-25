@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MapPin, Users, Clock } from 'lucide-react-native';
+import EventCardBadges from './EventCardBadges';
 
 interface EventCardProps {
     title: string;
@@ -27,23 +28,7 @@ export default function EventCard({
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styles.header}>
                 <Text style={styles.host}>HOSTED BY {host}</Text>
-                <View style={styles.badgesContainer}>
-                    {eventType && (
-                        <View
-                            style={[
-                                styles.typeBadge,
-                                eventType === 'checkpoint' && styles.checkpointBadge,
-                            ]}
-                        >
-                            <Text style={styles.typeText}>{eventType.toUpperCase()}</Text>
-                        </View>
-                    )}
-                    {isPrivate && (
-                        <View style={styles.privateBadge}>
-                            <Text style={styles.privateText}>PRIVATE</Text>
-                        </View>
-                    )}
-                </View>
+                <EventCardBadges isPrivate={isPrivate} eventType={eventType} />
             </View>
 
             <Text style={styles.title} numberOfLines={1}>
@@ -93,36 +78,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto_700Bold',
         fontSize: 10,
         textTransform: 'uppercase',
-    },
-    badgesContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 5,
-    },
-    typeBadge: {
-        backgroundColor: '#FFD700',
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        borderRadius: 2,
-    },
-    checkpointBadge: {
-        backgroundColor: '#FF3333',
-    },
-    typeText: {
-        color: '#000',
-        fontSize: 8,
-        fontFamily: 'Roboto_700Bold',
-    },
-    privateBadge: {
-        backgroundColor: '#333',
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        borderRadius: 2,
-    },
-    privateText: {
-        color: '#AAA',
-        fontSize: 8,
-        fontFamily: 'Roboto_700Bold',
     },
     title: {
         color: '#FFF',

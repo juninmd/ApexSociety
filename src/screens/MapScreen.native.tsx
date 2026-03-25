@@ -61,18 +61,29 @@ export default function MapScreen() {
                     />
                 ))}
 
-                {MOCK_EVENTS.map((event) => (
-                    <Marker
-                        key={event.id}
-                        coordinate={{
-                            latitude: event.location.latitude,
-                            longitude: event.location.longitude,
-                        }}
-                        title={event.title}
-                        description={event.startTime}
-                        pinColor={theme.colors.error} // Red for events
-                    />
-                ))}
+                {MOCK_EVENTS.map((event) => {
+                    let markerColor = theme.colors.error; // default red
+                    if (event.eventType === 'meet') {
+                        markerColor = theme.colors.primary; // yellow
+                    } else if (event.eventType === 'race') {
+                        markerColor = theme.colors.error; // red
+                    } else if (event.eventType === 'checkpoint') {
+                        markerColor = '#0000FF'; // blue
+                    }
+
+                    return (
+                        <Marker
+                            key={event.id}
+                            coordinate={{
+                                latitude: event.location.latitude,
+                                longitude: event.location.longitude,
+                            }}
+                            title={event.title}
+                            description={event.startTime}
+                            pinColor={markerColor}
+                        />
+                    );
+                })}
             </MapView>
 
             <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)']} style={styles.overlay}>
