@@ -38,16 +38,16 @@ const styles = StyleSheet.create({
         gap: 5,
     },
     typeBadge: {
-        backgroundColor: '#FFD700',
+        backgroundColor: theme.colors.primary,
         paddingHorizontal: 6,
         paddingVertical: 2,
         borderRadius: 2,
     },
     checkpointBadge: {
-        backgroundColor: '#0000FF',
+        backgroundColor: '#0000FF', // Consider moving to theme
     },
     raceBadge: {
-        backgroundColor: '#FF3333',
+        backgroundColor: theme.colors.error,
     },
     typeText: {
         color: '#000',
