@@ -1,13 +1,14 @@
 import React from 'react';
-import { Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../theme';
+import { useAlert } from '../context/AlertContext';
 
 export default function ReportCheckpointButton() {
+    const { showAlert } = useAlert();
+
     const handleReportCheckpoint = () => {
-        Alert.alert(
-            'Checkpoint Reportado',
-            'Motoristas nas proximidades foram notificados sobre a blitz.',
-            [{ text: 'OK', style: 'default' }],
+        showAlert(
+            'Checkpoint Reportado: Motoristas nas proximidades foram notificados sobre a blitz.',
         );
     };
 

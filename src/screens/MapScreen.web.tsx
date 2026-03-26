@@ -7,14 +7,14 @@ import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
 import { RootTabParamList } from '../navigation/types';
 import WebLandingContent from '../components/WebLandingContent';
+import { useAlert } from '../context/AlertContext';
 
 export default function MapScreen() {
     const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
+    const { showAlert } = useAlert();
 
     const handleReportBlitz = () => {
-        if (typeof window !== 'undefined') {
-            window.alert('Blitz reportada! Alerta emitido para a rede ApexSociety.');
-        }
+        showAlert('Blitz reportada! Alerta emitido para a rede ApexSociety.');
     };
 
     return (
