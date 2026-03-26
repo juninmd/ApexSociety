@@ -4,7 +4,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, DarkTheme, LinkingOptions } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import { EventProvider } from './src/context/EventContext';
+import { AlertProvider } from './src/context/AlertContext';
 import AppNavigator from './src/navigation/AppNavigator';
+import GlobalAlert from './src/components/GlobalAlert';
 import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { theme } from './src/theme';
@@ -55,12 +57,15 @@ export default function App() {
 
     return (
         <SafeAreaProvider>
-            <EventProvider>
-                <NavigationContainer theme={customTheme} linking={linking}>
-                    <StatusBar style="light" />
-                    <AppNavigator />
-                </NavigationContainer>
-            </EventProvider>
+            <AlertProvider>
+                <EventProvider>
+                    <NavigationContainer theme={customTheme} linking={linking}>
+                        <StatusBar style="light" />
+                        <AppNavigator />
+                        <GlobalAlert />
+                    </NavigationContainer>
+                </EventProvider>
+            </AlertProvider>
         </SafeAreaProvider>
     );
 }
