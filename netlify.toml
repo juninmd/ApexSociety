@@ -1,3 +1,4 @@
+# Netlify configuration for web deployment
 [build]
   command = "pnpm run build:web"
   publish = "dist"

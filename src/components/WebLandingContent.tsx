@@ -18,11 +18,11 @@ export default function WebLandingContent({
     return (
         <View style={styles.content}>
             <Map size={64} color={theme.colors.primary} style={styles.icon} />
-            <Text style={styles.title}>Corridas de Rua, Eventos & Alertas de Blitz</Text>
+            <Text style={styles.title}>A Comunidade Definitiva de Entusiastas de Carros</Text>
             <Text style={styles.subtitle}>
-                O mapa interativo em tempo real é otimizado para nosso aplicativo mobile. Baixe o{' '}
-                {metadata.name} para marcar corridas de rua, visualizar alertas de blitz e ver quem
-                está na sua área!
+                Conecte-se com motoristas locais, descubra encontros e receba alertas de blitz em
+                tempo real. Inspirado no First2. Baixe o {metadata.name} para a experiência
+                completa!
             </Text>
 
             <TouchableOpacity
@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     title: {
-        color: theme.colors.text,
+        color: theme.colors.primary,
         fontFamily: theme.fonts.primary.bold,
-        fontSize: 42,
+        fontSize: 48,
         marginBottom: 16,
         textAlign: 'center',
         textTransform: 'uppercase',
