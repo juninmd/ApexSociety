@@ -1,31 +1,37 @@
 import React from 'react';
 import { View, StyleSheet, Alert, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { RootTabParamList } from '../navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types';
 import CustomButton from '../components/CustomButton';
 import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
 
 export default function MenuScreen() {
-    const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     return (
         <View style={styles.container}>
             <View style={styles.menuContainer}>
                 <CustomButton
                     title="PROFILE"
-                    onPress={() => navigation.navigate('Profile')}
+                    onPress={() => navigation.navigate('Main', { screen: 'Profile' })}
                     style={styles.button}
                 />
                 <CustomButton
                     title="MAP"
-                    onPress={() => navigation.navigate('Map')}
+                    onPress={() => navigation.navigate('Main', { screen: 'Map' })}
                     style={styles.button}
                 />
                 <CustomButton
                     title="EVENTS"
-                    onPress={() => navigation.navigate('Events')}
+                    onPress={() => navigation.navigate('Main', { screen: 'Events' })}
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="DRIVE MODE"
+                    onPress={() => navigation.navigate('DriveMode')}
+                    variant="primary"
                     style={styles.button}
                 />
                 <CustomButton

@@ -1,7 +1,7 @@
 {
     "name": "ApexSociety",
     "slug": "ApexSociety",
-    "description": "ApexSociety - O app definitivo para entusiastas de carros. Marque corridas de rua, eventos de carro e encontros locais. Crie sua equipe e receba alertas de blitz em tempo real, inspirado no First2.",
+    "description": "ApexSociety - O app definitivo para entusiastas de carros. Marque corridas de rua e eventos de carro locais. Crie sua equipe e receba alertas de blitz em tempo real, inspirado no First2.",
     "githubUrl": "https://github.com/apexsociety/apexsociety",
     "version": "1.0.0",
     "scheme": "apexsociety",
