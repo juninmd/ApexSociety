@@ -4,8 +4,8 @@ export const MOCK_CREWS: Crew[] = [
     {
         id: 'crew-1',
         name: 'SPORTS CLUB US',
-        tag: 'FIRST2',
-        rank: '♔ FIRST2',
+        tag: 'APEX',
+        rank: '♔ APEX',
         memberCount: 1,
         foundedYear: "'25",
         logoUrl: undefined, // Placeholder handled in UI

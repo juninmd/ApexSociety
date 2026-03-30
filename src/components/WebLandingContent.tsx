@@ -21,8 +21,8 @@ export default function WebLandingContent({
             <Text style={styles.title}>Corridas de Rua, Eventos & Alertas de Blitz</Text>
             <Text style={styles.subtitle}>
                 O mapa interativo em tempo real é otimizado para nosso aplicativo mobile. Baixe o{' '}
-                {metadata.name} para marcar corridas de rua, visualizar alertas de blitz e ver quem
-                está na sua área!
+                {metadata.name} para construir sua equipe, marcar corridas de rua, visualizar
+                alertas de blitz e ver quem está na sua área!
             </Text>
 
             <TouchableOpacity
