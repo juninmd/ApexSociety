@@ -9,6 +9,7 @@ jest.mock('@react-navigation/native', () => ({
         goBack: jest.fn(),
         navigate: jest.fn(),
     }),
+    useIsFocused: () => true,
 }));
 
 jest.mock('../src/context/AlertContext', () => ({
@@ -42,7 +43,7 @@ describe('DriveModeScreen', () => {
         fireEvent.press(getByTestId('report-blitz-button'));
 
         expect(mockShowAlert).toHaveBeenCalledWith(
-            'Blitz reportada! Alerta emitido para a rede ApexSociety.',
+            'Blitz reported! Alert issued to the ApexSociety network.',
         );
     });
 });
