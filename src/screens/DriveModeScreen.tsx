@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AlertTriangle, Map, X } from 'lucide-react-native';
@@ -29,7 +29,7 @@ export default function DriveModeScreen() {
     }, []);
 
     const handleReportBlitz = () => {
-        showAlert('Blitz reportada! Alerta emitido para a rede ApexSociety.');
+        showAlert('Blitz reported! Alert issued to the ApexSociety network.');
     };
 
     return (
@@ -52,7 +52,7 @@ export default function DriveModeScreen() {
                 </View>
                 <View style={styles.dashboard}>
                     <View style={styles.speedCircle}>
-                        <Text style={styles.speedValue}>{speed}</Text>
+                        <Text style={styles.speedValue} allowFontScaling={false}>{speed}</Text>
                         <Text style={styles.speedUnit}>KM/H</Text>
                     </View>
                 </View>
@@ -64,7 +64,7 @@ export default function DriveModeScreen() {
                         testID="map-button"
                     >
                         <Map size={24} color={theme.colors.black} />
-                        <Text style={styles.mapButtonText}>ABRIR MAPA</Text>
+                        <Text style={styles.mapButtonText}>OPEN MAP</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.reportButton}
@@ -73,7 +73,7 @@ export default function DriveModeScreen() {
                         testID="report-blitz-button"
                     >
                         <AlertTriangle size={32} color={theme.colors.white} />
-                        <Text style={styles.reportButtonText}>REPORTAR BLITZ</Text>
+                        <Text style={styles.reportButtonText}>REPORT BLITZ</Text>
                     </TouchableOpacity>
                 </View>
             </LinearGradient>
