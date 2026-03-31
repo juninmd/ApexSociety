@@ -15,6 +15,7 @@ export type RootStackParamList = {
     CreateEvent: undefined;
     CreateCrew: undefined;
     CrewDetails: { crewId: string };
+    DriveMode: undefined;
 };
 
 export type RootTabScreenProps<T extends keyof RootTabParamList> = BottomTabScreenProps<

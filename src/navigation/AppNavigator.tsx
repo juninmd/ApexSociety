@@ -4,6 +4,7 @@ import TabNavigator from './TabNavigator';
 import CreateEventScreen from '../screens/CreateEventScreen';
 import CreateCrewScreen from '../screens/CreateCrewScreen';
 import CrewScreen from '../screens/CrewScreen';
+import DriveModeScreen from '../screens/DriveModeScreen';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -23,6 +24,7 @@ export default function AppNavigator() {
                 options={{ presentation: 'modal' }}
             />
             <Stack.Screen name="CrewDetails" component={CrewScreen} />
+            <Stack.Screen name="DriveMode" component={DriveModeScreen} />
         </Stack.Navigator>
     );
 }

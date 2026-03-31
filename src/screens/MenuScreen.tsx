@@ -1,14 +1,20 @@
 import React from 'react';
 import { View, StyleSheet, Alert, Linking } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { RootTabParamList } from '../navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootTabParamList, RootStackParamList } from '../navigation/types';
 import CustomButton from '../components/CustomButton';
 import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
 
+type MenuScreenNavigationProp = CompositeNavigationProp<
+    BottomTabNavigationProp<RootTabParamList, 'Menu'>,
+    NativeStackNavigationProp<RootStackParamList>
+>;
+
 export default function MenuScreen() {
-    const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
+    const navigation = useNavigation<MenuScreenNavigationProp>();
 
     return (
         <View style={styles.container}>
@@ -26,6 +32,11 @@ export default function MenuScreen() {
                 <CustomButton
                     title="EVENTS"
                     onPress={() => navigation.navigate('Events')}
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="DRIVE MODE"
+                    onPress={() => navigation.navigate('DriveMode')}
                     style={styles.button}
                 />
                 <CustomButton
