@@ -1,4 +1,4 @@
 [build]
-  command = "pnpm install && pnpm run build:web"
+  command = "npm install -g pnpm && pnpm install --frozen-lockfile && pnpm run build:web"
   publish = "dist"
   environment = { NODE_VERSION = "20", PNPM_VERSION = "9" }
