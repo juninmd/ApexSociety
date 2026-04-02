@@ -34,7 +34,7 @@ export default function WebLandingContent({
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.button} onPress={handleDownloadApp} activeOpacity={0.8}>
-                <Text style={styles.buttonText}>BAIXE O APP MOBILE</Text>
+                <Text style={styles.buttonText}>VER CÓDIGO FONTE</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -42,7 +42,7 @@ export default function WebLandingContent({
                 onPress={handleExploreEvents}
                 activeOpacity={0.8}
             >
-                <Text style={styles.secondaryButtonText}>EXPLORAR EVENTOS</Text>
+                <Text style={styles.secondaryButtonText}>ACESSAR O APP WEB</Text>
             </TouchableOpacity>
         </View>
     );
