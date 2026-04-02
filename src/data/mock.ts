@@ -105,7 +105,7 @@ export const MOCK_EVENTS: Event[] = [
     },
     {
         id: 'event-4',
-        title: 'POLICE CHECKPOINT',
+        title: 'BLITZ POLICIAL',
         hostId: 'crew-2',
         location: {
             latitude: -23.5615,
@@ -116,7 +116,7 @@ export const MOCK_EVENTS: Event[] = [
         endTime: 'UNKNOWN',
         attendees: 0,
         isPrivate: false,
-        description: 'Police checkpoint reported by Night Runners.',
+        description: 'Blitz reportada pela Night Runners.',
         eventType: 'checkpoint',
     },
 ];
