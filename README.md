@@ -11,7 +11,7 @@
 
 ## 🌐 Web Version (Available)
 
-The web version of ApexSociety is readily available to visualize the application sem precisar instalar:
+The web version of ApexSociety is readily available to visualize the application without installing it:
 
 - **[🚀 Play on Netlify](https://apexsociety.netlify.app/)**
 - **[View on GitHub Pages](https://apexsociety.github.io/apexsociety/)** (Primary Web App)
