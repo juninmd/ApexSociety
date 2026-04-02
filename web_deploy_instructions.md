@@ -1,9 +1,21 @@
-## Deploying Web Version
-The web version is already configured to deploy automatically via GitHub Pages. Any pushes to `main` branch will automatically build and update `https://apexsociety.github.io/apexsociety/` using the `.github/workflows/deploy.yml` workflow.
+# Deploy Web (Netlify e GitHub Pages)
 
-If you specifically want to deploy to **Netlify**, the configuration is already fully present in `netlify.toml`. All you have to do is:
-1. Log into Netlify.
-2. Select "Add new site" -> "Import an existing project".
-3. Choose GitHub, and authorize access to this repository.
-4. Netlify will automatically read the `netlify.toml` file and detect `pnpm run build:web` as the build command and `dist` as the publish directory.
-5. Click "Deploy site".
+A aplicação já está devidamente configurada para ser disponibilizada via **Netlify** e **GitHub Pages**.
+
+Para visualizar o aplicativo imediatamente na web, acesse os seguintes links:
+- **Netlify**: [https://apexsociety.netlify.app/](https://apexsociety.netlify.app/)
+- **GitHub Pages**: [https://apexsociety.github.io/apexsociety/](https://apexsociety.github.io/apexsociety/)
+
+## Como o Deploy Automático Funciona?
+
+O repositório conta com dois arquivos de Github Actions que realizam o processo automaticamente:
+1. `.github/workflows/deploy.yml` (Para o GitHub Pages)
+2. `.github/workflows/netlify.yml` (Para o Netlify)
+
+Sempre que você realizar um **commit e push** na branch `main` contendo as alterações recentes do projeto (como melhorias de segurança e atualização dos metadados), a infraestrutura do GitHub irá:
+1. Executar os testes automatizados.
+2. Rodar a verificação de código (`lint` e `type-check`).
+3. Compilar a versão otimizada para web (`pnpm run build:web`).
+4. Publicar automaticamente os novos artefatos nos links listados acima.
+
+Não é necessária nenhuma ação manual para disponibilizar a versão atualizada além do push.

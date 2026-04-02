@@ -11,12 +11,13 @@
 
 ## 🌐 Web Version (Available)
 
-The web version of ApexSociety is readily available to visualize the application without installing it:
+The web version of ApexSociety is readily available to visualize the application sem precisar instalar:
 
 - **[🚀 Play on Netlify](https://apexsociety.netlify.app/)**
 - **[View on GitHub Pages](https://apexsociety.github.io/apexsociety/)** (Primary Web App)
 
-Deployment workflows for both GitHub Pages and Netlify are fully configured to update automatically on pushes to `main` via `.github/workflows/deploy.yml` and `.github/workflows/netlify.yml`.
+*A versão web já está **disponibilizada** via Netlify e GitHub Pages.*
+Os fluxos de deploy (workflows) já estão devidamente configurados (`.github/workflows/deploy.yml` e `.github/workflows/netlify.yml`). Ao realizar um push ou commit para a branch `main`, a aplicação é compilada e disponibilizada automaticamente nestas plataformas.
 
 ## ✨ Features
 
