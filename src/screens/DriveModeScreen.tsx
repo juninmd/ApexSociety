@@ -11,10 +11,10 @@ export default function DriveModeScreen() {
         // Simulate speed changes to create a dynamic racing feel
         const interval = setInterval(() => {
             setSpeed((prevSpeed) => {
-                const change = Math.floor(Math.random() * 11) - 3; // Random change between -3 and +7
+                const change = Math.floor(Math.random() * 11) - 3;
                 let newSpeed = prevSpeed + change;
-                if (newSpeed < 60) newSpeed += 15; // Push it up quickly if low
-                if (newSpeed > 180) newSpeed -= 20; // Cap it
+                if (newSpeed < 60) newSpeed = Math.min(newSpeed + 15, 60);
+                if (newSpeed > 180) newSpeed = 180;
                 return newSpeed;
             });
         }, 500);
