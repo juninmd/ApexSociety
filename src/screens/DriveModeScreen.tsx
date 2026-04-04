@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme';
 import ReportCheckpointButton from '../components/ReportCheckpointButton';
 
 export default function DriveModeScreen() {
+    const [speed, setSpeed] = useState(0);
+
+    useEffect(() => {
+        // Simulate speed changes to create a dynamic racing feel
+        const interval = setInterval(() => {
+            setSpeed((prevSpeed) => {
+                const change = Math.floor(Math.random() * 11) - 3; // Random change between -3 and +7
+                let newSpeed = prevSpeed + change;
+                if (newSpeed < 60) newSpeed += 15; // Push it up quickly if low
+                if (newSpeed > 180) newSpeed -= 20; // Cap it
+                return newSpeed;
+            });
+        }, 500);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <View style={styles.container}>
             <LinearGradient colors={['#1a1a1a', '#000000']} style={styles.gradient}>
                 <View style={styles.content}>
                     <View style={styles.speedometerContainer}>
-                        <Text style={styles.speedValue}>1</Text>
+                        <Text style={styles.speedValue}>{speed}</Text>
                         <Text style={styles.speedUnit}>KM/H</Text>
                     </View>
 

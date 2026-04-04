@@ -7,7 +7,7 @@
 [![GitHub Pages Status](https://github.com/apexsociety/apexsociety/actions/workflows/deploy.yml/badge.svg)](https://apexsociety.github.io/apexsociety/)
 [![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
 
-> A modern, high-performance mobile application built with Expo and React Native, featuring geolocalização and immersive UI components. Orchestrated by **Jules-Architect** and **Spark-Mobile**.
+> A modern, high-performance mobile application built with Expo and React Native, featuring geolocalização and immersive UI components. Orchestrated by **Jules-Architect** and **Spark-Mobile**. Inspired by FIRST2, the ultimate car enthusiast community.
 
 ## 🌐 Web Version (Available)
 
