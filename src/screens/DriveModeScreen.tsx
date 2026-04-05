@@ -1,18 +1,65 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme';
 import ReportCheckpointButton from '../components/ReportCheckpointButton';
 
 export default function DriveModeScreen() {
+    const [speed, setSpeed] = useState(0);
+    const pulseAnim = React.useRef(new Animated.Value(1)).current;
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSpeed((prev) => {
+                const nextSpeed = prev + Math.floor(Math.random() * 5);
+                if (nextSpeed > 140) return 130 + Math.floor(Math.random() * 10);
+                return nextSpeed;
+            });
+        }, 300);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        if (speed > 100) {
+            Animated.sequence([
+                Animated.timing(pulseAnim, {
+                    toValue: 1.2,
+                    duration: 200,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(pulseAnim, {
+                    toValue: 1,
+                    duration: 200,
+                    useNativeDriver: true,
+                }),
+            ]).start();
+        }
+    }, [speed, pulseAnim]);
+
+    const isHighSpeed = speed > 100;
+
     return (
         <View style={styles.container}>
             <LinearGradient colors={['#1a1a1a', '#000000']} style={styles.gradient}>
                 <View style={styles.content}>
-                    <View style={styles.speedometerContainer}>
-                        <Text style={styles.speedValue}>1</Text>
+                    <Animated.View
+                        style={[
+                            styles.speedometerContainer,
+                            { transform: [{ scale: pulseAnim }] },
+                            isHighSpeed && { borderColor: theme.colors.error },
+                        ]}
+                    >
+                        <Text
+                            style={[
+                                styles.speedValue,
+                                isHighSpeed && { color: theme.colors.error },
+                            ]}
+                        >
+                            {speed}
+                        </Text>
                         <Text style={styles.speedUnit}>KM/H</Text>
-                    </View>
+                    </Animated.View>
 
                     <View style={styles.actionsContainer}>
                         <ReportCheckpointButton />
