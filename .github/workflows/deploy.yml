@@ -1,5 +1,6 @@
 name: Deploy Web to GitHub Pages
 
+# Automatically deploys the ApexSociety Web App to GitHub Pages on pushes to the main branch
 on:
     push:
         branches:

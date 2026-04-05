@@ -1,3 +1,4 @@
+# Netlify Configuration for ApexSociety Web Version
 [build]
   command = "pnpm run build:web"
   publish = "dist"
