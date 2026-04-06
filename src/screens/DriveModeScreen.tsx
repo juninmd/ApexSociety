@@ -43,6 +43,12 @@ export default function DriveModeScreen() {
         <View style={styles.container}>
             <LinearGradient colors={['#1a1a1a', '#000000']} style={styles.gradient}>
                 <View style={styles.content}>
+                    <View style={styles.radarStatus}>
+                        <Text style={styles.radarStatusText}>
+                            {isHighSpeed ? 'RADAR ATIVO: ALERTA' : 'BUSCANDO BLITZ...'}
+                        </Text>
+                    </View>
+
                     <Animated.View
                         style={[
                             styles.speedometerContainer,
@@ -112,5 +118,21 @@ const styles = StyleSheet.create({
     actionsContainer: {
         width: '100%',
         paddingHorizontal: 40,
+    },
+    radarStatus: {
+        position: 'absolute',
+        top: 20,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: theme.colors.primary,
+    },
+    radarStatusText: {
+        color: theme.colors.primary,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 16,
+        letterSpacing: 2,
     },
 });
