@@ -110,7 +110,8 @@
             "cookie": ">=1.0.2",
             "@xmldom/xmldom": ">=0.9.5",
             "node-forge": ">=1.4.0",
-            "picomatch": ">=3.0.2"
+            "picomatch": ">=4.0.4",
+            "defu": ">=6.1.5"
         }
     },
     "private": true

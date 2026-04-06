@@ -90,7 +90,7 @@ export default function MapScreen() {
                 <View style={styles.topOverlay}>
                     <ReportCheckpointButton />
                     <View>
-                        <Text style={styles.timeText}>12:13 AM</Text>
+                        <Text style={styles.timeText}>00:13</Text>
                         <Text style={styles.speedText}>1 KM/H</Text>
                     </View>
                 </View>
