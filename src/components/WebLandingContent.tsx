@@ -20,8 +20,8 @@ export default function WebLandingContent({
             <Map size={64} color={theme.colors.primary} style={styles.icon} />
             <Text style={styles.title}>Corridas de Rua, Eventos & Alertas de Blitz</Text>
             <Text style={styles.subtitle}>
-                O mapa interativo em tempo real é otimizado para nosso aplicativo mobile. Inspirado
-                pelo FIRST2, o {metadata.name} é o lugar perfeito para marcar corridas de rua,
+                O mapa interativo em tempo real é otimizado para nosso aplicativo mobile. Inspirado{' '}
+                pelo FIRST2, o {metadata.name} é o lugar perfeito para marcar corridas de rua,{' '}
                 organizar eventos de carro, visualizar alertas de blitz e ver quem está na sua área!
             </Text>
 
