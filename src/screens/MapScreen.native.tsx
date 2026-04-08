@@ -7,7 +7,7 @@ import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_USERS, MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
 import EventCardOverlay from '../components/EventCardOverlay';
-import ReportCheckpointButton from '../components/ReportCheckpointButton';
+import ReportHazardButton from '../components/ReportHazardButton';
 
 export default function MapScreen() {
     const [region, setRegion] = useState({
@@ -88,7 +88,7 @@ export default function MapScreen() {
 
             <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)']} style={styles.overlay}>
                 <View style={styles.topOverlay}>
-                    <ReportCheckpointButton />
+                    <ReportHazardButton type="blitz" />
                     <View>
                         <Text style={styles.timeText}>00:13</Text>
                         <Text style={styles.speedText}>1 KM/H</Text>
