@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme';
-import ReportCheckpointButton from '../components/ReportCheckpointButton';
+import ReportHazardButton from '../components/ReportHazardButton';
 
 export default function DriveModeScreen() {
     const [speed, setSpeed] = useState(0);
@@ -68,7 +68,9 @@ export default function DriveModeScreen() {
                     </Animated.View>
 
                     <View style={styles.actionsContainer}>
-                        <ReportCheckpointButton />
+                        <ReportHazardButton type="blitz" />
+                        <ReportHazardButton type="radar" />
+                        <ReportHazardButton type="acidente" />
                     </View>
                 </View>
             </LinearGradient>
@@ -117,7 +119,10 @@ const styles = StyleSheet.create({
     },
     actionsContainer: {
         width: '100%',
-        paddingHorizontal: 40,
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     radarStatus: {
         position: 'absolute',
