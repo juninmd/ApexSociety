@@ -17,6 +17,16 @@ export default function MapScreen() {
         showAlert('Blitz reportada! Alerta emitido para a rede ApexSociety.');
     };
 
+    const handleReportRadar = () => {
+        showAlert('Radar Reportado: Motoristas notificados sobre fiscalização eletrônica.');
+    };
+
+    const handleReportAcidente = () => {
+        showAlert(
+            'Acidente Reportado: Motoristas notificados para reduzir a velocidade e ter cautela.',
+        );
+    };
+
     return (
         <LinearGradient
             colors={[theme.colors.background, theme.colors.card]}
@@ -25,6 +35,8 @@ export default function MapScreen() {
             <View style={styles.overlay} />
             <WebLandingContent
                 handleReportBlitz={handleReportBlitz}
+                handleReportRadar={handleReportRadar}
+                handleReportAcidente={handleReportAcidente}
                 handleDownloadApp={() => Linking.openURL(metadata.githubUrl)}
                 handleExploreEvents={() => navigation.navigate('Events')}
             />

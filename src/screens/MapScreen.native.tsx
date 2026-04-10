@@ -88,7 +88,11 @@ export default function MapScreen() {
 
             <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)']} style={styles.overlay}>
                 <View style={styles.topOverlay}>
-                    <ReportHazardButton type="blitz" />
+                    <View style={styles.actionsContainer}>
+                        <ReportHazardButton type="blitz" />
+                        <ReportHazardButton type="radar" />
+                        <ReportHazardButton type="acidente" />
+                    </View>
                     <View>
                         <Text style={styles.timeText}>00:13</Text>
                         <Text style={styles.speedText}>1 KM/H</Text>
@@ -140,5 +144,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 5,
+        maxWidth: '70%',
     },
 });
