@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
-import { LinearGradient } from 'expo-linear-gradient';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
-import { MOCK_USERS, MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
-import EventCardOverlay from '../components/EventCardOverlay';
-import ReportHazardButton from '../components/ReportHazardButton';
+import { MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
+import MapMarkers from '../components/MapScreen/MapMarkers';
+import MapOverlay from '../components/MapScreen/MapOverlay';
 
 export default function MapScreen() {
     const [region, setRegion] = useState({
@@ -48,61 +47,10 @@ export default function MapScreen() {
                 customMapStyle={DARK_MAP_STYLE}
                 showsUserLocation={true}
             >
-                {MOCK_USERS.map((user) => (
-                    <Marker
-                        key={user.id}
-                        coordinate={{
-                            latitude: user.location.latitude,
-                            longitude: user.location.longitude,
-                        }}
-                        title={user.username}
-                        description={`Last active: ${user.lastActive}`}
-                        pinColor={theme.colors.primary} // Yellow for users
-                    />
-                ))}
-
-                {MOCK_EVENTS.map((event) => {
-                    let markerColor = theme.colors.error; // default red
-                    if (event.eventType === 'meet') {
-                        markerColor = theme.colors.primary; // yellow
-                    } else if (event.eventType === 'race') {
-                        markerColor = theme.colors.error; // red
-                    } else if (event.eventType === 'checkpoint') {
-                        markerColor = '#0000FF'; // blue
-                    }
-
-                    return (
-                        <Marker
-                            key={event.id}
-                            coordinate={{
-                                latitude: event.location.latitude,
-                                longitude: event.location.longitude,
-                            }}
-                            title={event.title}
-                            description={event.startTime}
-                            pinColor={markerColor}
-                        />
-                    );
-                })}
+                <MapMarkers />
             </MapView>
 
-            <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)']} style={styles.overlay}>
-                <View style={styles.topOverlay}>
-                    <View style={styles.actionsContainer}>
-                        <ReportHazardButton type="blitz" />
-                        <ReportHazardButton type="radar" />
-                        <ReportHazardButton type="acidente" />
-                    </View>
-                    <View>
-                        <Text style={styles.timeText}>00:13</Text>
-                        <Text style={styles.speedText}>1 KM/H</Text>
-                    </View>
-                </View>
-
-                {nextEvent && (
-                    <EventCardOverlay nextEvent={nextEvent} nextEventHost={nextEventHost} />
-                )}
-            </LinearGradient>
+            <MapOverlay nextEvent={nextEvent} nextEventHost={nextEventHost} />
         </View>
     );
 }
@@ -115,40 +63,5 @@ const styles = StyleSheet.create({
     map: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        justifyContent: 'space-between',
-        padding: 20,
-        paddingTop: 60,
-        paddingBottom: 100,
-        pointerEvents: 'box-none',
-    },
-    timeText: {
-        color: theme.colors.primary,
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 24,
-        textAlign: 'right',
-    },
-    speedText: {
-        color: theme.colors.text,
-        fontFamily: theme.fonts.primary.regular,
-        fontSize: 18,
-        textAlign: 'right',
-    },
-    topOverlay: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    actionsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 5,
-        maxWidth: '70%',
     },
 });
