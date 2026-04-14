@@ -27,7 +27,7 @@ export default function WebLandingContent({
                 <Map size={72} color={theme.colors.primary} style={styles.icon} />
                 <View style={styles.iconGlow} />
             </View>
-            <Text style={styles.title}>Corridas Underground & Encontros de Carros</Text>
+            <Text style={styles.title}>Underground Racing & Car Meets</Text>
             <Text style={styles.subtitle}>
                 O mapa interativo em tempo real é otimizado para nosso aplicativo mobile. Inspirado{' '}
                 pelo FIRST2, o {metadata.name} é a comunidade definitiva para marcar corridas de
