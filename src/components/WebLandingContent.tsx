@@ -23,12 +23,16 @@ export default function WebLandingContent({
 }: WebLandingContentProps) {
     return (
         <View style={styles.content}>
-            <Map size={64} color={theme.colors.primary} style={styles.icon} />
-            <Text style={styles.title}>Corridas de Rua, Eventos & Alertas de Blitz</Text>
+            <View style={styles.iconContainer}>
+                <Map size={72} color={theme.colors.primary} style={styles.icon} />
+                <View style={styles.iconGlow} />
+            </View>
+            <Text style={styles.title}>Underground Racing & Car Meets</Text>
             <Text style={styles.subtitle}>
                 O mapa interativo em tempo real é otimizado para nosso aplicativo mobile. Inspirado{' '}
-                pelo FIRST2, o {metadata.name} é o lugar perfeito para marcar corridas de rua,{' '}
-                organizar eventos de carro, visualizar alertas de blitz e ver quem está na sua área!
+                pelo FIRST2, o {metadata.name} é a comunidade definitiva para marcar corridas de
+                rua, organizar eventos de carro, construir sua equipe, visualizar alertas de blitz e
+                ver quem está na sua área!
             </Text>
 
             <Hazards
@@ -48,20 +52,43 @@ export default function WebLandingContent({
 const styles = StyleSheet.create({
     content: {
         alignItems: 'center',
-        maxWidth: 400,
+        maxWidth: 500,
         zIndex: 1,
     },
-    icon: {
+    iconContainer: {
+        position: 'relative',
         marginBottom: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        zIndex: 2,
+    },
+    iconGlow: {
+        position: 'absolute',
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: theme.colors.primary,
+        opacity: 0.3,
+        shadowColor: theme.colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 1,
+        shadowRadius: 20,
+        elevation: 10,
+        zIndex: 1,
     },
     title: {
         color: theme.colors.text,
         fontFamily: theme.fonts.primary.bold,
-        fontSize: 42,
+        fontSize: 48,
         marginBottom: 16,
         textAlign: 'center',
         textTransform: 'uppercase',
-        letterSpacing: 2,
+        letterSpacing: 3,
+        textShadowColor: theme.colors.primary,
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10,
     },
     subtitle: {
         color: theme.colors.textSecondary,
@@ -70,5 +97,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 48,
         lineHeight: 28,
+        paddingHorizontal: 20,
     },
 });
