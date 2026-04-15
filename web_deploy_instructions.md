@@ -16,5 +16,5 @@ If you specifically want to deploy to **Netlify**, the configuration is already 
 **Option B: Manual CLI Deployment**
 If you wish to immediately test and publish a version via terminal:
 1. Make sure you are logged in to the Netlify CLI by running `npx netlify login`.
-2. Build and deploy the project by running: `pnpm run deploy:netlify`.
+2. Build and deploy the project by running: `pnpm run build:web && pnpm run deploy:netlify`.
    *(This uses `netlify deploy --prod --dir=dist` underneath).*
