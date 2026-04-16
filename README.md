@@ -7,16 +7,16 @@
 [![GitHub Pages Status](https://github.com/apexsociety/apexsociety/actions/workflows/deploy.yml/badge.svg)](https://apexsociety.github.io/apexsociety/)
 [![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
 
-> A modern, high-performance mobile application built with Expo and React Native, featuring geolocalização and immersive UI components. Orchestrated by **Jules-Architect** and **Spark-Mobile**.
+> O app definitivo para entusiastas de carros e corridas underground, inspirado no FIRST2. Ideal para marcar corridas de rua, eventos de carro e encontros automotivos. Crie sua equipe e receba alertas de blitz, radar e acidentes em tempo real!
 
-## 🌐 Web Version (Available)
+## 🌐 Live Web Version (Visualização)
 
-The web version of ApexSociety is readily available to visualize the application without installing it:
+A versão web do ApexSociety está disponível para você visualizar e testar o aplicativo sem precisar instalá-lo no celular:
 
-- **[🚀 Play on Netlify](https://apexsociety.netlify.app/)**
-- **[View on GitHub Pages](https://apexsociety.github.io/apexsociety/)** (Primary Web App)
+- **[🚀 Visualizar no GitHub Pages](https://apexsociety.github.io/apexsociety/)** (Principal)
+- **[Visualizar no Netlify](https://apexsociety.netlify.app/)**
 
-Deployment workflows for both GitHub Pages and Netlify are fully configured to update automatically on pushes to `main` via `.github/workflows/gh-pages.yml` and `.github/workflows/netlify.yml`.
+_Os deploys para ambas as plataformas são configurados para atualizar automaticamente a cada push na branch `main`._
 
 ## ✨ Features
 
@@ -51,10 +51,11 @@ pnpm ios
 ## 🛡️ Antigravity Protocol
 
 This project adheres to the **Antigravity** code standards:
+
 - **150-Line Limit**: Mandatory for keeping UI components and logic hooks lean.
 - **Strict Typing**: Full TypeScript coverage across all screens and services.
 - **Pure Components**: Preference for functional components and specialized hooks.
 
 ---
 
-*"Reach the peak of mobile excellence."*
+_"Reach the peak of mobile excellence."_
