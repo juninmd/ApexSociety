@@ -14,19 +14,19 @@ export default function CreateCrewScreen() {
 
     const handleCreate = () => {
         if (!name || !tag) {
-            Alert.alert('Error', 'Please fill in Crew Name and Tag');
+            Alert.alert('Erro', 'Por favor, preencha o Nome e a Tag da Equipe');
             return;
         }
 
         if (tag.length > 5) {
-            Alert.alert('Error', 'Tag must be 5 characters or less');
+            Alert.alert('Erro', 'A Tag deve ter 5 caracteres ou menos');
             return;
         }
 
         // Mock creation logic
-        console.log('Creating Crew:', { name, tag, description });
+        console.log('Criando Equipe:', { name, tag, description });
 
-        Alert.alert('Success', 'Crew created successfully!', [
+        Alert.alert('Sucesso', 'Equipe criada com sucesso!', [
             { text: 'OK', onPress: () => navigation.goBack() },
         ]);
     };
@@ -34,7 +34,7 @@ export default function CreateCrewScreen() {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>CREATE CREW</Text>
+                <Text style={styles.headerTitle}>CRIAR EQUIPE</Text>
             </View>
 
             <View style={styles.form}>
@@ -48,11 +48,11 @@ export default function CreateCrewScreen() {
                 />
 
                 <TouchableOpacity style={styles.createButton} onPress={handleCreate}>
-                    <Text style={styles.createButtonText}>CREATE CREW</Text>
+                    <Text style={styles.createButtonText}>CRIAR EQUIPE</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.goBack()}>
-                    <Text style={styles.cancelButtonText}>CANCEL</Text>
+                    <Text style={styles.cancelButtonText}>CANCELAR</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>

@@ -28,7 +28,7 @@ export default function CrewHeader({ name, memberCount, rank }: CrewHeaderProps)
                 <Text style={styles.crewName}>{name}</Text>
                 <View style={styles.statsRow}>
                     <Users color={theme.colors.secondary} size={14} />
-                    <Text style={styles.statsText}>{memberCount} MEMBERS</Text>
+                    <Text style={styles.statsText}>{memberCount} MEMBROS</Text>
                     <Text style={styles.rankText}>{rank}</Text>
                 </View>
             </View>

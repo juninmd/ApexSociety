@@ -30,7 +30,7 @@ export default function TabNavigator() {
                 component={MapScreen}
                 options={{
                     tabBarIcon: ({ color }) => <Map color={color} size={24} />,
-                    tabBarLabel: 'MAP',
+                    tabBarLabel: 'MAPA',
                 }}
             />
             <Tab.Screen
@@ -38,7 +38,7 @@ export default function TabNavigator() {
                 component={EventsScreen}
                 options={{
                     tabBarIcon: ({ color }) => <Calendar color={color} size={24} />,
-                    tabBarLabel: 'EVENTS',
+                    tabBarLabel: 'EVENTOS',
                 }}
             />
             <Tab.Screen
@@ -58,7 +58,7 @@ export default function TabNavigator() {
                 component={CrewListScreen}
                 options={{
                     tabBarIcon: ({ color }) => <Users color={color} size={24} />, // Icon for crew
-                    tabBarLabel: 'CREWS',
+                    tabBarLabel: 'EQUIPES',
                 }}
             />
             <Tab.Screen
@@ -66,7 +66,7 @@ export default function TabNavigator() {
                 component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ color }) => <User color={color} size={24} />,
-                    tabBarLabel: 'PROFILE',
+                    tabBarLabel: 'PERFIL',
                 }}
             />
         </Tab.Navigator>

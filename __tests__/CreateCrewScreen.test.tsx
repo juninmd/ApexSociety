@@ -22,42 +22,45 @@ describe('<CreateCrewScreen />', () => {
     it('renders correctly', () => {
         const { getAllByText, getByText, getByPlaceholderText } = render(<CreateCrewScreen />);
 
-        expect(getAllByText('CREATE CREW').length).toBe(2);
-        expect(getByText('CREW NAME')).toBeTruthy();
-        expect(getByPlaceholderText('Ex: Night Runners')).toBeTruthy();
+        expect(getAllByText('CRIAR EQUIPE').length).toBe(2);
+        expect(getByText('NOME DA EQUIPE')).toBeTruthy();
+        expect(getByPlaceholderText('Ex: Corredores Noturnos')).toBeTruthy();
     });
 
     it('shows error if name or tag is empty', () => {
         const { getAllByText } = render(<CreateCrewScreen />);
-        const createBtn = getAllByText('CREATE CREW')[1]; // Second one is the button
+        const createBtn = getAllByText('CRIAR EQUIPE')[1]; // Second one is the button
 
         fireEvent.press(createBtn);
 
-        expect(Alert.alert).toHaveBeenCalledWith('Error', 'Please fill in Crew Name and Tag');
+        expect(Alert.alert).toHaveBeenCalledWith(
+            'Erro',
+            'Por favor, preencha o Nome e a Tag da Equipe',
+        );
     });
 
     it('shows error if tag is more than 5 characters', () => {
         const { getByPlaceholderText, getAllByText } = render(<CreateCrewScreen />);
 
-        const nameInput = getByPlaceholderText('Ex: Night Runners');
-        const tagInput = getByPlaceholderText('Ex: NRUN');
-        const createBtn = getAllByText('CREATE CREW')[1];
+        const nameInput = getByPlaceholderText('Ex: Corredores Noturnos');
+        const tagInput = getByPlaceholderText('Ex: CORR');
+        const createBtn = getAllByText('CRIAR EQUIPE')[1];
 
         fireEvent.changeText(nameInput, 'My Crew');
         fireEvent.changeText(tagInput, 'TOOLONG');
 
         fireEvent.press(createBtn);
 
-        expect(Alert.alert).toHaveBeenCalledWith('Error', 'Tag must be 5 characters or less');
+        expect(Alert.alert).toHaveBeenCalledWith('Erro', 'A Tag deve ter 5 caracteres ou menos');
     });
 
     it('creates crew successfully and goes back', () => {
         const { getByPlaceholderText, getAllByText } = render(<CreateCrewScreen />);
 
-        const nameInput = getByPlaceholderText('Ex: Night Runners');
-        const tagInput = getByPlaceholderText('Ex: NRUN');
-        const descInput = getByPlaceholderText('What is your crew about?');
-        const createBtn = getAllByText('CREATE CREW')[1];
+        const nameInput = getByPlaceholderText('Ex: Corredores Noturnos');
+        const tagInput = getByPlaceholderText('Ex: CORR');
+        const descInput = getByPlaceholderText('Sobre o que é a sua equipe?');
+        const createBtn = getAllByText('CRIAR EQUIPE')[1];
 
         fireEvent.changeText(nameInput, 'My Crew');
         fireEvent.changeText(tagInput, 'COOL');
@@ -66,8 +69,8 @@ describe('<CreateCrewScreen />', () => {
         fireEvent.press(createBtn);
 
         expect(Alert.alert).toHaveBeenCalledWith(
-            'Success',
-            'Crew created successfully!',
+            'Sucesso',
+            'Equipe criada com sucesso!',
             expect.any(Array),
         );
 
@@ -81,7 +84,7 @@ describe('<CreateCrewScreen />', () => {
 
     it('calls goBack when cancel is pressed', () => {
         const { getByText } = render(<CreateCrewScreen />);
-        const cancelBtn = getByText('CANCEL');
+        const cancelBtn = getByText('CANCELAR');
 
         fireEvent.press(cancelBtn);
 

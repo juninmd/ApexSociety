@@ -16,20 +16,20 @@ describe('<CrewListScreen />', () => {
         const { getByText } = render(<CrewListScreen />);
 
         // Header
-        expect(getByText('CREWS')).toBeTruthy();
+        expect(getByText('EQUIPES')).toBeTruthy();
 
         // Check for mock data
         expect(getByText(MOCK_CREWS[0].name)).toBeTruthy();
         expect(getByText(MOCK_CREWS[1].name)).toBeTruthy();
 
         // Check for Create Crew button
-        expect(getByText('CREATE CREW')).toBeTruthy();
+        expect(getByText('CRIAR EQUIPE')).toBeTruthy();
     });
 
     it('navigates to CreateCrew on button press', () => {
         const { getByText } = render(<CrewListScreen />);
 
-        const button = getByText('CREATE CREW');
+        const button = getByText('CRIAR EQUIPE');
         fireEvent.press(button);
 
         expect(mockNavigate).toHaveBeenCalledWith('CreateCrew');
