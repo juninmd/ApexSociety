@@ -19,7 +19,7 @@ export default function CrewScreen() {
     if (!crew) {
         return (
             <View style={[styles.container, styles.center]}>
-                <Text style={styles.errorText}>Crew not found</Text>
+                <Text style={styles.errorText}>Equipe não encontrada</Text>
             </View>
         );
     }
@@ -32,28 +32,28 @@ export default function CrewScreen() {
             {/* Red Banner */}
             <CrewBanner name={crew.name} tag={crew.tag} foundedYear={crew.foundedYear} />
 
-            <Text style={styles.sectionHeader}>MANAGE</Text>
+            <Text style={styles.sectionHeader}>GERENCIAR</Text>
 
             <View style={styles.menuList}>
                 <CrewMenuItem
                     icon={<Settings color={theme.colors.text} />}
-                    title="CHANGE SETTINGS"
-                    subtitle="Edit crew appearance and settings"
+                    title="MUDAR CONFIGURAÇÕES"
+                    subtitle="Editar aparência e configurações da equipe"
                 />
                 <CrewMenuItem
                     icon={<Users color={theme.colors.text} />}
-                    title="CREW MEMBERS"
-                    subtitle="Manage invited or current members"
+                    title="MEMBROS DA EQUIPE"
+                    subtitle="Gerenciar membros"
                 />
                 <CrewMenuItem
                     icon={<UserPlus color={theme.colors.text} />}
-                    title="INVITE MEMBERS"
-                    subtitle="Invite users to join the crew"
+                    title="CONVIDAR MEMBROS"
+                    subtitle="Convidar usuários para a equipe"
                 />
                 <CrewMenuItem
                     icon={<Handshake color={theme.colors.text} />}
-                    title="LEADERBOARD"
-                    subtitle="View crew statistics and ranking"
+                    title="CLASSIFICAÇÃO"
+                    subtitle="Ver estatísticas e ranking da equipe"
                 />
             </View>
         </ScrollView>

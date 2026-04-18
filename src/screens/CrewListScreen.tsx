@@ -25,7 +25,7 @@ export default function CrewListScreen() {
                 <Text style={styles.crewTag}>{item.tag}</Text>
                 <View style={styles.statsRow}>
                     <Users size={14} color={theme.colors.secondary} />
-                    <Text style={styles.statsText}>{item.memberCount} MEMBERS</Text>
+                    <Text style={styles.statsText}>{item.memberCount} MEMBROS</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -34,7 +34,7 @@ export default function CrewListScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>CREWS</Text>
+                <Text style={styles.headerTitle}>EQUIPES</Text>
             </View>
 
             <FlatList
@@ -46,7 +46,7 @@ export default function CrewListScreen() {
 
             <View style={styles.footer}>
                 <CustomButton
-                    title="CREATE CREW"
+                    title="CRIAR EQUIPE"
                     onPress={() => navigation.navigate('CreateCrew')}
                 />
             </View>

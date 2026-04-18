@@ -7,7 +7,7 @@ export default function CreateEventScreen() {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>CREATE EVENT</Text>
+                <Text style={styles.headerTitle}>CRIAR EVENTO</Text>
             </View>
             <CreateEventForm />
         </ScrollView>

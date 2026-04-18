@@ -21,7 +21,7 @@ export default function CreateEventForm() {
 
     const handleCreate = () => {
         if (!title || !date || !time || !location) {
-            Alert.alert('Error', 'Please fill in all required fields');
+            Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios');
             return;
         }
         const newEvent: Event = {
@@ -37,7 +37,7 @@ export default function CreateEventForm() {
             eventType,
         };
         addEvent(newEvent);
-        Alert.alert('Success', 'Event created successfully!', [
+        Alert.alert('Sucesso', 'Evento criado com sucesso!', [
             { text: 'OK', onPress: () => navigation.goBack() },
         ]);
     };
@@ -46,14 +46,14 @@ export default function CreateEventForm() {
         <View style={styles.form}>
             <EventTypeSelector eventType={eventType} setEventType={setEventType} />
             <FormInput
-                label="EVENT TITLE"
-                placeholder="Ex: Friday Night Meet"
+                label="TÍTULO DO EVENTO"
+                placeholder="Ex: Encontro de Sexta à Noite"
                 value={title}
                 onChangeText={setTitle}
             />
             <FormInput
-                label="DESCRIPTION"
-                placeholder="What's the plan?"
+                label="DESCRIÇÃO"
+                placeholder="Qual é o plano?"
                 value={description}
                 onChangeText={setDescription}
                 isTextArea
@@ -61,33 +61,33 @@ export default function CreateEventForm() {
             <View style={styles.row}>
                 <View style={styles.halfWidth}>
                     <FormInput
-                        label="DATE"
-                        placeholder="MM/DD/YYYY"
+                        label="DATA"
+                        placeholder="DD/MM/AAAA"
                         value={date}
                         onChangeText={setDate}
                     />
                 </View>
                 <View style={styles.halfWidth}>
                     <FormInput
-                        label="TIME"
-                        placeholder="HH:MM PM"
+                        label="HORA"
+                        placeholder="HH:MM"
                         value={time}
                         onChangeText={setTime}
                     />
                 </View>
             </View>
             <FormInput
-                label="LOCATION (ADDRESS OR SPOT)"
-                placeholder="Where are we meeting?"
+                label="LOCALIZAÇÃO (ENDEREÇO OU PONTO)"
+                placeholder="Onde vamos nos encontrar?"
                 value={location}
                 onChangeText={setLocation}
             />
             <TouchableOpacity style={styles.createButton} onPress={handleCreate}>
                 <View style={styles.buttonBackground} />
-                <Text style={styles.buttonText}>PUBLISH EVENT</Text>
+                <Text style={styles.buttonText}>PUBLICAR EVENTO</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.goBack()}>
-                <Text style={styles.cancelText}>CANCEL</Text>
+                <Text style={styles.cancelText}>CANCELAR</Text>
             </TouchableOpacity>
         </View>
     );

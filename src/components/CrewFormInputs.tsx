@@ -22,10 +22,10 @@ export default function CrewFormInputs({
     return (
         <>
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>CREW NAME</Text>
+                <Text style={styles.label}>NOME DA EQUIPE</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Ex: Night Runners"
+                    placeholder="Ex: Corredores Noturnos"
                     placeholderTextColor={theme.colors.secondary}
                     value={name}
                     onChangeText={setName}
@@ -33,10 +33,10 @@ export default function CrewFormInputs({
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>TAG (MAX 5 CHARS)</Text>
+                <Text style={styles.label}>TAG (MÁX 5 CARACTERES)</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Ex: NRUN"
+                    placeholder="Ex: CORR"
                     placeholderTextColor={theme.colors.secondary}
                     value={tag}
                     onChangeText={(text) => setTag(text.toUpperCase())}
@@ -45,10 +45,10 @@ export default function CrewFormInputs({
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>DESCRIPTION</Text>
+                <Text style={styles.label}>DESCRIÇÃO</Text>
                 <TextInput
                     style={[styles.input, styles.textArea]}
-                    placeholder="What is your crew about?"
+                    placeholder="Sobre o que é a sua equipe?"
                     placeholderTextColor={theme.colors.secondary}
                     value={description}
                     onChangeText={setDescription}
