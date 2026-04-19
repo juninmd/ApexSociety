@@ -16,7 +16,7 @@ export default function EventsScreen() {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>UPCOMING EVENTS</Text>
+                <Text style={styles.headerTitle}>EVENTOS DE CARRO E CORRIDAS</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('CreateEvent')}>
                     <Plus color={theme.colors.primary} size={32} />
                 </TouchableOpacity>

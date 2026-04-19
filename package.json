@@ -7,9 +7,9 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/apexsociety/apexsociety.git"
+        "url": "https://github.com/juninmd/ApexSociety.git"
     },
-    "homepage": "https://apexsociety.github.io/apexsociety",
+    "homepage": "https://juninmd.github.io/ApexSociety",
     "keywords": [
         "react-native",
         "expo",
@@ -102,7 +102,8 @@
             "test-exclude": "^7.0.1",
             "undici": "^6.24.1",
             "flatted": "^3.4.2",
-            "fastify": ">=5.8.3",
+            "fastify": ">=5.8.5",
+            "@fastify/static": ">=9.1.1",
             "brace-expansion": "^2.0.1",
             "picomatch": ">=4.0.4",
             "follow-redirects": "^1.16.0",
