@@ -44,6 +44,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         backgroundColor: metadata.themeColor,
     },
     experiments: {
-        baseUrl: process.env.GH_PAGES ? '/apexsociety' : '/',
+        baseUrl: process.env.GH_PAGES ? '/ApexSociety' : '/',
     },
 });
