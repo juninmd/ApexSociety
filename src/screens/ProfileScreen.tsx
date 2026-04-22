@@ -7,6 +7,7 @@ import ProfileStats from '../components/ProfileStats';
 import GarageSection from '../components/GarageSection';
 import CrewsSection from '../components/CrewsSection';
 import ProfileHeader from '../components/ProfileHeader';
+import StickersSection from '../components/StickersSection';
 
 const USER = {
     name: 'ALEX RACER',
@@ -39,6 +40,12 @@ const USER = {
         { id: 'crew-1', name: 'SPORTS CLUB US', rank: 'LEADER' },
         { id: 'crew-2', name: 'MIDNIGHT RUNNERS', rank: 'MEMBER' },
         { id: 'crew-3', name: 'TOKYO DRIFT', rank: 'ELITE' },
+    ],
+    stickers: [
+        { id: 's1', name: 'NIGHT RIDER', color: '#00F0FF' },
+        { id: 's2', name: 'TOUGE KING', color: '#FF0055' },
+        { id: 's3', name: 'JDM LEGEND', color: '#FFE600' },
+        { id: 's4', name: '1ST MEET', color: '#00FF00' },
     ],
 };
 
@@ -80,6 +87,9 @@ export default function ProfileScreen() {
 
             {/* Garage Section */}
             <GarageSection cars={USER.garage} />
+
+            {/* Adesivos Digitais Section */}
+            <StickersSection stickers={USER.stickers} />
 
             {/* Crews Section */}
             <CrewsSection crews={USER.crews} />
