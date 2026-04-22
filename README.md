@@ -9,14 +9,14 @@
 
 > O app definitivo para entusiastas de carros e corridas underground, inspirado no FIRST2. Ideal para marcar corridas de rua, eventos de carro e encontros automotivos. Crie sua equipe e receba alertas de blitz, radar e acidentes em tempo real!
 
-## 🌐 Live Web Version (Visualização)
+## 🌐 Live Web Version (Visualização Automática)
 
-A versão web do ApexSociety está disponível para você visualizar e testar o aplicativo sem precisar instalá-lo no celular:
+O aplicativo foi disponibilizado na web via **Netlify** e **GitHub Pages** para facilitar a visualização de encontros e equipes diretamente pelo navegador, sem necessidade de instalação!
 
-- **[🚀 Visualizar no GitHub Pages](https://juninmd.github.io/ApexSociety/)** (Principal)
-- **[Visualizar no Netlify](https://apexsociety.netlify.app/)**
+- **[🚀 Acessar Versão Netlify](https://apexsociety.netlify.app/)** (Recomendado)
+- **[Acessar Versão GitHub Pages](https://juninmd.github.io/ApexSociety/)**
 
-_Os deploys para ambas as plataformas são configurados para atualizar automaticamente a cada push na branch `main`._
+_Os deploys para ambas as plataformas são configurados para atualizar automaticamente a cada push na branch `main`. Você também pode acionar o deploy manual para o Netlify rodando `pnpm run deploy:netlify` localmente após a build (`pnpm build:web`)._
 
 ## ✨ Features
 
