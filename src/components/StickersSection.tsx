@@ -21,7 +21,10 @@ export default function StickersSection({ stickers }: StickersSectionProps) {
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.list}>
                 {stickers.map((sticker) => (
-                    <View key={sticker.id} style={[styles.stickerCard, { borderColor: sticker.color }]}>
+                    <View
+                        key={sticker.id}
+                        style={[styles.stickerCard, { borderColor: sticker.color }]}
+                    >
                         <View style={[styles.stickerCircle, { backgroundColor: sticker.color }]} />
                         <Text style={styles.stickerName}>{sticker.name}</Text>
                     </View>

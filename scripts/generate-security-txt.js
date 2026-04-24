@@ -21,7 +21,9 @@ Canonical: ${cleanHomepage}/.well-known/security.txt
 `;
 
     fs.writeFileSync(outputPath, securityTxtContent, 'utf8');
-    console.log(`Successfully generated public/.well-known/security.txt with canonical: ${cleanHomepage}/.well-known/security.txt`);
+    console.log(
+        `Successfully generated public/.well-known/security.txt with canonical: ${cleanHomepage}/.well-known/security.txt`,
+    );
 } catch (error) {
     console.error('Error generating security.txt:', error);
     process.exit(1);
