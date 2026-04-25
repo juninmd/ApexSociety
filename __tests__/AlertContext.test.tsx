@@ -9,11 +9,7 @@ const TestComponent = () => {
     return (
         <>
             <Text testID="alert-message">{alertMessage ?? 'No alert'}</Text>
-            <Button
-                testID="show-alert-btn"
-                title="Show"
-                onPress={() => showAlert('Test Alert')}
-            />
+            <Button testID="show-alert-btn" title="Show" onPress={() => showAlert('Test Alert')} />
             <Button testID="hide-alert-btn" title="Hide" onPress={hideAlert} />
         </>
     );
@@ -33,7 +29,7 @@ describe('AlertContext', () => {
         const { getByTestId } = render(
             <AlertProvider>
                 <TestComponent />
-            </AlertProvider>
+            </AlertProvider>,
         );
 
         const alertText = getByTestId('alert-message');
@@ -58,7 +54,7 @@ describe('AlertContext', () => {
         const { getByTestId } = render(
             <AlertProvider>
                 <TestComponent />
-            </AlertProvider>
+            </AlertProvider>,
         );
 
         const alertText = getByTestId('alert-message');
@@ -82,7 +78,7 @@ describe('AlertContext', () => {
         const { getByTestId } = render(
             <AlertProvider>
                 <TestComponent />
-            </AlertProvider>
+            </AlertProvider>,
         );
 
         const alertText = getByTestId('alert-message');

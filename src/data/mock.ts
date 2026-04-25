@@ -68,7 +68,8 @@ export const MOCK_EVENTS: Event[] = [
         endTime: 'SEG 24 FEV 2025 @ 23:30',
         attendees: 30,
         isPrivate: false,
-        description: 'Encontro focado em carros modificados. Sem manobras perigosas.',
+        description:
+            'Encontro focado em carros modificados no estilo FIRST2. Sem manobras perigosas.',
         eventType: 'meet',
     },
     {
@@ -84,7 +85,7 @@ export const MOCK_EVENTS: Event[] = [
         endTime: 'SÁB 01 MAR 2025 @ 02:00',
         attendees: 45,
         isPrivate: false,
-        description: 'Corrida de rua amigável para todas as equipes.',
+        description: 'Corridas underground amigáveis para todas as equipes da comunidade.',
         eventType: 'race',
     },
     {
@@ -100,7 +101,8 @@ export const MOCK_EVENTS: Event[] = [
         endTime: 'SEX 05 MAR 2025 @ 03:00',
         attendees: 150,
         isPrivate: false,
-        description: 'Evento de corrida de rua. Cuidado com a polícia.',
+        description:
+            'Maior evento de corridas underground inspirado no FIRST2. Cuidado com a polícia.',
         eventType: 'race',
     },
     {
