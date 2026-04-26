@@ -1,5 +1,6 @@
 const { FlatCompat } = require('@eslint/eslintrc');
 const prettierRecommended = require('eslint-plugin-prettier/recommended');
+const jestPlugin = require('eslint-plugin-jest');
 
 const compat = new FlatCompat();
 
@@ -18,6 +19,9 @@ module.exports = [
     prettierRecommended,
     {
         files: ['**/*.test.ts', '**/*.test.tsx', 'jest.setup.js', 'jest.config.js'],
+        plugins: {
+            jest: jestPlugin,
+        },
         languageOptions: {
             globals: {
                 jest: 'readonly',
@@ -31,6 +35,7 @@ module.exports = [
             },
         },
         rules: {
+            ...jestPlugin.configs.recommended.rules,
             '@typescript-eslint/no-require-imports': 'off',
             'no-undef': 'off', // globals are handled but sometimes flat config is tricky with implicit globals
         },
