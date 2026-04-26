@@ -87,6 +87,8 @@ export const MOCK_EVENTS: Event[] = [
         isPrivate: false,
         description: 'Corridas underground amigáveis para todas as equipes da comunidade.',
         eventType: 'race',
+        riskLevel: 'medium',
+        prize: 'Aposta Amigável',
     },
     {
         id: 'event-3',
@@ -104,6 +106,8 @@ export const MOCK_EVENTS: Event[] = [
         description:
             'Maior evento de corridas underground inspirado no FIRST2. Cuidado com a polícia.',
         eventType: 'race',
+        riskLevel: 'high',
+        prize: 'R$ 2.000 + Respeito',
     },
     {
         id: 'event-4',

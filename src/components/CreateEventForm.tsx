@@ -18,6 +18,8 @@ export default function CreateEventForm() {
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
     const [eventType, setEventType] = useState<'meet' | 'race' | 'checkpoint'>('meet');
+    const [riskLevel, setRiskLevel] = useState<'low' | 'medium' | 'high'>('low');
+    const [prize, setPrize] = useState('');
 
     const handleCreate = () => {
         if (!title || !date || !time || !location) {
@@ -35,6 +37,7 @@ export default function CreateEventForm() {
             attendees: 1,
             isPrivate: false,
             eventType,
+            ...(eventType === 'race' ? { riskLevel, prize } : {}),
         };
         addEvent(newEvent);
         Alert.alert('Sucesso', 'Evento criado com sucesso!', [
@@ -82,6 +85,46 @@ export default function CreateEventForm() {
                 value={location}
                 onChangeText={setLocation}
             />
+
+            {eventType === 'race' && (
+                <>
+                    <View style={styles.riskSelector}>
+                        <Text style={styles.label}>NÍVEL DE RISCO</Text>
+                        <View style={styles.riskButtons}>
+                            {(['low', 'medium', 'high'] as const).map((level) => (
+                                <TouchableOpacity
+                                    key={level}
+                                    style={[
+                                        styles.riskButton,
+                                        riskLevel === level && styles.riskButtonActive,
+                                    ]}
+                                    onPress={() => setRiskLevel(level)}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.riskButtonText,
+                                            riskLevel === level && styles.riskButtonTextActive,
+                                        ]}
+                                    >
+                                        {level === 'low'
+                                            ? 'BAIXO'
+                                            : level === 'medium'
+                                              ? 'MÉDIO'
+                                              : 'ALTO'}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </View>
+                    <FormInput
+                        label="PREMIAÇÃO"
+                        placeholder="Ex: R$ 500 ou Respeito"
+                        value={prize}
+                        onChangeText={setPrize}
+                    />
+                </>
+            )}
+
             <TouchableOpacity style={styles.createButton} onPress={handleCreate}>
                 <View style={styles.buttonBackground} />
                 <Text style={styles.buttonText}>PUBLICAR EVENTO</Text>
@@ -128,5 +171,40 @@ const styles = StyleSheet.create({
         color: theme.colors.textSecondary,
         fontSize: 14,
         letterSpacing: 1,
+    },
+    label: {
+        fontFamily: theme.fonts.secondary.bold,
+        color: theme.colors.textSecondary,
+        marginBottom: 8,
+        fontSize: 12,
+        letterSpacing: 1,
+    },
+    riskSelector: {
+        marginBottom: 20,
+    },
+    riskButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    riskButton: {
+        flex: 1,
+        backgroundColor: theme.colors.card,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+        padding: 12,
+        marginHorizontal: 4,
+        alignItems: 'center',
+    },
+    riskButtonActive: {
+        backgroundColor: theme.colors.primary,
+        borderColor: theme.colors.primary,
+    },
+    riskButtonText: {
+        fontFamily: theme.fonts.secondary.bold,
+        color: theme.colors.textSecondary,
+        fontSize: 12,
+    },
+    riskButtonTextActive: {
+        color: '#000',
     },
 });
