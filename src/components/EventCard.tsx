@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MapPin, Users, Clock } from 'lucide-react-native';
 import EventCardBadges from './EventCardBadges';
+import EventCardRaceDetails from './EventCardRaceDetails';
 import { theme } from '../theme';
 
 interface EventCardProps {
@@ -51,37 +52,7 @@ export default function EventCard({
                 </View>
             </View>
 
-            {(riskLevel || prize) && (
-                <View style={styles.raceDetails}>
-                    {riskLevel && (
-                        <View style={styles.riskBadge}>
-                            <Text style={styles.riskLabel}>RISCO:</Text>
-                            <Text
-                                style={[
-                                    styles.riskValue,
-                                    riskLevel === 'high'
-                                        ? styles.riskHigh
-                                        : riskLevel === 'medium'
-                                          ? styles.riskMedium
-                                          : styles.riskLow,
-                                ]}
-                            >
-                                {riskLevel === 'high'
-                                    ? 'ALTO'
-                                    : riskLevel === 'medium'
-                                      ? 'MÉDIO'
-                                      : 'BAIXO'}
-                            </Text>
-                        </View>
-                    )}
-                    {prize && (
-                        <View style={styles.prizeBadge}>
-                            <Text style={styles.prizeLabel}>PRÊMIO:</Text>
-                            <Text style={styles.prizeValue}>{prize}</Text>
-                        </View>
-                    )}
-                </View>
-            )}
+            <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
 
             <View style={styles.footer}>
                 <Users size={14} color="#666" />
@@ -149,51 +120,6 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 12,
         marginLeft: 6,
-    },
-    raceDetails: {
-        flexDirection: 'row',
-        marginBottom: 15,
-        gap: 10,
-    },
-    riskBadge: {
-        flexDirection: 'row',
-        backgroundColor: '#333',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 4,
-        alignItems: 'center',
-    },
-    riskLabel: {
-        color: '#888',
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 10,
-        marginRight: 4,
-    },
-    riskValue: {
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 10,
-    },
-    riskHigh: { color: '#FF3333' },
-    riskMedium: { color: '#FFAA00' },
-    riskLow: { color: '#00FF00' },
-    prizeBadge: {
-        flexDirection: 'row',
-        backgroundColor: '#333',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 4,
-        alignItems: 'center',
-    },
-    prizeLabel: {
-        color: '#888',
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 10,
-        marginRight: 4,
-    },
-    prizeValue: {
-        color: '#FFD700',
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 10,
     },
     cornerDecor: {
         position: 'absolute',
