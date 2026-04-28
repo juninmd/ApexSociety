@@ -8,6 +8,7 @@ import { useEvents } from '../context/EventContext';
 import { Event } from '../types';
 import FormInput from './FormInput';
 import EventTypeSelector from './EventTypeSelector';
+import CreateEventRiskSelector from './CreateEventRiskSelector';
 
 export default function CreateEventForm() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -87,42 +88,12 @@ export default function CreateEventForm() {
             />
 
             {eventType === 'race' && (
-                <>
-                    <View style={styles.riskSelector}>
-                        <Text style={styles.label}>NÍVEL DE RISCO</Text>
-                        <View style={styles.riskButtons}>
-                            {(['low', 'medium', 'high'] as const).map((level) => (
-                                <TouchableOpacity
-                                    key={level}
-                                    style={[
-                                        styles.riskButton,
-                                        riskLevel === level && styles.riskButtonActive,
-                                    ]}
-                                    onPress={() => setRiskLevel(level)}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.riskButtonText,
-                                            riskLevel === level && styles.riskButtonTextActive,
-                                        ]}
-                                    >
-                                        {level === 'low'
-                                            ? 'BAIXO'
-                                            : level === 'medium'
-                                              ? 'MÉDIO'
-                                              : 'ALTO'}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    </View>
-                    <FormInput
-                        label="PREMIAÇÃO"
-                        placeholder="Ex: R$ 500 ou Respeito"
-                        value={prize}
-                        onChangeText={setPrize}
-                    />
-                </>
+                <CreateEventRiskSelector
+                    riskLevel={riskLevel}
+                    setRiskLevel={setRiskLevel}
+                    prize={prize}
+                    setPrize={setPrize}
+                />
             )}
 
             <TouchableOpacity style={styles.createButton} onPress={handleCreate}>
@@ -171,40 +142,5 @@ const styles = StyleSheet.create({
         color: theme.colors.textSecondary,
         fontSize: 14,
         letterSpacing: 1,
-    },
-    label: {
-        fontFamily: theme.fonts.secondary.bold,
-        color: theme.colors.textSecondary,
-        marginBottom: 8,
-        fontSize: 12,
-        letterSpacing: 1,
-    },
-    riskSelector: {
-        marginBottom: 20,
-    },
-    riskButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    riskButton: {
-        flex: 1,
-        backgroundColor: theme.colors.card,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-        padding: 12,
-        marginHorizontal: 4,
-        alignItems: 'center',
-    },
-    riskButtonActive: {
-        backgroundColor: theme.colors.primary,
-        borderColor: theme.colors.primary,
-    },
-    riskButtonText: {
-        fontFamily: theme.fonts.secondary.bold,
-        color: theme.colors.textSecondary,
-        fontSize: 12,
-    },
-    riskButtonTextActive: {
-        color: '#000',
     },
 });
