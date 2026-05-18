@@ -47,3 +47,13 @@ coverage/
 public/index.html
 public/sitemap.xml
 .netlify/
+
+# Environment and secrets (added for security)
+secrets/
+config/secrets.yml
+*.env.*
+!*.env.example  # Allow env example files
+*.cert
+*.pem
+*.p12
+*.key
