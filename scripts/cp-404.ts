@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const src = path.join(__dirname, '../dist/index.html');
 const dest = path.join(__dirname, '../dist/404.html');
