@@ -1,10 +1,10 @@
-const { FlatCompat } = require('@eslint/eslintrc');
-const prettierRecommended = require('eslint-plugin-prettier/recommended');
-const jestPlugin = require('eslint-plugin-jest');
+import { FlatCompat } from '@eslint/eslintrc';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import jestPlugin from 'eslint-plugin-jest';
 
 const compat = new FlatCompat();
 
-module.exports = [
+export default [
     {
         ignores: [
             'node_modules/',
@@ -18,7 +18,7 @@ module.exports = [
     ...compat.extends('expo'),
     prettierRecommended,
     {
-        files: ['**/*.test.ts', '**/*.test.tsx', 'jest.setup.js', 'jest.config.js'],
+        files: ['**/*.test.ts', '**/*.test.tsx', 'jest.setup.ts', 'jest.config.ts'],
         plugins: {
             jest: jestPlugin,
         },
@@ -41,7 +41,7 @@ module.exports = [
         },
     },
     {
-        files: ['scripts/*.js'],
+        files: ['scripts/*.ts'],
         languageOptions: {
             globals: {
                 process: 'readonly',

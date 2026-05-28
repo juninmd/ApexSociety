@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 const metadataPath = path.join(__dirname, '../src/constants/metadata.json');
 const outputPath = path.join(__dirname, '../public/sitemap.xml');
