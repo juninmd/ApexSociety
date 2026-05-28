@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const metadataPath = path.join(import.meta.dirname, '../src/constants/metadata.json');
-const outputPath = path.join(import.meta.dirname, '../public/sitemap.xml');
+const metadataPath = path.join(__dirname, '../src/constants/metadata.json');
+const outputPath = path.join(__dirname, '../public/sitemap.xml');
 
 try {
     const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
