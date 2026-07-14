@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR_NETLIFY_SITE_API_ID/deploy-status)](https://apexsociety.netlify.app/)
 [![GitHub Pages Status](https://github.com/juninmd/ApexSociety/actions/workflows/deploy.yml/badge.svg)](https://juninmd.github.io/ApexSociety/)
-[![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
+[![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen.svg)](<>)
 
 > O app definitivo para entusiastas de carros e corridas underground, inspirado no FIRST2. Ideal para marcar corridas de rua, eventos de carro e encontros automotivos. Crie sua equipe e receba alertas de blitz, radar e acidentes em tempo real!
 

@@ -30,6 +30,8 @@ export default function EventCard({
     prize,
     onPress,
 }: EventCardProps) {
+    const [rsvp, setRsvp] = React.useState(false);
+
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styles.header}>
@@ -43,11 +45,11 @@ export default function EventCard({
 
             <View style={styles.infoRow}>
                 <View style={styles.infoItem}>
-                    <Clock size={14} color="#FFD700" />
+                    <Clock size={14} color={theme.colors.primary} />
                     <Text style={styles.infoText}>{time}</Text>
                 </View>
                 <View style={styles.infoItem}>
-                    <MapPin size={14} color="#FFD700" />
+                    <MapPin size={14} color={theme.colors.primary} />
                     <Text style={styles.infoText}>{location}</Text>
                 </View>
             </View>
@@ -55,8 +57,18 @@ export default function EventCard({
             <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
 
             <View style={styles.footer}>
-                <Users size={14} color="#666" />
-                <Text style={styles.attendees}>{attendees} GOING</Text>
+                <View style={styles.attendeesContainer}>
+                    <Users size={14} color={theme.colors.secondary} />
+                    <Text style={styles.attendees}>{attendees + (rsvp ? 1 : 0)} GOING</Text>
+                </View>
+                <TouchableOpacity
+                    style={[styles.rsvpButton, rsvp && styles.rsvpButtonActive]}
+                    onPress={() => setRsvp(!rsvp)}
+                >
+                    <Text style={[styles.rsvpText, rsvp && styles.rsvpTextActive]}>
+                        {rsvp ? 'CONFIRMADO' : 'PARTICIPAR'}
+                    </Text>
+                </TouchableOpacity>
             </View>
 
             {/* Decorative "Stitch" corner */}
@@ -67,11 +79,11 @@ export default function EventCard({
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#1E1E1E',
+        backgroundColor: theme.colors.card,
         padding: 20,
         marginBottom: 15,
         borderLeftWidth: 3,
-        borderLeftColor: '#FFD700',
+        borderLeftColor: theme.colors.primary,
         position: 'relative',
         overflow: 'hidden',
     },
@@ -82,13 +94,13 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     host: {
-        color: '#888',
+        color: theme.colors.textSecondary,
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 10,
         textTransform: 'uppercase',
     },
     title: {
-        color: '#FFF',
+        color: theme.colors.text,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 24,
         marginBottom: 10,
@@ -103,7 +115,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     infoText: {
-        color: '#CCC',
+        color: theme.colors.textSecondary,
         fontFamily: theme.fonts.secondary.regular,
         fontSize: 14,
         marginLeft: 8,
@@ -111,15 +123,40 @@ const styles = StyleSheet.create({
     footer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         borderTopWidth: 1,
-        borderTopColor: '#333',
+        borderTopColor: theme.colors.border,
         paddingTop: 10,
     },
+    attendeesContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     attendees: {
-        color: '#666',
+        color: theme.colors.secondary,
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 12,
         marginLeft: 6,
+    },
+    rsvpButton: {
+        borderWidth: 1,
+        borderColor: theme.colors.primary,
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        borderRadius: 4,
+        transform: [{ skewX: '-10deg' }],
+    },
+    rsvpButtonActive: {
+        backgroundColor: theme.colors.primary,
+    },
+    rsvpText: {
+        color: theme.colors.primary,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 10,
+        transform: [{ skewX: '10deg' }],
+    },
+    rsvpTextActive: {
+        color: theme.colors.black,
     },
     cornerDecor: {
         position: 'absolute',
@@ -127,7 +164,7 @@ const styles = StyleSheet.create({
         right: -10,
         width: 20,
         height: 20,
-        backgroundColor: '#FFD700',
+        backgroundColor: theme.colors.primary,
         transform: [{ rotate: '45deg' }],
     },
 });

@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../theme';
 import { useAlert } from '../context/AlertContext';
+import { useHazards } from '../context/HazardContext';
+import * as Location from 'expo-location';
 
 export type HazardType = 'blitz' | 'radar' | 'acidente';
 
@@ -11,6 +13,7 @@ interface ReportHazardButtonProps {
 
 export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
     const { showAlert } = useAlert();
+    const { addHazard } = useHazards();
 
     const hazardConfig = {
         blitz: {
@@ -21,12 +24,12 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
         },
         radar: {
             text: 'REPORTAR RADAR',
-            color: '#f39c12', // Orange for radar
+            color: theme.colors.primary, // Orange for radar
             alertMsg: 'Radar Reportado: Motoristas notificados sobre fiscalização eletrônica.',
         },
         acidente: {
             text: 'REPORTAR ACIDENTE',
-            color: '#e74c3c', // Red for accident
+            color: theme.colors.error, // Red for accident
             alertMsg:
                 'Acidente Reportado: Motoristas notificados para reduzir a velocidade e ter cautela.',
         },
@@ -34,8 +37,29 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
 
     const config = hazardConfig[type];
 
-    const handleReportHazard = () => {
-        showAlert(config.alertMsg);
+    const handleReportHazard = async () => {
+        try {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                showAlert(`${config.alertMsg} (Sem localização)`);
+                return;
+            }
+
+            const location = await Location.getCurrentPositionAsync({});
+            addHazard({
+                id: Math.random().toString(36).substr(2, 9),
+                type,
+                location: {
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                },
+                reportedAt: new Date().toISOString(),
+            });
+
+            showAlert(config.alertMsg);
+        } catch (error) {
+            showAlert(config.alertMsg);
+        }
     };
 
     return (

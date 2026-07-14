@@ -1,3 +1,4 @@
+import { theme } from '../theme';
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 
@@ -19,26 +20,26 @@ export default function CustomButton({
     const getBackgroundColor = () => {
         switch (variant) {
             case 'primary':
-                return '#FFD700';
+                return theme.colors.primary;
             case 'secondary':
-                return '#333333';
+                return theme.colors.border;
             case 'danger':
-                return '#D32F2F';
+                return theme.colors.error;
             default:
-                return '#FFD700';
+                return theme.colors.primary;
         }
     };
 
     const getTextColor = () => {
         switch (variant) {
             case 'primary':
-                return '#000000';
+                return theme.colors.black;
             case 'secondary':
-                return '#FFFFFF';
+                return theme.colors.white;
             case 'danger':
-                return '#FFFFFF';
+                return theme.colors.white;
             default:
-                return '#000000';
+                return theme.colors.black;
         }
     };
 
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(255,255,255,0.1)',
     },
     text: {
-        fontFamily: 'Oswald_700Bold',
+        fontFamily: theme.fonts.primary.bold,
         fontSize: 16,
         textTransform: 'uppercase',
         letterSpacing: 1,

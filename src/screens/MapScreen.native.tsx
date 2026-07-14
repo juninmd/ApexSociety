@@ -7,6 +7,7 @@ import { theme } from '../theme';
 import { MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
 import MapMarkers from '../components/MapScreen/MapMarkers';
 import MapOverlay from '../components/MapScreen/MapOverlay';
+import MapHazards from '../components/MapScreen/MapHazards';
 
 export default function MapScreen() {
     const [region, setRegion] = useState({
@@ -48,6 +49,7 @@ export default function MapScreen() {
                 showsUserLocation={true}
             >
                 <MapMarkers />
+                <MapHazards />
             </MapView>
 
             <MapOverlay nextEvent={nextEvent} nextEventHost={nextEventHost} />
