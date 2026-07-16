@@ -10,7 +10,7 @@ const AlertContext = createContext<AlertContextType | undefined>(undefined);
 
 export function AlertProvider({ children }: { children: ReactNode }) {
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+    const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
 
     const showAlert = (message: string) => {
         setAlertMessage(message);

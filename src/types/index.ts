@@ -39,4 +39,6 @@ export interface Event {
     eventType?: 'meet' | 'race' | 'checkpoint';
     riskLevel?: 'low' | 'medium' | 'high';
     prize?: string;
+    isSecret?: boolean;
+    passcode?: string;
 }

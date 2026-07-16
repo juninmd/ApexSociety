@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { MapPin, Users, Clock } from 'lucide-react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { MapPin, Users, Clock, Lock } from 'lucide-react-native';
 import EventCardBadges from './EventCardBadges';
 import EventCardRaceDetails from './EventCardRaceDetails';
 import { theme } from '../theme';
@@ -15,6 +15,8 @@ interface EventCardProps {
     eventType?: 'meet' | 'race' | 'checkpoint';
     riskLevel?: 'low' | 'medium' | 'high';
     prize?: string;
+    isSecret?: boolean;
+    passcode?: string;
     onPress?: () => void;
 }
 
@@ -28,9 +30,51 @@ export default function EventCard({
     eventType,
     riskLevel,
     prize,
+    isSecret,
+    passcode,
     onPress,
 }: EventCardProps) {
     const [rsvp, setRsvp] = React.useState(false);
+    const [isUnlocked, setIsUnlocked] = React.useState(false);
+    const [passcodeAttempt, setPasscodeAttempt] = React.useState('');
+
+    const handleUnlock = () => {
+        if (passcodeAttempt === passcode) {
+            setIsUnlocked(true);
+        } else {
+            Alert.alert('Erro', 'Senha incorreta.');
+        }
+    };
+
+    if (isSecret && !isUnlocked) {
+        return (
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text style={styles.host}>HOSTED BY {host}</Text>
+                    <EventCardBadges isPrivate={isPrivate} eventType={eventType} />
+                </View>
+                <View style={{ alignItems: 'center', marginVertical: 20 }}>
+                    <Lock size={32} color={theme.colors.primary} />
+                    <Text style={[styles.title, { marginTop: 10, textAlign: 'center' }]}>
+                        EVENTO SECRETO
+                    </Text>
+                    <TextInput
+                        style={styles.passcodeInput}
+                        placeholder="CÓDIGO DE ACESSO"
+                        placeholderTextColor={theme.colors.textSecondary}
+                        value={passcodeAttempt}
+                        onChangeText={setPasscodeAttempt}
+                        autoCapitalize="characters"
+                        secureTextEntry
+                    />
+                    <TouchableOpacity style={styles.unlockButton} onPress={handleUnlock}>
+                        <Text style={styles.unlockText}>DESBLOQUEAR</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.cornerDecor} />
+            </View>
+        );
+    }
 
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -166,5 +210,28 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: theme.colors.primary,
         transform: [{ rotate: '45deg' }],
+    },
+    passcodeInput: {
+        borderWidth: 1,
+        borderColor: theme.colors.primary,
+        color: theme.colors.text,
+        fontFamily: theme.fonts.primary.regular,
+        fontSize: 16,
+        padding: 10,
+        width: '80%',
+        textAlign: 'center',
+        marginTop: 15,
+        marginBottom: 10,
+    },
+    unlockButton: {
+        backgroundColor: theme.colors.primary,
+        paddingVertical: 8,
+        paddingHorizontal: 20,
+        borderRadius: 4,
+    },
+    unlockText: {
+        color: theme.colors.black,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 14,
     },
 });

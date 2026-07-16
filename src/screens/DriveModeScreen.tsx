@@ -6,7 +6,7 @@ import ReportHazardButton from '../components/ReportHazardButton';
 
 export default function DriveModeScreen() {
     const [speed, setSpeed] = useState(0);
-    const pulseAnim = React.useRef(new Animated.Value(1)).current;
+    const [pulseAnim] = useState(() => new Animated.Value(1));
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -71,6 +71,7 @@ export default function DriveModeScreen() {
                         <ReportHazardButton type="blitz" />
                         <ReportHazardButton type="radar" />
                         <ReportHazardButton type="acidente" />
+                        <ReportHazardButton type="sos" />
                     </View>
                 </View>
             </LinearGradient>

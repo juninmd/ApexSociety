@@ -108,6 +108,8 @@ export const MOCK_EVENTS: Event[] = [
         eventType: 'race',
         riskLevel: 'high',
         prize: 'R$ 2.000 + Respeito',
+        isSecret: true,
+        passcode: '05MAR',
     },
     {
         id: 'event-4',
