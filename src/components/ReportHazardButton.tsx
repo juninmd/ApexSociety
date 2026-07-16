@@ -5,7 +5,7 @@ import { useAlert } from '../context/AlertContext';
 import { useHazards } from '../context/HazardContext';
 import * as Location from 'expo-location';
 
-export type HazardType = 'blitz' | 'radar' | 'acidente';
+export type HazardType = 'blitz' | 'radar' | 'acidente' | 'sos';
 
 interface ReportHazardButtonProps {
     type: HazardType;
@@ -33,6 +33,11 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
             alertMsg:
                 'Acidente Reportado: Motoristas notificados para reduzir a velocidade e ter cautela.',
         },
+        sos: {
+            text: 'SINAL SOS',
+            color: '#FF0000', // Bright Red for SOS
+            alertMsg: 'SOS Ativado: Membros da equipe notificados. Aguarde por assistência.',
+        },
     };
 
     const config = hazardConfig[type];
@@ -57,7 +62,7 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
             });
 
             showAlert(config.alertMsg);
-        } catch (error) {
+        } catch (_error) {
             showAlert(config.alertMsg);
         }
     };

@@ -36,6 +36,8 @@ export default function EventsScreen() {
                             eventType={event.eventType}
                             riskLevel={event.riskLevel}
                             prize={event.prize}
+                            isSecret={event.isSecret}
+                            passcode={event.passcode}
                             onPress={() => {}} // No-op for now
                         />
                     );

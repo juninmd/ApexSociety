@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Location } from '../types';
 
-export type HazardType = 'blitz' | 'radar' | 'acidente';
+export type HazardType = 'blitz' | 'radar' | 'acidente' | 'sos';
 
 export interface Hazard {
     id: string;

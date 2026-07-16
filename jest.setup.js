@@ -1,3 +1,4 @@
+/* global jest */
 jest.mock('react-native-maps', () => {
     const React = require('react');
     const { View } = require('react-native');

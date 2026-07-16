@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     coverOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: 'rgba(0,0,0,0.3)',
     },
     profileInfoContainer: {
