@@ -36,6 +36,31 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
         setHazards((prev) => [...prev, hazard]);
     };
 
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            const now = new Date();
+            setHazards((prev) => {
+                const filtered = prev.filter((hazard) => {
+                    const reportedAt = new Date(hazard.reportedAt);
+                    const diffMs = now.getTime() - reportedAt.getTime();
+                    const diffMinutes = diffMs / (1000 * 60);
+
+                    // 30 minutes for blitz, 120 minutes (2 hours) for others
+                    if (hazard.type === 'blitz') {
+                        return diffMinutes < 30;
+                    } else if (hazard.type === 'acidente') {
+                        return diffMinutes < 120;
+                    }
+                    return diffMinutes < 60; // 1 hour default
+                });
+
+                return filtered.length === prev.length ? prev : filtered;
+            });
+        }, 60000); // Check every minute
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <HazardContext.Provider value={{ hazards, addHazard }}>{children}</HazardContext.Provider>
     );
