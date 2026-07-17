@@ -62,7 +62,7 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
             });
 
             showAlert(config.alertMsg);
-        } catch (_error) {
+        } catch {
             showAlert(config.alertMsg);
         }
     };
