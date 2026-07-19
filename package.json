@@ -118,7 +118,8 @@
             "postcss": ">=8.5.10",
             "uuid": ">=14.0.0",
             "node-forge": ">=1.4.0",
-            "defu": ">=6.1.5"
+            "defu": ">=6.1.5",
+            "test-exclude>minimatch": "^5.0.1"
         }
     },
     "private": true
