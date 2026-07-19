@@ -17,12 +17,7 @@ export default function Speedometer({ speed, pulseAnim, isHighSpeed }: Speedomet
                 isHighSpeed && { borderColor: theme.colors.error },
             ]}
         >
-            <Text
-                style={[
-                    styles.speedValue,
-                    isHighSpeed && { color: theme.colors.error },
-                ]}
-            >
+            <Text style={[styles.speedValue, isHighSpeed && { color: theme.colors.error }]}>
                 {speed}
             </Text>
             <Text style={styles.speedUnit}>KM/H</Text>

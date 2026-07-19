@@ -13,7 +13,7 @@ export default function MapHazards() {
     const [pulseAnim] = useState(() => new Animated.Value(0.4));
 
     useEffect(() => {
-        const hasSos = hazards.some(h => h.type === 'sos');
+        const hasSos = hazards.some((h) => h.type === 'sos');
         if (hasSos) {
             Animated.loop(
                 Animated.sequence([
@@ -27,7 +27,7 @@ export default function MapHazards() {
                         duration: 800,
                         useNativeDriver: true,
                     }),
-                ])
+                ]),
             ).start();
         } else {
             pulseAnim.setValue(0.8);

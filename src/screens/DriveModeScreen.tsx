@@ -53,16 +53,19 @@ export default function DriveModeScreen() {
 
                     const nearbyHazard = hazards.find((hazard) => {
                         const dist = getDistance(
-                            latitude, longitude,
-                            hazard.location.latitude, hazard.location.longitude,
+                            latitude,
+                            longitude,
+                            hazard.location.latitude,
+                            hazard.location.longitude,
                         );
                         return dist < 2 && (hazard.type === 'blitz' || hazard.type === 'acidente');
                     });
 
                     if (nearbyHazard && proximityAlert !== nearbyHazard.id) {
-                        const msg = nearbyHazard.type === 'blitz'
-                            ? 'ALERTA: BLITZ POLICIAL A MENOS DE 2KM!'
-                            : 'ALERTA: ACIDENTE A MENOS DE 2KM!';
+                        const msg =
+                            nearbyHazard.type === 'blitz'
+                                ? 'ALERTA: BLITZ POLICIAL A MENOS DE 2KM!'
+                                : 'ALERTA: ACIDENTE A MENOS DE 2KM!';
                         showAlert(msg);
                         setProximityAlert(nearbyHazard.id);
                         Vibration.vibrate([0, 500, 200, 500]); // Vibrate twice
@@ -108,6 +111,18 @@ export default function DriveModeScreen() {
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: theme.colors.black },
     gradient: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    content: { flex: 1, width: '100%', justifyContent: 'space-around', alignItems: 'center', paddingVertical: 60 },
-    actionsContainer: { width: '100%', paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    content: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingVertical: 60,
+    },
+    actionsContainer: {
+        width: '100%',
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
 });

@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         overflow: 'hidden',
     },
-    buttonBackground: { ...StyleSheet.absoluteFill, backgroundColor: theme.colors.primary },
+    buttonBackground: { ...StyleSheet.absoluteFillObject, backgroundColor: theme.colors.primary },
     buttonText: {
         fontFamily: theme.fonts.primary.bold,
         color: '#000',
