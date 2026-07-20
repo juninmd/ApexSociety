@@ -57,3 +57,4 @@ config/secrets.yml
 *.pem
 *.p12
 *.key
+serve.log

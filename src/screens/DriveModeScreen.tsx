@@ -8,13 +8,15 @@ import { useHazards } from '../context/HazardContext';
 import { useAlert } from '../context/AlertContext';
 import Speedometer from '../components/Speedometer';
 import RadarStatus from '../components/RadarStatus';
+import DriveModeTopBar from '../components/DriveModeTopBar';
 import { getDistance } from '../utils/location';
 
 export default function DriveModeScreen() {
     const [speed, setSpeed] = useState(0);
     const [pulseAnim] = useState(() => new Animated.Value(1));
     const [proximityAlert, setProximityAlert] = useState<string | null>(null);
-    const { hazards } = useHazards();
+    const [isGhostMode, setIsGhostMode] = useState(false);
+    const { hazards, heatLevel } = useHazards();
     const { showAlert } = useAlert();
 
     useEffect(() => {
@@ -48,7 +50,7 @@ export default function DriveModeScreen() {
             const sub = await Location.watchPositionAsync(
                 { accuracy: Location.Accuracy.High, timeInterval: 5000, distanceInterval: 10 },
                 (location) => {
-                    if (isCancelled) return;
+                    if (isCancelled || isGhostMode) return;
                     const { latitude, longitude } = location.coords;
 
                     const nearbyHazard = hazards.find((hazard) => {
@@ -85,13 +87,21 @@ export default function DriveModeScreen() {
             isCancelled = true;
             if (locationSub) locationSub.remove();
         };
-    }, [hazards, proximityAlert, showAlert]);
+    }, [hazards, proximityAlert, showAlert, isGhostMode]);
 
     const isHighSpeed = speed > 100;
 
     return (
         <View style={styles.container}>
-            <LinearGradient colors={['#1a1a1a', '#000000']} style={styles.gradient}>
+            <LinearGradient
+                colors={isGhostMode ? ['#0d0d1a', '#000000'] : ['#1a1a1a', '#000000']}
+                style={styles.gradient}
+            >
+                <DriveModeTopBar
+                    isGhostMode={isGhostMode}
+                    onToggleGhostMode={() => setIsGhostMode(!isGhostMode)}
+                    heatLevel={heatLevel}
+                />
                 <View style={styles.content}>
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
@@ -110,7 +120,7 @@ export default function DriveModeScreen() {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: theme.colors.black },
-    gradient: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    gradient: { flex: 1 },
     content: {
         flex: 1,
         width: '100%',

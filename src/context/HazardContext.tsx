@@ -13,6 +13,7 @@ export interface Hazard {
 interface HazardContextType {
     hazards: Hazard[];
     addHazard: (hazard: Hazard) => void;
+    heatLevel: number;
 }
 
 const HazardContext = createContext<HazardContextType | undefined>(undefined);
@@ -35,6 +36,8 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
     const addHazard = (hazard: Hazard) => {
         setHazards((prev) => [...prev, hazard]);
     };
+
+    const heatLevel = hazards.filter((h) => h.type === 'blitz' || h.type === 'radar').length;
 
     React.useEffect(() => {
         const interval = setInterval(() => {
@@ -62,6 +65,8 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <HazardContext.Provider value={{ hazards, addHazard }}>{children}</HazardContext.Provider>
+        <HazardContext.Provider value={{ hazards, addHazard, heatLevel }}>
+            {children}
+        </HazardContext.Provider>
     );
 };
