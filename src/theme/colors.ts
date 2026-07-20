@@ -7,6 +7,7 @@ export const colors = {
     textSecondary: '#AAAAAA',
     border: '#2C2C2C',
     error: '#D32F2F',
+    warning: '#FF9800',
     success: '#4CAF50', // Assuming a standard success color might be needed
     overlay: 'rgba(0,0,0,0.8)',
     mapOverlayStart: 'transparent',
