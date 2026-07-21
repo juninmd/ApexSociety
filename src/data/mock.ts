@@ -71,6 +71,7 @@ export const MOCK_EVENTS: Event[] = [
         description:
             'Encontro focado em carros modificados no estilo FIRST2. Sem manobras perigosas.',
         eventType: 'meet',
+        weather: 'clear',
     },
     {
         id: 'event-2',
@@ -89,6 +90,7 @@ export const MOCK_EVENTS: Event[] = [
         eventType: 'race',
         riskLevel: 'medium',
         prize: 'Aposta Amigável',
+        weather: 'rain',
     },
     {
         id: 'event-3',
@@ -110,6 +112,7 @@ export const MOCK_EVENTS: Event[] = [
         prize: 'R$ 2.000 + Respeito',
         isSecret: true,
         passcode: '05MAR',
+        weather: 'fog',
     },
     {
         id: 'event-4',

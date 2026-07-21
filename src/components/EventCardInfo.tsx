@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { MapPin, Clock } from 'lucide-react-native';
+import { MapPin, Clock, Sun, CloudRain, CloudFog } from 'lucide-react-native';
 import { theme } from '../theme';
 
 interface EventCardInfoProps {
     time: string;
     location: string;
+    weather?: 'clear' | 'rain' | 'fog';
 }
 
-export default function EventCardInfo({ time, location }: EventCardInfoProps) {
+export default function EventCardInfo({ time, location, weather }: EventCardInfoProps) {
     return (
         <View style={styles.infoRow}>
             <View style={styles.infoItem}>
@@ -19,6 +20,18 @@ export default function EventCardInfo({ time, location }: EventCardInfoProps) {
                 <MapPin size={14} color={theme.colors.primary} />
                 <Text style={styles.infoText}>{location}</Text>
             </View>
+            {weather && (
+                <View style={styles.infoItem}>
+                    {weather === 'clear' && <Sun size={14} color={theme.colors.primary} />}
+                    {weather === 'rain' && <CloudRain size={14} color={theme.colors.primary} />}
+                    {weather === 'fog' && <CloudFog size={14} color={theme.colors.primary} />}
+                    <Text style={styles.infoText}>
+                        {weather === 'clear' && 'TEMPO LIMPO'}
+                        {weather === 'rain' && 'CHUVA'}
+                        {weather === 'fog' && 'NEBLINA'}
+                    </Text>
+                </View>
+            )}
         </View>
     );
 }

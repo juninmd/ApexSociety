@@ -38,6 +38,7 @@ export default function EventsScreen() {
                             prize={event.prize}
                             isSecret={event.isSecret}
                             passcode={event.passcode}
+                            weather={event.weather}
                             onPress={() => {}} // No-op for now
                         />
                     );

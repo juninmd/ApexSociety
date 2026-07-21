@@ -19,6 +19,7 @@ interface EventCardProps {
     prize?: string;
     isSecret?: boolean;
     passcode?: string;
+    weather?: 'clear' | 'rain' | 'fog';
     onPress?: () => void;
 }
 
@@ -34,6 +35,7 @@ export default function EventCard({
     prize,
     isSecret,
     passcode,
+    weather,
     onPress,
 }: EventCardProps) {
     const [isUnlocked, setIsUnlocked] = React.useState(false);
@@ -61,7 +63,7 @@ export default function EventCard({
                 {title}
             </Text>
 
-            <EventCardInfo time={time} location={location} />
+            <EventCardInfo time={time} location={location} weather={weather} />
 
             <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
 

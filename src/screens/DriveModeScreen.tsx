@@ -16,8 +16,21 @@ export default function DriveModeScreen() {
     const [pulseAnim] = useState(() => new Animated.Value(1));
     const [proximityAlert, setProximityAlert] = useState<string | null>(null);
     const [isGhostMode, setIsGhostMode] = useState(false);
+    const [ghostStartTime, setGhostStartTime] = useState<number | null>(null);
     const { hazards, heatLevel } = useHazards();
     const { showAlert } = useAlert();
+
+    const handleToggleGhostMode = () => {
+        if (!isGhostMode) {
+            setGhostStartTime(Date.now());
+            setIsGhostMode(true);
+        } else {
+            const duration = ghostStartTime ? Math.floor((Date.now() - ghostStartTime) / 1000) : 0;
+            showAlert(`GHOST MODE OFFLINE: YOU DROVE OFF THE GRID FOR ${duration} SECONDS`);
+            setGhostStartTime(null);
+            setIsGhostMode(false);
+        }
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -99,7 +112,7 @@ export default function DriveModeScreen() {
             >
                 <DriveModeTopBar
                     isGhostMode={isGhostMode}
-                    onToggleGhostMode={() => setIsGhostMode(!isGhostMode)}
+                    onToggleGhostMode={handleToggleGhostMode}
                     heatLevel={heatLevel}
                 />
                 <View style={styles.content}>
