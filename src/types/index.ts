@@ -41,4 +41,5 @@ export interface Event {
     prize?: string;
     isSecret?: boolean;
     passcode?: string;
+    weather?: 'clear' | 'rain' | 'fog';
 }
