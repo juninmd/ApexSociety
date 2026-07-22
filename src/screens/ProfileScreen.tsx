@@ -8,6 +8,7 @@ import GarageSection from '../components/GarageSection';
 import CrewsSection from '../components/CrewsSection';
 import ProfileHeader from '../components/ProfileHeader';
 import StickersSection from '../components/StickersSection';
+import { useReputation } from '../context/ReputationContext';
 
 const USER = {
     name: 'ALEX RACER',
@@ -24,16 +25,19 @@ const USER = {
             id: '1',
             name: 'NISSAN 180SX',
             image: 'https://images.unsplash.com/photo-1626668893632-6f3d4466d25f?auto=format&fit=crop&q=80&w=800',
+            specs: { engine: 'SR20DET', hp: '350 HP' },
         },
         {
             id: '2',
             name: 'MAZDA RX-7',
             image: 'https://images.unsplash.com/photo-1621251978255-a04454d65146?auto=format&fit=crop&q=80&w=800',
+            specs: { engine: '13B-REW', hp: '400 HP' },
         },
         {
             id: '3',
             name: 'TOYOTA SUPRA',
             image: 'https://images.unsplash.com/photo-1619682817481-e994891cd1f5?auto=format&fit=crop&q=80&w=800',
+            specs: { engine: '2JZ-GTE', hp: '800 HP' },
         },
     ],
     crews: [
@@ -53,6 +57,13 @@ const COVER_IMAGE_URL =
     'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=1200';
 
 export default function ProfileScreen() {
+    const { reputation } = useReputation();
+
+    const dynamicStats = {
+        ...USER.stats,
+        reputation: reputation.toString() + ' REP',
+    };
+
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             {/* Header / Cover Image */}
@@ -70,7 +81,7 @@ export default function ProfileScreen() {
                 </View>
 
                 {/* Stats */}
-                <ProfileStats stats={USER.stats} />
+                <ProfileStats stats={dynamicStats} />
 
                 {/* Actions */}
                 <View style={styles.actionButtons}>

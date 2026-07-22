@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Car, Heart } from 'lucide-react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Car } from 'lucide-react-native';
 import { theme } from '../theme';
-
-interface CarItem {
-    id: string;
-    name: string;
-    image: string;
-}
+import CarCard, { CarItem } from './CarCard';
 
 interface GarageSectionProps {
     cars: CarItem[];
@@ -38,34 +32,13 @@ export default function GarageSection({ cars }: GarageSectionProps) {
                 contentContainerStyle={styles.garageList}
             >
                 {cars.map((car) => (
-                    <View key={car.id} style={styles.carCard}>
-                        <Image source={{ uri: car.image }} style={styles.carImage} />
-                        <LinearGradient
-                            colors={['transparent', 'rgba(0,0,0,0.9)']}
-                            style={styles.carOverlay}
-                        >
-                            <View style={styles.carDetails}>
-                                <Text style={styles.carName}>{car.name}</Text>
-                                <TouchableOpacity
-                                    style={styles.respectButton}
-                                    onPress={() => handleRespect(car.id)}
-                                >
-                                    <Heart
-                                        size={16}
-                                        color={
-                                            respectedCars[car.id]
-                                                ? theme.colors.primary
-                                                : theme.colors.white
-                                        }
-                                        fill={respectedCars[car.id] ? theme.colors.primary : 'none'}
-                                    />
-                                    <Text style={styles.respectCount}>
-                                        {respectedCars[car.id] || 0}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </LinearGradient>
-                    </View>
+                    <CarCard
+                        key={car.id}
+                        car={car}
+                        isRespected={!!respectedCars[car.id]}
+                        respectCount={respectedCars[car.id] || 0}
+                        onRespect={handleRespect}
+                    />
                 ))}
                 <TouchableOpacity style={styles.addCarCard}>
                     <Car color={theme.colors.secondary} size={32} />
@@ -100,50 +73,6 @@ const styles = StyleSheet.create({
     },
     garageList: {
         paddingLeft: 20,
-    },
-    carCard: {
-        width: 200,
-        height: 140,
-        marginRight: 15,
-        backgroundColor: theme.colors.card,
-        position: 'relative',
-        overflow: 'hidden',
-    },
-    carImage: {
-        width: '100%',
-        height: '100%',
-    },
-    carOverlay: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        padding: 10,
-        paddingTop: 40,
-    },
-    carDetails: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    carName: {
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 16,
-        color: theme.colors.white,
-    },
-    respectButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255,255,255,0.1)',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 12,
-    },
-    respectCount: {
-        color: theme.colors.white,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 12,
-        marginLeft: 4,
     },
     addCarCard: {
         width: 100,
