@@ -67,7 +67,7 @@ export default function EventCard({
 
             <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
 
-            <EventCardFooter attendees={attendees} />
+            <EventCardFooter attendees={attendees} startTime={time} />
 
             {/* Decorative "Stitch" corner */}
             <View style={styles.cornerDecor} />

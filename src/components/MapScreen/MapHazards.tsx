@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Animated, View, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Animated } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { theme } from '../../theme';
 import { useHazards } from '../../context/HazardContext';

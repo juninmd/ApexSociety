@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Animated, Vibration } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Location from 'expo-location';
 import { theme } from '../theme';
 import ReportHazardButton from '../components/ReportHazardButton';
 import { useHazards } from '../context/HazardContext';
@@ -9,39 +8,17 @@ import { useAlert } from '../context/AlertContext';
 import Speedometer from '../components/Speedometer';
 import RadarStatus from '../components/RadarStatus';
 import DriveModeTopBar from '../components/DriveModeTopBar';
-import { getDistance } from '../utils/location';
+import { useDriveTracking } from '../hooks/useDriveTracking';
 
 export default function DriveModeScreen() {
-    const [speed, setSpeed] = useState(0);
     const [pulseAnim] = useState(() => new Animated.Value(1));
-    const [proximityAlert, setProximityAlert] = useState<string | null>(null);
-    const [isGhostMode, setIsGhostMode] = useState(false);
-    const [ghostStartTime, setGhostStartTime] = useState<number | null>(null);
     const { hazards, heatLevel } = useHazards();
     const { showAlert } = useAlert();
 
-    const handleToggleGhostMode = () => {
-        if (!isGhostMode) {
-            setGhostStartTime(Date.now());
-            setIsGhostMode(true);
-        } else {
-            const duration = ghostStartTime ? Math.floor((Date.now() - ghostStartTime) / 1000) : 0;
-            showAlert(`GHOST MODE OFFLINE: YOU DROVE OFF THE GRID FOR ${duration} SECONDS`);
-            setGhostStartTime(null);
-            setIsGhostMode(false);
-        }
-    };
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setSpeed((prev) => {
-                const nextSpeed = prev + Math.floor(Math.random() * 5);
-                if (nextSpeed > 140) return 130 + Math.floor(Math.random() * 10);
-                return nextSpeed;
-            });
-        }, 300);
-        return () => clearInterval(interval);
-    }, []);
+    const { speed, isGhostMode, handleToggleGhostMode } = useDriveTracking({
+        hazards,
+        showAlert,
+    });
 
     useEffect(() => {
         if (speed > 100) {
@@ -51,56 +28,6 @@ export default function DriveModeScreen() {
             ]).start();
         }
     }, [speed, pulseAnim]);
-
-    useEffect(() => {
-        let locationSub: Location.LocationSubscription | null = null;
-        let isCancelled = false;
-
-        const startLocationTracking = async () => {
-            const { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted' || isCancelled) return;
-
-            const sub = await Location.watchPositionAsync(
-                { accuracy: Location.Accuracy.High, timeInterval: 5000, distanceInterval: 10 },
-                (location) => {
-                    if (isCancelled || isGhostMode) return;
-                    const { latitude, longitude } = location.coords;
-
-                    const nearbyHazard = hazards.find((hazard) => {
-                        const dist = getDistance(
-                            latitude,
-                            longitude,
-                            hazard.location.latitude,
-                            hazard.location.longitude,
-                        );
-                        return dist < 2 && (hazard.type === 'blitz' || hazard.type === 'acidente');
-                    });
-
-                    if (nearbyHazard && proximityAlert !== nearbyHazard.id) {
-                        const msg =
-                            nearbyHazard.type === 'blitz'
-                                ? 'ALERTA: BLITZ POLICIAL A MENOS DE 2KM!'
-                                : 'ALERTA: ACIDENTE A MENOS DE 2KM!';
-                        showAlert(msg);
-                        setProximityAlert(nearbyHazard.id);
-                        Vibration.vibrate([0, 500, 200, 500]); // Vibrate twice
-                    } else if (!nearbyHazard) {
-                        setProximityAlert(null);
-                    }
-                },
-            );
-
-            if (isCancelled) sub.remove();
-            else locationSub = sub;
-        };
-
-        startLocationTracking();
-
-        return () => {
-            isCancelled = true;
-            if (locationSub) locationSub.remove();
-        };
-    }, [hazards, proximityAlert, showAlert, isGhostMode]);
 
     const isHighSpeed = speed > 100;
 
