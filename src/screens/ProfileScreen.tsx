@@ -9,49 +9,7 @@ import CrewsSection from '../components/CrewsSection';
 import ProfileHeader from '../components/ProfileHeader';
 import StickersSection from '../components/StickersSection';
 import { useReputation } from '../context/ReputationContext';
-
-const USER = {
-    name: 'ALEX RACER',
-    handle: '@driftking_99',
-    bio: 'JDM Enthusiast | Touge Runner | Building a 180SX',
-    location: 'Tokyo, Japan',
-    stats: {
-        followers: '12.5K',
-        following: '420',
-        reputation: 'ELITE',
-    },
-    garage: [
-        {
-            id: '1',
-            name: 'NISSAN 180SX',
-            image: 'https://images.unsplash.com/photo-1626668893632-6f3d4466d25f?auto=format&fit=crop&q=80&w=800',
-            specs: { engine: 'SR20DET', hp: '350 HP' },
-        },
-        {
-            id: '2',
-            name: 'MAZDA RX-7',
-            image: 'https://images.unsplash.com/photo-1621251978255-a04454d65146?auto=format&fit=crop&q=80&w=800',
-            specs: { engine: '13B-REW', hp: '400 HP' },
-        },
-        {
-            id: '3',
-            name: 'TOYOTA SUPRA',
-            image: 'https://images.unsplash.com/photo-1619682817481-e994891cd1f5?auto=format&fit=crop&q=80&w=800',
-            specs: { engine: '2JZ-GTE', hp: '800 HP' },
-        },
-    ],
-    crews: [
-        { id: 'crew-1', name: 'SPORTS CLUB US', rank: 'LEADER' },
-        { id: 'crew-2', name: 'MIDNIGHT RUNNERS', rank: 'MEMBER' },
-        { id: 'crew-3', name: 'TOKYO DRIFT', rank: 'ELITE' },
-    ],
-    stickers: [
-        { id: 's1', name: 'NIGHT RIDER', color: '#00F0FF' },
-        { id: 's2', name: 'TOUGE KING', color: '#FF0055' },
-        { id: 's3', name: 'JDM LEGEND', color: '#FFE600' },
-        { id: 's4', name: '1ST MEET', color: '#00FF00' },
-    ],
-};
+import { MOCK_PROFILE_USER } from '../data/mock';
 
 const COVER_IMAGE_URL =
     'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=1200';
@@ -60,7 +18,7 @@ export default function ProfileScreen() {
     const { reputation } = useReputation();
 
     const dynamicStats = {
-        ...USER.stats,
+        ...MOCK_PROFILE_USER.stats,
         reputation: reputation.toString() + ' REP',
     };
 
@@ -68,16 +26,16 @@ export default function ProfileScreen() {
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             {/* Header / Cover Image */}
             <ProfileHeader
-                user={{ name: USER.name, handle: USER.handle }}
+                user={{ name: MOCK_PROFILE_USER.name, handle: MOCK_PROFILE_USER.handle }}
                 coverImageUrl={COVER_IMAGE_URL}
             />
 
             <View style={styles.contentSection}>
                 {/* Bio & Location */}
-                <Text style={styles.bio}>{USER.bio}</Text>
+                <Text style={styles.bio}>{MOCK_PROFILE_USER.bio}</Text>
                 <View style={styles.locationRow}>
                     <MapPin color={theme.colors.secondary} size={14} />
-                    <Text style={styles.locationText}>{USER.location}</Text>
+                    <Text style={styles.locationText}>{MOCK_PROFILE_USER.location}</Text>
                 </View>
 
                 {/* Stats */}
@@ -97,13 +55,13 @@ export default function ProfileScreen() {
             </View>
 
             {/* Garage Section */}
-            <GarageSection cars={USER.garage} />
+            <GarageSection cars={MOCK_PROFILE_USER.garage} />
 
             {/* Adesivos Digitais Section */}
-            <StickersSection stickers={USER.stickers} />
+            <StickersSection stickers={MOCK_PROFILE_USER.stickers} />
 
             {/* Crews Section */}
-            <CrewsSection crews={USER.crews} />
+            <CrewsSection crews={MOCK_PROFILE_USER.crews} />
 
             <View style={{ height: 100 }} />
         </ScrollView>
