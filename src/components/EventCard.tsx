@@ -20,6 +20,7 @@ interface EventCardProps {
     isSecret?: boolean;
     passcode?: string;
     weather?: 'clear' | 'rain' | 'fog';
+    elevatedRisk?: boolean;
     onPress?: () => void;
 }
 
@@ -36,6 +37,7 @@ export default function EventCard({
     isSecret,
     passcode,
     weather,
+    elevatedRisk,
     onPress,
 }: EventCardProps) {
     const [isUnlocked, setIsUnlocked] = React.useState(false);
@@ -64,6 +66,12 @@ export default function EventCard({
             </Text>
 
             <EventCardInfo time={time} location={location} weather={weather} />
+
+            {elevatedRisk && (
+                <View style={styles.elevatedRiskContainer}>
+                    <Text style={styles.elevatedRiskText}>⚠️ ELEVATED POLICE RISK</Text>
+                </View>
+            )}
 
             <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
 
@@ -112,5 +120,19 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: theme.colors.primary,
         transform: [{ rotate: '45deg' }],
+    },
+    elevatedRiskContainer: {
+        backgroundColor: 'rgba(255, 0, 0, 0.15)',
+        padding: 8,
+        borderRadius: 4,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: theme.colors.error,
+        alignItems: 'center',
+    },
+    elevatedRiskText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 12,
     },
 });

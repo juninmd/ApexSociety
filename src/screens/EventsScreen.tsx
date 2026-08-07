@@ -8,10 +8,12 @@ import { MOCK_CREWS } from '../data/mock';
 import EventCard from '../components/EventCard';
 import { RootStackParamList } from '../navigation/types';
 import { useEvents } from '../context/EventContext';
+import { useHazards } from '../context/HazardContext';
 
 export default function EventsScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { events } = useEvents();
+    const { heatLevel } = useHazards();
 
     return (
         <ScrollView style={styles.container}>
@@ -39,6 +41,7 @@ export default function EventsScreen() {
                             isSecret={event.isSecret}
                             passcode={event.passcode}
                             weather={event.weather}
+                            elevatedRisk={heatLevel > 1} // Heat level > 1 triggers warning
                             onPress={() => {}} // No-op for now
                         />
                     );

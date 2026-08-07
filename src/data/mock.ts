@@ -53,6 +53,49 @@ export const MOCK_USERS: User[] = [
     },
 ];
 
+export const MOCK_PROFILE_USER = {
+    name: 'ALEX RACER',
+    handle: '@driftking_99',
+    bio: 'JDM Enthusiast | Touge Runner | Building a 180SX',
+    location: 'Tokyo, Japan',
+    stats: {
+        followers: '12.5K',
+        following: '420',
+        reputation: 'ELITE',
+    },
+    garage: [
+        {
+            id: '1',
+            name: 'NISSAN 180SX',
+            image: 'https://images.unsplash.com/photo-1626668893632-6f3d4466d25f?auto=format&fit=crop&q=80&w=800',
+            specs: { engine: 'SR20DET', hp: '350 HP' },
+        },
+        {
+            id: '2',
+            name: 'MAZDA RX-7',
+            image: 'https://images.unsplash.com/photo-1621251978255-a04454d65146?auto=format&fit=crop&q=80&w=800',
+            specs: { engine: '13B-REW', hp: '400 HP' },
+        },
+        {
+            id: '3',
+            name: 'TOYOTA SUPRA',
+            image: 'https://images.unsplash.com/photo-1619682817481-e994891cd1f5?auto=format&fit=crop&q=80&w=800',
+            specs: { engine: '2JZ-GTE', hp: '800 HP' },
+        },
+    ],
+    crews: [
+        { id: 'crew-1', name: 'SPORTS CLUB US', rank: 'LEADER' },
+        { id: 'crew-2', name: 'MIDNIGHT RUNNERS', rank: 'MEMBER' },
+        { id: 'crew-3', name: 'TOKYO DRIFT', rank: 'ELITE' },
+    ],
+    stickers: [
+        { id: 's1', name: 'NIGHT RIDER', color: '#00F0FF' },
+        { id: 's2', name: 'TOUGE KING', color: '#FF0055' },
+        { id: 's3', name: 'JDM LEGEND', color: '#FFE600' },
+        { id: 's4', name: '1ST MEET', color: '#00FF00' },
+    ],
+};
+
 export const MOCK_EVENTS: Event[] = [
     {
         id: 'event-1',

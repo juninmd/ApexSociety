@@ -5,6 +5,7 @@ import CreateEventScreen from '../screens/CreateEventScreen';
 import CreateCrewScreen from '../screens/CreateCrewScreen';
 import CrewScreen from '../screens/CrewScreen';
 import DriveModeScreen from '../screens/DriveModeScreen';
+import LeaderboardScreen from '../screens/LeaderboardScreen';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -25,6 +26,7 @@ export default function AppNavigator() {
             />
             <Stack.Screen name="CrewDetails" component={CrewScreen} />
             <Stack.Screen name="DriveMode" component={DriveModeScreen} />
+            <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
         </Stack.Navigator>
     );
 }

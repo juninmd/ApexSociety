@@ -40,6 +40,11 @@ export default function MenuScreen() {
                     style={styles.button}
                 />
                 <CustomButton
+                    title="LEADERBOARD"
+                    onPress={() => navigation.navigate('Leaderboard')}
+                    style={styles.button}
+                />
+                <CustomButton
                     title="SETTINGS"
                     onPress={() => Alert.alert('Coming Soon', 'Settings are under development.')}
                     variant="secondary"
