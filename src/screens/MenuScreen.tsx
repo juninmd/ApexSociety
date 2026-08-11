@@ -20,38 +20,38 @@ export default function MenuScreen() {
         <View style={styles.container}>
             <View style={styles.menuContainer}>
                 <CustomButton
-                    title="DRIVE MODE"
+                    title="MODO DIREÇÃO"
                     onPress={() => navigation.navigate('DriveMode')}
                     style={styles.button}
                 />
                 <CustomButton
-                    title="PROFILE"
+                    title="PERFIL"
                     onPress={() => navigation.navigate('Profile')}
                     style={styles.button}
                 />
                 <CustomButton
-                    title="MAP"
+                    title="MAPA"
                     onPress={() => navigation.navigate('Map')}
                     style={styles.button}
                 />
                 <CustomButton
-                    title="EVENTS"
+                    title="EVENTOS"
                     onPress={() => navigation.navigate('Events')}
                     style={styles.button}
                 />
                 <CustomButton
-                    title="LEADERBOARD"
+                    title="CLASSIFICAÇÃO"
                     onPress={() => navigation.navigate('Leaderboard')}
                     style={styles.button}
                 />
                 <CustomButton
-                    title="SETTINGS"
-                    onPress={() => Alert.alert('Coming Soon', 'Settings are under development.')}
+                    title="CONFIGURAÇÕES"
+                    onPress={() => Alert.alert('Em Breve', 'Configurações em desenvolvimento.')}
                     variant="secondary"
                     style={styles.button}
                 />
                 <CustomButton
-                    title="WEB VERSION"
+                    title="VERSÃO WEB"
                     onPress={() => Linking.openURL(metadata.homepage)}
                     variant="secondary"
                     style={styles.button}

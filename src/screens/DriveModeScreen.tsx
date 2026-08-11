@@ -8,6 +8,7 @@ import { useAlert } from '../context/AlertContext';
 import Speedometer from '../components/Speedometer';
 import RadarStatus from '../components/RadarStatus';
 import DriveModeTopBar from '../components/DriveModeTopBar';
+import PanicButton from '../components/PanicButton';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 
 export default function DriveModeScreen() {
@@ -54,6 +55,7 @@ export default function DriveModeScreen() {
                     </View>
                 </View>
             </LinearGradient>
+            <PanicButton />
         </View>
     );
 }
