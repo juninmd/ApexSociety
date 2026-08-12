@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Car } from 'lucide-react-native';
 import { theme } from '../theme';
 import CarCard, { CarItem } from './CarCard';
+import { RootStackParamList } from '../navigation/types';
 
 interface GarageSectionProps {
     cars: CarItem[];
@@ -10,6 +13,7 @@ interface GarageSectionProps {
 
 export default function GarageSection({ cars }: GarageSectionProps) {
     const [respectedCars, setRespectedCars] = useState<Record<string, number>>({});
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const handleRespect = (carId: string) => {
         setRespectedCars((prev) => ({
@@ -38,6 +42,7 @@ export default function GarageSection({ cars }: GarageSectionProps) {
                         isRespected={!!respectedCars[car.id]}
                         respectCount={respectedCars[car.id] || 0}
                         onRespect={handleRespect}
+                        onPress={() => navigation.navigate('CarDetails', { carId: car.id })}
                     />
                 ))}
                 <TouchableOpacity style={styles.addCarCard}>

@@ -3,6 +3,7 @@ import { Vibration } from 'react-native';
 import * as Location from 'expo-location';
 import { Hazard } from '../context/HazardContext';
 import { getDistance } from '../utils/location';
+import { MOCK_EVENTS } from '../data/mock';
 
 interface UseDriveTrackingProps {
     hazards: Hazard[];
@@ -73,7 +74,24 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
                         setProximityAlert(nearbyHazard.id);
                         Vibration.vibrate([0, 500, 200, 500]); // Vibrate twice
                     } else if (!nearbyHazard) {
-                        setProximityAlert(null);
+                        // Check for nearby events if no hazard
+                        const nearbyEvent = MOCK_EVENTS.find((event) => {
+                            const dist = getDistance(
+                                latitude,
+                                longitude,
+                                event.location.latitude,
+                                event.location.longitude,
+                            );
+                            return dist < 3; // Event proximity radius 3km
+                        });
+
+                        if (nearbyEvent && proximityAlert !== nearbyEvent.id) {
+                            showAlert(`ALERTA: EVENTO '${nearbyEvent.title.toUpperCase()}' A MENOS DE 3KM!`);
+                            setProximityAlert(nearbyEvent.id);
+                            Vibration.vibrate([0, 200, 100, 200]); // Vibrate for event
+                        } else if (!nearbyEvent) {
+                            setProximityAlert(null);
+                        }
                     }
                 },
             );

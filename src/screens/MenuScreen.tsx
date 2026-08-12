@@ -7,6 +7,7 @@ import { RootTabParamList, RootStackParamList } from '../navigation/types';
 import CustomButton from '../components/CustomButton';
 import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
+import { useAuth } from '../context/AuthContext';
 
 type MenuScreenNavigationProp = CompositeNavigationProp<
     BottomTabNavigationProp<RootTabParamList, 'Menu'>,
@@ -15,6 +16,7 @@ type MenuScreenNavigationProp = CompositeNavigationProp<
 
 export default function MenuScreen() {
     const navigation = useNavigation<MenuScreenNavigationProp>();
+    const { logout } = useAuth();
 
     return (
         <View style={styles.container}>
@@ -54,6 +56,12 @@ export default function MenuScreen() {
                     title="VERSÃO WEB"
                     onPress={() => Linking.openURL(metadata.homepage)}
                     variant="secondary"
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="SAIR (LOGOUT)"
+                    onPress={logout}
+                    variant="danger"
                     style={styles.button}
                 />
             </View>

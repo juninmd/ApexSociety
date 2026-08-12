@@ -12,9 +12,12 @@ export type RootTabParamList = {
 
 export type RootStackParamList = {
     Main: NavigatorScreenParams<RootTabParamList>;
+    Login: undefined;
+    Signup: undefined;
     CreateEvent: undefined;
     CreateCrew: undefined;
     CrewDetails: { crewId: string };
+    CarDetails: { carId: string };
     DriveMode: undefined;
     Leaderboard: undefined;
 };
