@@ -22,9 +22,10 @@ interface CarCardProps {
     isRespected: boolean;
     onRespect: (id: string) => void;
     respectCount: number;
+    onPress?: () => void;
 }
 
-export default function CarCard({ car, isRespected, onRespect, respectCount }: CarCardProps) {
+export default function CarCard({ car, isRespected, onRespect, respectCount, onPress }: CarCardProps) {
     const { addReputation } = useReputation();
 
     const handleRespectPress = () => {
@@ -35,7 +36,7 @@ export default function CarCard({ car, isRespected, onRespect, respectCount }: C
     };
 
     return (
-        <View style={styles.carCard}>
+        <TouchableOpacity style={styles.carCard} onPress={onPress} activeOpacity={0.9}>
             <Image source={{ uri: car.image }} style={styles.carImage} />
             <LinearGradient colors={['transparent', 'rgba(0,0,0,0.9)']} style={styles.carOverlay}>
                 <View style={styles.carDetails}>
@@ -57,7 +58,7 @@ export default function CarCard({ car, isRespected, onRespect, respectCount }: C
                     </TouchableOpacity>
                 </View>
             </LinearGradient>
-        </View>
+        </TouchableOpacity>
     );
 }
 
