@@ -25,7 +25,13 @@ interface CarCardProps {
     onPress?: () => void;
 }
 
-export default function CarCard({ car, isRespected, onRespect, respectCount, onPress }: CarCardProps) {
+export default function CarCard({
+    car,
+    isRespected,
+    onRespect,
+    respectCount,
+    onPress,
+}: CarCardProps) {
     const { addReputation } = useReputation();
 
     const handleRespectPress = () => {

@@ -42,4 +42,5 @@ export interface Event {
     isSecret?: boolean;
     passcode?: string;
     weather?: 'clear' | 'rain' | 'fog';
+    hypeScore?: number; // Metric for Event Hype System
 }

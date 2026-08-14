@@ -14,7 +14,7 @@ export default function SignupScreen() {
 
     const handleSignup = () => {
         Alert.alert('Sucesso', 'Conta criada com sucesso! Você pode fazer login agora.', [
-            { text: 'OK', onPress: () => navigation.navigate('Login') }
+            { text: 'OK', onPress: () => navigation.navigate('Login') },
         ]);
     };
 
@@ -38,9 +38,16 @@ export default function SignupScreen() {
                     secureTextEntry
                 />
 
-                <CustomButton title="CRIAR CONTA" onPress={handleSignup} style={styles.signupButton} />
+                <CustomButton
+                    title="CRIAR CONTA"
+                    onPress={handleSignup}
+                    style={styles.signupButton}
+                />
 
-                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.loginLink}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Login')}
+                    style={styles.loginLink}
+                >
                     <Text style={styles.loginText}>JÁ TEM CONTA? VOLTAR</Text>
                 </TouchableOpacity>
             </View>
