@@ -109,7 +109,7 @@
             "minimatch": "^3.0.4",
             "@tootallnate/once": "^3.0.1",
             "test-exclude": "^6.0.0",
-            "undici": ">=6.28.0",
+            "undici": "6.28.0",
             "flatted": "^3.4.2",
             "fastify": ">=5.8.5",
             "@fastify/static": ">=10.1.2",
