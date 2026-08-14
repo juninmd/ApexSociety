@@ -29,7 +29,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     setState({ user, isAuthenticated: true });
                     resolve();
                 } else {
-                    reject(new Error('User not found. Use "DriftKingBR" or "SpeedDemon" for testing.'));
+                    reject(
+                        new Error('User not found. Use "DriftKingBR" or "SpeedDemon" for testing.'),
+                    );
                 }
             }, 500);
         });
@@ -40,9 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ ...state, login, logout }}>
-            {children}
-        </AuthContext.Provider>
+        <AuthContext.Provider value={{ ...state, login, logout }}>{children}</AuthContext.Provider>
     );
 }
 

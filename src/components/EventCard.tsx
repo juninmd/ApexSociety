@@ -21,6 +21,7 @@ interface EventCardProps {
     passcode?: string;
     weather?: 'clear' | 'rain' | 'fog';
     elevatedRisk?: boolean;
+    hypeScore?: number;
     onPress?: () => void;
 }
 
@@ -38,6 +39,7 @@ export default function EventCard({
     passcode,
     weather,
     elevatedRisk,
+    hypeScore = 0,
     onPress,
 }: EventCardProps) {
     const [isUnlocked, setIsUnlocked] = React.useState(false);
@@ -61,9 +63,16 @@ export default function EventCard({
                 <EventCardBadges isPrivate={isPrivate} eventType={eventType} />
             </View>
 
-            <Text style={styles.title} numberOfLines={1}>
-                {title}
-            </Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title} numberOfLines={1}>
+                    {title}
+                </Text>
+                {hypeScore >= 100 && (
+                    <View style={styles.hypeBadge}>
+                        <Text style={styles.hypeText}>🔥 HIGH HYPE</Text>
+                    </View>
+                )}
+            </View>
 
             <EventCardInfo time={time} location={location} weather={weather} />
 
@@ -105,12 +114,32 @@ const styles = StyleSheet.create({
         fontSize: 10,
         textTransform: 'uppercase',
     },
+    titleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
     title: {
         color: theme.colors.text,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 24,
-        marginBottom: 10,
         textTransform: 'uppercase',
+        flex: 1,
+        marginRight: 8,
+    },
+    hypeBadge: {
+        backgroundColor: 'rgba(255, 100, 0, 0.2)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#FF6400',
+    },
+    hypeText: {
+        color: '#FF6400',
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 10,
     },
     cornerDecor: {
         position: 'absolute',

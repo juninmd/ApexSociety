@@ -9,6 +9,7 @@ import Speedometer from '../components/Speedometer';
 import RadarStatus from '../components/RadarStatus';
 import DriveModeTopBar from '../components/DriveModeTopBar';
 import PanicButton from '../components/PanicButton';
+import TelemetryDashboard from '../components/TelemetryDashboard';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 
 export default function DriveModeScreen() {
@@ -46,6 +47,7 @@ export default function DriveModeScreen() {
                 <View style={styles.content}>
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
+                    <TelemetryDashboard speed={speed} />
 
                     <View style={styles.actionsContainer}>
                         <ReportHazardButton type="blitz" />

@@ -45,15 +45,15 @@ export default function MapScreen() {
             crewId: 'crew-1',
             center: { latitude: -23.5505, longitude: -46.6333 },
             radius: 3000,
-            color: 'rgba(255, 0, 85, 0.2)' // FIRST2 Red
+            color: 'rgba(255, 0, 85, 0.2)', // FIRST2 Red
         },
         {
             id: 't2',
             crewId: 'crew-2',
             center: { latitude: -23.5815, longitude: -46.6863 },
             radius: 2000,
-            color: 'rgba(0, 240, 255, 0.2)' // Cyan
-        }
+            color: 'rgba(0, 240, 255, 0.2)', // Cyan
+        },
     ];
 
     return (
@@ -87,7 +87,12 @@ export default function MapScreen() {
                 <Text style={styles.legendTitle}>TERRITÓRIOS (CREW WARS)</Text>
                 {MOCK_CREWS.slice(0, 2).map((crew, idx) => (
                     <View key={crew.id} style={styles.legendRow}>
-                        <View style={[styles.legendColor, { backgroundColor: territories[idx].color.replace('0.2', '0.8') }]} />
+                        <View
+                            style={[
+                                styles.legendColor,
+                                { backgroundColor: territories[idx].color.replace('0.2', '0.8') },
+                            ]}
+                        />
                         <Text style={styles.legendText}>{crew.name}</Text>
                     </View>
                 ))}
@@ -139,5 +144,5 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
         fontFamily: theme.fonts.secondary.regular,
         fontSize: 12,
-    }
+    },
 });

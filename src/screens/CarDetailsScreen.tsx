@@ -16,7 +16,7 @@ export default function CarDetailsScreen() {
     const params = route.params as { carId: string } | undefined;
     const carId = params?.carId;
 
-    const car = MOCK_PROFILE_USER.garage.find(c => c.id === carId) || MOCK_PROFILE_USER.garage[0];
+    const car = MOCK_PROFILE_USER.garage.find((c) => c.id === carId) || MOCK_PROFILE_USER.garage[0];
 
     const handleRevEngine = () => {
         // Vibrate to simulate revving engine
@@ -38,7 +38,9 @@ export default function CarDetailsScreen() {
                     <View style={styles.specsContainer}>
                         <Text style={styles.specsTitle}>ESPECIFICAÇÕES</Text>
                         <Text style={styles.specsText}>Motor: {car.specs.engine}</Text>
-                        {car.specs.hp && <Text style={styles.specsText}>Potência: {car.specs.hp}</Text>}
+                        {car.specs.hp && (
+                            <Text style={styles.specsText}>Potência: {car.specs.hp}</Text>
+                        )}
                     </View>
                 )}
 
@@ -107,5 +109,5 @@ const styles = StyleSheet.create({
     actionContainer: {
         marginTop: 'auto',
         marginBottom: 40,
-    }
+    },
 });

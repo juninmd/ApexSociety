@@ -86,7 +86,9 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
                         });
 
                         if (nearbyEvent && proximityAlert !== nearbyEvent.id) {
-                            showAlert(`ALERTA: EVENTO '${nearbyEvent.title.toUpperCase()}' A MENOS DE 3KM!`);
+                            showAlert(
+                                `ALERTA: EVENTO '${nearbyEvent.title.toUpperCase()}' A MENOS DE 3KM!`,
+                            );
                             setProximityAlert(nearbyEvent.id);
                             Vibration.vibrate([0, 200, 100, 200]); // Vibrate for event
                         } else if (!nearbyEvent) {

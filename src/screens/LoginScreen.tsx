@@ -50,7 +50,10 @@ export default function LoginScreen() {
 
                 <CustomButton title="ENTRAR" onPress={handleLogin} style={styles.loginButton} />
 
-                <TouchableOpacity onPress={() => navigation.navigate('Signup')} style={styles.signupLink}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Signup')}
+                    style={styles.signupLink}
+                >
                     <Text style={styles.signupText}>NÃO TEM CONTA? CRIE UMA</Text>
                 </TouchableOpacity>
             </View>

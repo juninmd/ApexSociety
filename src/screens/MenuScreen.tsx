@@ -8,6 +8,7 @@ import CustomButton from '../components/CustomButton';
 import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
 import { useAuth } from '../context/AuthContext';
+import { useConvoy } from '../context/ConvoyContext';
 
 type MenuScreenNavigationProp = CompositeNavigationProp<
     BottomTabNavigationProp<RootTabParamList, 'Menu'>,
@@ -17,10 +18,17 @@ type MenuScreenNavigationProp = CompositeNavigationProp<
 export default function MenuScreen() {
     const navigation = useNavigation<MenuScreenNavigationProp>();
     const { logout } = useAuth();
+    const { isConvoyActive, toggleConvoy } = useConvoy();
 
     return (
         <View style={styles.container}>
             <View style={styles.menuContainer}>
+                <CustomButton
+                    title={isConvoyActive ? 'DESATIVAR CONVOY' : 'ATIVAR CONVOY'}
+                    onPress={toggleConvoy}
+                    style={styles.button}
+                    variant={isConvoyActive ? 'secondary' : 'primary'}
+                />
                 <CustomButton
                     title="MODO DIREÇÃO"
                     onPress={() => navigation.navigate('DriveMode')}

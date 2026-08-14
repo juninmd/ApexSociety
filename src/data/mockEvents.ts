@@ -60,6 +60,7 @@ export const MOCK_EVENTS: Event[] = [
         isSecret: true,
         passcode: '05MAR',
         weather: 'fog',
+        hypeScore: 120,
     },
     {
         id: 'event-4',
