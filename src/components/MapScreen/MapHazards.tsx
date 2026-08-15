@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Animated } from 'react-native';
-import { Marker } from 'react-native-maps';
+import { Marker, Circle } from 'react-native-maps';
 import { theme } from '../../theme';
 import { useHazards } from '../../context/HazardContext';
 
@@ -72,17 +72,29 @@ export default function MapHazards() {
                 }
 
                 return (
-                    <Marker
-                        key={hazard.id}
-                        coordinate={{
-                            latitude: hazard.location.latitude,
-                            longitude: hazard.location.longitude,
-                        }}
-                        title={title}
-                        description={`Reportado em: ${new Date(hazard.reportedAt).toLocaleTimeString()}`}
-                        pinColor={markerColor}
-                        opacity={0.8}
-                    />
+                    <React.Fragment key={hazard.id}>
+                        <Marker
+                            coordinate={{
+                                latitude: hazard.location.latitude,
+                                longitude: hazard.location.longitude,
+                            }}
+                            title={title}
+                            description={`Reportado em: ${new Date(hazard.reportedAt).toLocaleTimeString()}`}
+                            pinColor={markerColor}
+                            opacity={0.8}
+                        />
+                        {(hazard.type === 'blitz' || hazard.type === 'radar') && (
+                            <Circle
+                                center={{
+                                    latitude: hazard.location.latitude,
+                                    longitude: hazard.location.longitude,
+                                }}
+                                radius={1000} // 1km radius Hot Zone
+                                strokeColor={markerColor}
+                                fillColor={`${markerColor}33`} // 20% opacity
+                            />
+                        )}
+                    </React.Fragment>
                 );
             })}
         </>

@@ -2,13 +2,19 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import EventCard from '../src/components/EventCard';
 import { ReputationProvider } from '../src/context/ReputationContext';
+import { EventProvider } from '../src/context/EventContext';
 
 describe('EventCard', () => {
     const renderWithContext = (ui: React.ReactElement) => {
-        return render(<ReputationProvider>{ui}</ReputationProvider>);
+        return render(
+            <EventProvider>
+                <ReputationProvider>{ui}</ReputationProvider>
+            </EventProvider>
+        );
     };
 
     const defaultProps = {
+        eventId: 'test-event-1',
         title: 'Test Event',
         host: 'Test Host',
         location: 'Test Location',

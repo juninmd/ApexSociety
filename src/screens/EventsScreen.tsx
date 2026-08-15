@@ -29,6 +29,7 @@ export default function EventsScreen() {
                     return (
                         <EventCard
                             key={event.id}
+                            eventId={event.id}
                             title={event.title}
                             host={host?.name || 'Unknown Host'}
                             location={event.location.address || 'Unknown Location'}

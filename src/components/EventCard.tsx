@@ -8,6 +8,7 @@ import EventCardFooter from './EventCardFooter';
 import { theme } from '../theme';
 
 interface EventCardProps {
+    eventId: string;
     title: string;
     host: string;
     location: string;
@@ -26,6 +27,7 @@ interface EventCardProps {
 }
 
 export default function EventCard({
+    eventId,
     title,
     host,
     location,
@@ -84,7 +86,7 @@ export default function EventCard({
 
             <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
 
-            <EventCardFooter attendees={attendees} startTime={time} />
+            <EventCardFooter eventId={eventId} attendees={attendees} startTime={time} />
 
             {/* Decorative "Stitch" corner */}
             <View style={styles.cornerDecor} />

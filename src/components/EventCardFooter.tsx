@@ -3,21 +3,25 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Users } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
+import { useEvents } from '../context/EventContext';
 
 interface EventCardFooterProps {
+    eventId: string;
     attendees: number;
     startTime?: string;
     endTime?: string;
 }
 
-export default function EventCardFooter({ attendees, startTime }: EventCardFooterProps) {
+export default function EventCardFooter({ eventId, attendees, startTime }: EventCardFooterProps) {
     const [rsvp, setRsvp] = useState(false);
     const isLive = startTime?.toLowerCase() === 'agora' || false;
     const { addReputation } = useReputation();
+    const { incrementHype } = useEvents();
 
     const handlePress = () => {
         if (!rsvp) {
             addReputation(isLive ? 20 : 10); // +20 for checking in live, +10 for standard RSVP
+            incrementHype(eventId);
         }
         setRsvp(!rsvp);
     };
