@@ -68,7 +68,7 @@ async function main() {
         await page.getByPlaceholder('Ex: DriftKingBR').fill('DriftKingBR');
         await page.getByPlaceholder('Sua senha secreta').fill('password');
         await page.getByText('ENTRAR').click();
-    } catch (e) {
+    } catch (_e) {
         // Not on login page, continue
     }
 
@@ -96,12 +96,14 @@ async function main() {
     try {
         await page.goto(`${base}/create-event`, { waitUntil: 'networkidle' });
         await page.getByText('PUBLICAR EVENTO').first().waitFor({ timeout: 5000 });
-        await page.getByPlaceholder('Ex: Encontro de Sexta à Noite').fill('TRACK DAY - GUARAPIRANGA');
+        await page
+            .getByPlaceholder('Ex: Encontro de Sexta à Noite')
+            .fill('TRACK DAY - GUARAPIRANGA');
         await page.getByPlaceholder('DD/MM/AAAA').fill('12/08/2026');
         await page.getByPlaceholder('HH:MM').fill('20:00');
         await page.getByPlaceholder('Onde vamos nos encontrar?').fill('AUTÓDROMO DE INTERLAGOS');
         await shot('04-create-event');
-    } catch (e) {
+    } catch (_e) {
         console.warn('Could not complete Create Event form in E2E');
     }
 
@@ -115,7 +117,7 @@ async function main() {
         await page.getByText('OS CORREDORES').first().click();
         await page.getByText('GERENCIAR').first().waitFor({ timeout: 5000 });
         await shot('06-crew-details');
-    } catch (e) {
+    } catch (_e) {
         console.warn('Could not complete Crews in E2E');
     }
 
@@ -124,7 +126,7 @@ async function main() {
         await page.goto(`${base}/profile`, { waitUntil: 'networkidle' });
         await page.getByText('EDIT PROFILE').waitFor({ timeout: 5000 });
         await shot('07-profile');
-    } catch (e) {
+    } catch (_e) {
         console.warn('Could not complete Profile in E2E');
     }
 

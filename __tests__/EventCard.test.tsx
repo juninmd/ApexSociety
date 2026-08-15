@@ -9,7 +9,7 @@ describe('EventCard', () => {
         return render(
             <EventProvider>
                 <ReputationProvider>{ui}</ReputationProvider>
-            </EventProvider>
+            </EventProvider>,
         );
     };
 
