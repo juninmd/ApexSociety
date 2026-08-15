@@ -5,6 +5,7 @@ import { MOCK_EVENTS } from '../data/mock';
 interface EventContextType {
     events: Event[];
     addEvent: (event: Event) => void;
+    incrementHype: (eventId: string) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -28,6 +29,18 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
         setEvents((prevEvents) => [event, ...prevEvents]);
     };
 
+    const incrementHype = (eventId: string) => {
+        setEvents((prevEvents) =>
+            prevEvents.map((event) => {
+                if (event.id === eventId) {
+                    const currentHype = event.hypeScore || 0;
+                    return { ...event, hypeScore: currentHype + 10 };
+                }
+                return event;
+            }),
+        );
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
             setEvents((prevEvents) => {
@@ -46,5 +59,9 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
         return () => clearInterval(interval);
     }, []);
 
-    return <EventContext.Provider value={{ events, addEvent }}>{children}</EventContext.Provider>;
+    return (
+        <EventContext.Provider value={{ events, addEvent, incrementHype }}>
+            {children}
+        </EventContext.Provider>
+    );
 };

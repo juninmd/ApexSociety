@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../theme';
 import { useAlert } from '../context/AlertContext';
 import { useHazards } from '../context/HazardContext';
+import { useConvoy } from '../context/ConvoyContext';
 import * as Location from 'expo-location';
 
 export type HazardType = 'blitz' | 'radar' | 'acidente' | 'sos';
@@ -14,6 +15,7 @@ interface ReportHazardButtonProps {
 export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
     const { showAlert } = useAlert();
     const { addHazard } = useHazards();
+    const { isConvoyActive } = useConvoy();
 
     const hazardConfig = {
         blitz: {
@@ -61,7 +63,11 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
                 reportedAt: new Date().toISOString(),
             });
 
-            showAlert(config.alertMsg);
+            if (type === 'sos' && isConvoyActive) {
+                showAlert('🚨 CONVOY SOS FLARE ATIVADO 🚨 Membros da equipe notificados.');
+            } else {
+                showAlert(config.alertMsg);
+            }
         } catch {
             showAlert(config.alertMsg);
         }
