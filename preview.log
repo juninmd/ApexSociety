@@ -1,0 +1,79 @@
+ INFO  Accepting connections at http://localhost:3000
+ HTTP  8/16/2026 12:18:15 PM ::1 GET /
+ HTTP  8/16/2026 12:18:15 PM ::1 Returned 200 in 272 ms
+ HTTP  8/16/2026 12:18:16 PM ::1 GET /_expo/static/js/web/index-3ecdce2ad1e588a5cd6eef13d052da07.js
+ HTTP  8/16/2026 12:18:16 PM ::1 Returned 200 in 16 ms
+ HTTP  8/16/2026 12:18:16 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.678ba85b47044ac65031832c80bdfe4a.ttf
+ HTTP  8/16/2026 12:18:16 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+oswald@0.4.2/node_modules/@expo-google-fonts/oswald/700Bold/Oswald_700Bold.10c64324bb2a7a3fef799c573e0ce19f.ttf
+ HTTP  8/16/2026 12:18:16 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.2dd437af13b14eb2f3b5de2e79523e65.ttf
+ HTTP  8/16/2026 12:18:16 PM ::1 Returned 200 in 7 ms
+ HTTP  8/16/2026 12:18:16 PM ::1 Returned 200 in 11 ms
+ HTTP  8/16/2026 12:18:16 PM ::1 Returned 200 in 8 ms
+ HTTP  8/16/2026 12:18:52 PM ::1 GET /
+ HTTP  8/16/2026 12:18:52 PM ::1 Returned 304 in 2 ms
+ HTTP  8/16/2026 12:18:52 PM ::1 GET /_expo/static/js/web/index-3ecdce2ad1e588a5cd6eef13d052da07.js
+ HTTP  8/16/2026 12:18:52 PM ::1 Returned 304 in 1 ms
+ HTTP  8/16/2026 12:18:53 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.678ba85b47044ac65031832c80bdfe4a.ttf
+ HTTP  8/16/2026 12:18:53 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+oswald@0.4.2/node_modules/@expo-google-fonts/oswald/700Bold/Oswald_700Bold.10c64324bb2a7a3fef799c573e0ce19f.ttf
+ HTTP  8/16/2026 12:18:53 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.2dd437af13b14eb2f3b5de2e79523e65.ttf
+ HTTP  8/16/2026 12:18:53 PM ::1 Returned 304 in 7 ms
+ HTTP  8/16/2026 12:18:53 PM ::1 Returned 304 in 7 ms
+ HTTP  8/16/2026 12:18:53 PM ::1 Returned 304 in 11 ms
+ HTTP  8/16/2026 12:20:18 PM ::1 GET /
+ HTTP  8/16/2026 12:20:18 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:20:18 PM ::1 GET /_expo/static/js/web/index-3ecdce2ad1e588a5cd6eef13d052da07.js
+ HTTP  8/16/2026 12:20:18 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:20:18 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.678ba85b47044ac65031832c80bdfe4a.ttf
+ HTTP  8/16/2026 12:20:18 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+oswald@0.4.2/node_modules/@expo-google-fonts/oswald/700Bold/Oswald_700Bold.10c64324bb2a7a3fef799c573e0ce19f.ttf
+ HTTP  8/16/2026 12:20:18 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:20:18 PM ::1 Returned 200 in 2 ms
+ HTTP  8/16/2026 12:20:18 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.2dd437af13b14eb2f3b5de2e79523e65.ttf
+ HTTP  8/16/2026 12:20:18 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:20:55 PM ::1 GET /
+ HTTP  8/16/2026 12:20:55 PM ::1 Returned 304 in 1 ms
+ HTTP  8/16/2026 12:20:55 PM ::1 GET /_expo/static/js/web/index-3ecdce2ad1e588a5cd6eef13d052da07.js
+ HTTP  8/16/2026 12:20:55 PM ::1 Returned 304 in 1 ms
+ HTTP  8/16/2026 12:20:55 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.678ba85b47044ac65031832c80bdfe4a.ttf
+ HTTP  8/16/2026 12:20:55 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+oswald@0.4.2/node_modules/@expo-google-fonts/oswald/700Bold/Oswald_700Bold.10c64324bb2a7a3fef799c573e0ce19f.ttf
+ HTTP  8/16/2026 12:20:55 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.2dd437af13b14eb2f3b5de2e79523e65.ttf
+ HTTP  8/16/2026 12:20:55 PM ::1 Returned 304 in 2 ms
+ HTTP  8/16/2026 12:20:55 PM ::1 Returned 304 in 1 ms
+ HTTP  8/16/2026 12:20:55 PM ::1 Returned 304 in 5 ms
+ HTTP  8/16/2026 12:22:13 PM ::1 GET /map
+ HTTP  8/16/2026 12:22:13 PM ::1 Returned 404 in 1 ms
+ HTTP  8/16/2026 12:23:51 PM ::1 GET /
+ HTTP  8/16/2026 12:23:51 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:23:51 PM ::1 GET /_expo/static/js/web/index-3ecdce2ad1e588a5cd6eef13d052da07.js
+ HTTP  8/16/2026 12:23:51 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:23:52 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.678ba85b47044ac65031832c80bdfe4a.ttf
+ HTTP  8/16/2026 12:23:52 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+oswald@0.4.2/node_modules/@expo-google-fonts/oswald/700Bold/Oswald_700Bold.10c64324bb2a7a3fef799c573e0ce19f.ttf
+ HTTP  8/16/2026 12:23:52 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.2dd437af13b14eb2f3b5de2e79523e65.ttf
+ HTTP  8/16/2026 12:23:52 PM ::1 Returned 200 in 3 ms
+ HTTP  8/16/2026 12:23:52 PM ::1 Returned 200 in 3 ms
+ HTTP  8/16/2026 12:23:52 PM ::1 Returned 200 in 2 ms
+ HTTP  8/16/2026 12:24:28 PM ::1 GET /
+ HTTP  8/16/2026 12:24:28 PM ::1 Returned 304 in 2 ms
+ HTTP  8/16/2026 12:24:28 PM ::1 GET /_expo/static/js/web/index-3ecdce2ad1e588a5cd6eef13d052da07.js
+ HTTP  8/16/2026 12:24:28 PM ::1 Returned 304 in 1 ms
+ HTTP  8/16/2026 12:24:29 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.678ba85b47044ac65031832c80bdfe4a.ttf
+ HTTP  8/16/2026 12:24:29 PM ::1 Returned 304 in 1 ms
+ HTTP  8/16/2026 12:24:29 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+oswald@0.4.2/node_modules/@expo-google-fonts/oswald/700Bold/Oswald_700Bold.10c64324bb2a7a3fef799c573e0ce19f.ttf
+ HTTP  8/16/2026 12:24:29 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.2dd437af13b14eb2f3b5de2e79523e65.ttf
+ HTTP  8/16/2026 12:24:29 PM ::1 Returned 304 in 0 ms
+ HTTP  8/16/2026 12:24:29 PM ::1 Returned 304 in 2 ms
+ HTTP  8/16/2026 12:25:47 PM ::1 GET /map
+ HTTP  8/16/2026 12:25:47 PM ::1 Returned 404 in 3 ms
+ HTTP  8/16/2026 12:25:51 PM ::1 GET /profile
+ HTTP  8/16/2026 12:25:51 PM ::1 Returned 404 in 2 ms
+ HTTP  8/16/2026 12:26:55 PM ::1 GET /profile
+ HTTP  8/16/2026 12:26:55 PM ::1 Returned 404 in 1 ms
+ HTTP  8/16/2026 12:27:42 PM ::1 GET /
+ HTTP  8/16/2026 12:27:42 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:27:42 PM ::1 GET /_expo/static/js/web/index-3ecdce2ad1e588a5cd6eef13d052da07.js
+ HTTP  8/16/2026 12:27:42 PM ::1 Returned 200 in 1 ms
+ HTTP  8/16/2026 12:27:43 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.678ba85b47044ac65031832c80bdfe4a.ttf
+ HTTP  8/16/2026 12:27:43 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+oswald@0.4.2/node_modules/@expo-google-fonts/oswald/700Bold/Oswald_700Bold.10c64324bb2a7a3fef799c573e0ce19f.ttf
+ HTTP  8/16/2026 12:27:43 PM ::1 GET /assets/node_modules/.pnpm/@expo-google-fonts+roboto@0.4.3/node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.2dd437af13b14eb2f3b5de2e79523e65.ttf
+ HTTP  8/16/2026 12:27:43 PM ::1 Returned 200 in 2 ms
+ HTTP  8/16/2026 12:27:43 PM ::1 Returned 200 in 2 ms
+ HTTP  8/16/2026 12:27:43 PM ::1 Returned 200 in 3 ms

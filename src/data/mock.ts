@@ -96,4 +96,23 @@ export const MOCK_PROFILE_USER = {
     ],
 };
 
+export const MOCK_TERRITORIES = [
+    {
+        id: 't1',
+        crewId: 'crew-1',
+        center: { latitude: -23.5505, longitude: -46.6333 },
+        radius: 3000,
+        color: 'rgba(255, 0, 85, 0.2)',
+        dominance: 85,
+    },
+    {
+        id: 't2',
+        crewId: 'crew-2',
+        center: { latitude: -23.5815, longitude: -46.6863 },
+        radius: 2000,
+        color: 'rgba(0, 240, 255, 0.2)',
+        dominance: 42,
+    },
+];
+
 export { MOCK_EVENTS } from './mockEvents';
