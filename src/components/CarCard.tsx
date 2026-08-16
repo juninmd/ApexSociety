@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Heart } from 'lucide-react-native';
+import { Heart, Wrench } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 
@@ -33,11 +33,19 @@ export default function CarCard({
     onPress,
 }: CarCardProps) {
     const { addReputation } = useReputation();
+    const [tunedHp, setTunedHp] = useState<number | null>(null);
 
     const handleRespectPress = () => {
         onRespect(car.id);
         if (!isRespected) {
             addReputation(5); // +5 rep for a car like
+        }
+    };
+
+    const handleTune = () => {
+        if (car.specs?.hp) {
+            const currentHp = tunedHp || parseInt(car.specs.hp.replace(/[^0-9]/g, ''), 10) || 0;
+            setTunedHp(currentHp + 10);
         }
     };
 
@@ -49,9 +57,20 @@ export default function CarCard({
                     <View>
                         <Text style={styles.carName}>{car.name}</Text>
                         {car.specs && (
-                            <Text style={styles.carSpecsText}>
-                                {car.specs.engine} {car.specs.hp ? `| ${car.specs.hp}` : ''}
-                            </Text>
+                            <View style={styles.specsContainer}>
+                                <Text style={styles.carSpecsText}>
+                                    {car.specs.engine}
+                                    {car.specs.hp
+                                        ? ` | ${tunedHp ? tunedHp + ' HP' : car.specs.hp}`
+                                        : ''}
+                                </Text>
+                                <TouchableOpacity style={styles.tuneButton} onPress={handleTune}>
+                                    <Wrench
+                                        size={10}
+                                        color={tunedHp ? '#4CAF50' : theme.colors.secondary}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         )}
                     </View>
                     <TouchableOpacity style={styles.respectButton} onPress={handleRespectPress}>
@@ -99,11 +118,21 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: theme.colors.white,
     },
+    specsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 2,
+    },
     carSpecsText: {
         fontFamily: theme.fonts.secondary.regular,
         fontSize: 10,
         color: theme.colors.secondary,
-        marginTop: 2,
+    },
+    tuneButton: {
+        marginLeft: 6,
+        padding: 4,
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        borderRadius: 4,
     },
     respectButton: {
         flexDirection: 'row',

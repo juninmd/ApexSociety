@@ -4,7 +4,7 @@ import MapView, { PROVIDER_DEFAULT, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
-import { MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
+import { MOCK_EVENTS, MOCK_CREWS, MOCK_TERRITORIES } from '../data/mock';
 import MapMarkers from '../components/MapScreen/MapMarkers';
 import MapOverlay from '../components/MapScreen/MapOverlay';
 import MapHazards from '../components/MapScreen/MapHazards';
@@ -38,24 +38,6 @@ export default function MapScreen() {
         })();
     }, []);
 
-    // Mock crew territories
-    const territories = [
-        {
-            id: 't1',
-            crewId: 'crew-1',
-            center: { latitude: -23.5505, longitude: -46.6333 },
-            radius: 3000,
-            color: 'rgba(255, 0, 85, 0.2)', // FIRST2 Red
-        },
-        {
-            id: 't2',
-            crewId: 'crew-2',
-            center: { latitude: -23.5815, longitude: -46.6863 },
-            radius: 2000,
-            color: 'rgba(0, 240, 255, 0.2)', // Cyan
-        },
-    ];
-
     return (
         <View style={styles.container}>
             <MapView
@@ -67,7 +49,7 @@ export default function MapScreen() {
                 showsUserLocation={true}
             >
                 {/* Crew Territories Layer */}
-                {territories.map((territory) => (
+                {MOCK_TERRITORIES.map((territory) => (
                     <Circle
                         key={territory.id}
                         center={territory.center}
@@ -90,10 +72,20 @@ export default function MapScreen() {
                         <View
                             style={[
                                 styles.legendColor,
-                                { backgroundColor: territories[idx].color.replace('0.2', '0.8') },
+                                {
+                                    backgroundColor: MOCK_TERRITORIES[idx].color.replace(
+                                        '0.2',
+                                        '0.8',
+                                    ),
+                                },
                             ]}
                         />
-                        <Text style={styles.legendText}>{crew.name}</Text>
+                        <View>
+                            <Text style={styles.legendText}>{crew.name}</Text>
+                            <Text style={styles.legendSubtext}>
+                                Dominance: {MOCK_TERRITORIES[idx].dominance}%
+                            </Text>
+                        </View>
                     </View>
                 ))}
             </View>
@@ -144,5 +136,10 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
         fontFamily: theme.fonts.secondary.regular,
         fontSize: 12,
+    },
+    legendSubtext: {
+        color: theme.colors.textSecondary,
+        fontFamily: theme.fonts.secondary.regular,
+        fontSize: 10,
     },
 });
