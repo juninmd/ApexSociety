@@ -113,7 +113,7 @@
             "flatted": "^3.4.2",
             "fastify": ">=5.8.5",
             "@fastify/static": ">=10.1.2",
-            "brace-expansion": "^2.0.1",
+            "brace-expansion": ">=2.1.4",
             "picomatch": ">=4.0.4",
             "fast-uri@<=3.1.0": ">=3.1.1",
             "fast-uri@<=3.1.1": ">=3.1.2",
@@ -125,7 +125,17 @@
             "defu": ">=6.1.5",
             "tar": ">=7.5.21",
             "esbuild": ">=0.28.1",
-            "@eslint/plugin-kit": ">=0.3.4"
+            "@eslint/plugin-kit": ">=0.3.4",
+            "js-yaml": ">=4.3.1",
+            "nanoid": ">=3.3.18",
+            "ws": ">=8.20.1",
+            "@opentelemetry/core": ">=2.8.0",
+            "http-proxy-middleware": ">=3.0.6",
+            "find-my-way": ">=9.7.0",
+            "fast-uri": ">=4.1.2",
+            "sharp": ">=0.35.0",
+            "multiparty": ">=4.3.0",
+            "@opentelemetry/propagator-jaeger": ">=2.9.0"
         }
     },
     "private": true

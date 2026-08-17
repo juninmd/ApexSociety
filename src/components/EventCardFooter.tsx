@@ -20,10 +20,23 @@ export default function EventCardFooter({ eventId, attendees, startTime }: Event
 
     const handlePress = () => {
         if (!rsvp) {
-            addReputation(isLive ? 20 : 10); // +20 for checking in live, +10 for standard RSVP
-            incrementHype(eventId);
+            if (addReputation) {
+                addReputation(isLive ? 20 : 10); // +20 for checking in live, +10 for standard RSVP
+            }
+            if (incrementHype) {
+                incrementHype(eventId);
+            }
         }
         setRsvp(!rsvp);
+    };
+
+    const handleBoostHype = () => {
+        if (incrementHype) {
+            incrementHype(eventId);
+        }
+        if (addReputation) {
+            addReputation(5); // Small rep reward for boosting event visibility
+        }
     };
 
     return (
@@ -31,6 +44,10 @@ export default function EventCardFooter({ eventId, attendees, startTime }: Event
             <View style={styles.attendeesContainer}>
                 <Users size={14} color={theme.colors.secondary} />
                 <Text style={styles.attendees}>{attendees + (rsvp ? 1 : 0)} GOING</Text>
+
+                <TouchableOpacity onPress={handleBoostHype} style={styles.boostButton}>
+                    <Text style={styles.boostText}>🔥 BOOST</Text>
+                </TouchableOpacity>
             </View>
             <TouchableOpacity
                 style={[
@@ -105,5 +122,19 @@ const styles = StyleSheet.create({
     },
     liveText: {
         color: theme.colors.error,
+    },
+    boostButton: {
+        marginLeft: 15,
+        backgroundColor: 'rgba(255, 69, 0, 0.1)',
+        paddingHorizontal: 8,
+        paddingVertical: 3,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 69, 0, 0.3)',
+    },
+    boostText: {
+        color: '#FF4500',
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 10,
     },
 });
