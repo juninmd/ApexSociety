@@ -14,6 +14,7 @@ interface HazardContextType {
     hazards: Hazard[];
     addHazard: (hazard: Hazard) => void;
     heatLevel: number;
+    getHeatMapDensity: () => number;
 }
 
 const HazardContext = createContext<HazardContextType | undefined>(undefined);
@@ -64,8 +65,22 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
         return () => clearInterval(interval);
     }, []);
 
+    const getHeatMapDensity = () => {
+        // Base multiplier is 1. For every hazard, we increase the density by 10% (0.1)
+        // Cap the multiplier at 3x to prevent map over-saturation.
+        const multiplier = 1 + hazards.length * 0.1;
+        return Math.min(multiplier, 3);
+    };
+
     return (
-        <HazardContext.Provider value={{ hazards, addHazard, heatLevel }}>
+        <HazardContext.Provider
+            value={{
+                hazards,
+                addHazard,
+                heatLevel: heatLevel * getHeatMapDensity(),
+                getHeatMapDensity,
+            }}
+        >
             {children}
         </HazardContext.Provider>
     );

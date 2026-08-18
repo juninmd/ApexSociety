@@ -50,6 +50,7 @@ export default function EventCard({
         return (
             <EventCardSecret
                 host={host}
+                eventLocation={location}
                 passcode={passcode}
                 isPrivate={isPrivate}
                 eventType={eventType}

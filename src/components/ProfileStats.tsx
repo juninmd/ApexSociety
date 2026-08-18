@@ -11,6 +11,22 @@ interface StatsProps {
 }
 
 export default function ProfileStats({ stats }: StatsProps) {
+    const repValue = parseInt(stats.reputation.replace(/[^0-9]/g, ''), 10) || 0;
+
+    let repBadge = 'ROOKIE';
+    let badgeColor = theme.colors.secondary;
+
+    if (repValue > 500) {
+        repBadge = 'STREET LEGEND';
+        badgeColor = theme.colors.primary; // Yellow / Gold
+    } else if (repValue > 450) {
+        repBadge = 'PRO TUNER';
+        badgeColor = '#00F0FF'; // Cyan
+    } else if (repValue > 420) {
+        repBadge = 'NIGHT RIDER';
+        badgeColor = '#FF0055'; // Pink/Red
+    }
+
     return (
         <View style={styles.statsContainer}>
             <View style={styles.statItem}>
@@ -26,6 +42,9 @@ export default function ProfileStats({ stats }: StatsProps) {
             <View style={styles.statItem}>
                 <Text style={styles.statValue}>{stats.reputation}</Text>
                 <Text style={styles.statLabel}>REPUTATION</Text>
+                <View style={[styles.badgeContainer, { borderColor: badgeColor }]}>
+                    <Text style={[styles.badgeText, { color: badgeColor }]}>{repBadge}</Text>
+                </View>
             </View>
         </View>
     );
@@ -59,5 +78,17 @@ const styles = StyleSheet.create({
     statDivider: {
         width: 1,
         backgroundColor: theme.colors.border,
+    },
+    badgeContainer: {
+        marginTop: 5,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 4,
+        borderWidth: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    badgeText: {
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 9,
     },
 });
