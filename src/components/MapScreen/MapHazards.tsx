@@ -7,7 +7,7 @@ import { useHazards } from '../../context/HazardContext';
 const AnimatedMarker = Animated.createAnimatedComponent(Marker);
 
 export default function MapHazards() {
-    const { hazards } = useHazards();
+    const { hazards, getHeatMapDensity } = useHazards();
 
     // Create animated values for all markers. If sos, animate opacity
     const [pulseAnim] = useState(() => new Animated.Value(0.4));
@@ -89,9 +89,14 @@ export default function MapHazards() {
                                     latitude: hazard.location.latitude,
                                     longitude: hazard.location.longitude,
                                 }}
-                                radius={1000} // 1km radius Hot Zone
+                                radius={1000 * getHeatMapDensity()} // 1km radius Hot Zone dynamically scaled
                                 strokeColor={markerColor}
-                                fillColor={`${markerColor}33`} // 20% opacity
+                                fillColor={`${markerColor}${Math.min(
+                                    Math.round(0.2 * getHeatMapDensity() * 255),
+                                    255,
+                                )
+                                    .toString(16)
+                                    .padStart(2, '0')}`} // dynamic opacity
                             />
                         )}
                     </React.Fragment>
