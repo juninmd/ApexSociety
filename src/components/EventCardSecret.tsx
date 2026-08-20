@@ -50,7 +50,7 @@ export default function EventCardSecret({
             // we will simulate the check passing if they have GPS enabled, representing the underground check-in logic.
             Alert.alert('Sucesso', 'Você está no local do evento! Acesso liberado.');
             onUnlock();
-        } catch (_error) {
+        } catch (error) {
             Alert.alert('Erro', 'Não foi possível obter sua localização.');
         } finally {
             setIsVerifyingLocation(false);
