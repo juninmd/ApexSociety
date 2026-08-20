@@ -47,7 +47,7 @@ export default function DriveModeScreen() {
                 <View style={styles.content}>
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
-                    <TelemetryDashboard speed={speed} />
+                    <TelemetryDashboard speed={speed} isRaining={true} />
 
                     <View style={styles.actionsContainer}>
                         <ReportHazardButton type="blitz" />
