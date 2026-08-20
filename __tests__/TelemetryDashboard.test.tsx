@@ -35,4 +35,9 @@ describe('TelemetryDashboard', () => {
         expect(rpmText).toBeTruthy();
         expect(tempText).toBeTruthy();
     });
+
+    it('renders ROAD SLIPPERY warning when isRaining is true', () => {
+        const { getByText } = render(<TelemetryDashboard speed={100} isRaining={true} />);
+        expect(getByText('ROAD SLIPPERY / GRIP REDUCED')).toBeTruthy();
+    });
 });

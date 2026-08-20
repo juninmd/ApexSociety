@@ -1,27 +1,37 @@
-import asyncio
-from playwright.async_api import async_playwright
+from playwright.sync_api import sync_playwright
 
-async def run():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        # Set a very tall viewport so everything is visible without scrolling
-        page = await browser.new_page(viewport={"width": 1280, "height": 3000})
-        await page.goto('http://localhost:3000')
-        await page.wait_for_load_state('networkidle')
-        await asyncio.sleep(2)
+def run_cuj(page):
+    page.goto("http://localhost:3000/")
+    page.wait_for_timeout(2000)
 
-        # Click on the 'PERFIL' tab
+    # Login - Just click blindly where the login button is.
+    page.mouse.click(200, 450)
+    page.wait_for_timeout(2000)
+
+    # Web View map - go to web app
+    page.mouse.click(200, 600)
+    page.wait_for_timeout(2000)
+
+    # Click Menu tab
+    page.mouse.click(200, 760)
+    page.wait_for_timeout(1000)
+
+    # Click MODO DIREÇÃO on menu
+    page.mouse.click(200, 250)
+    page.wait_for_timeout(2000)
+
+    page.screenshot(path="/home/jules/verification/screenshots/verification.png")
+
+if __name__ == "__main__":
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(
+            record_video_dir="/home/jules/verification/videos",
+            viewport={'width': 400, 'height': 800} # Mobile viewport
+        )
+        page = context.new_page()
         try:
-            await page.get_by_text('PERFIL', exact=True).click(timeout=5000)
-        except Exception:
-            print("Failed to click by text, trying to click near the bottom right area...")
-            await page.mouse.click(1150, 2900)
-
-        await asyncio.sleep(3)
-
-        # Take a screenshot
-        await page.screenshot(path='/home/jules/verification/screenshots/verification4.png')
-        await browser.close()
-
-if __name__ == '__main__':
-    asyncio.run(run())
+            run_cuj(page)
+        finally:
+            context.close()
+            browser.close()
