@@ -14,7 +14,12 @@ export default function EventCardRaceDetails({ riskLevel, prize }: EventCardRace
 
     // Determine win probability based on risk
     const winProbability = riskLevel === 'high' ? '35%' : riskLevel === 'medium' ? '55%' : '85%';
-    const winProbColor = riskLevel === 'high' ? styles.riskHigh : riskLevel === 'medium' ? styles.riskMedium : styles.riskLow;
+    const winProbColor =
+        riskLevel === 'high'
+            ? styles.riskHigh
+            : riskLevel === 'medium'
+              ? styles.riskMedium
+              : styles.riskLow;
 
     return (
         <View style={styles.raceDetails}>
@@ -32,7 +37,11 @@ export default function EventCardRaceDetails({ riskLevel, prize }: EventCardRace
                                       : styles.riskLow,
                             ]}
                         >
-                            {riskLevel === 'high' ? 'ALTO' : riskLevel === 'medium' ? 'MÉDIO' : 'BAIXO'}
+                            {riskLevel === 'high'
+                                ? 'ALTO'
+                                : riskLevel === 'medium'
+                                  ? 'MÉDIO'
+                                  : 'BAIXO'}
                         </Text>
                     </View>
                 )}
