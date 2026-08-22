@@ -9,6 +9,7 @@ import { Event } from '../types';
 import FormInput from './FormInput';
 import EventTypeSelector from './EventTypeSelector';
 import CreateEventRiskSelector from './CreateEventRiskSelector';
+import CreateEventDateTimeInput from './CreateEventDateTimeInput';
 
 export default function CreateEventForm() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -62,24 +63,7 @@ export default function CreateEventForm() {
                 onChangeText={setDescription}
                 isTextArea
             />
-            <View style={styles.row}>
-                <View style={styles.halfWidth}>
-                    <FormInput
-                        label="DATA"
-                        placeholder="DD/MM/AAAA"
-                        value={date}
-                        onChangeText={setDate}
-                    />
-                </View>
-                <View style={styles.halfWidth}>
-                    <FormInput
-                        label="HORA"
-                        placeholder="HH:MM"
-                        value={time}
-                        onChangeText={setTime}
-                    />
-                </View>
-            </View>
+            <CreateEventDateTimeInput date={date} setDate={setDate} time={time} setTime={setTime} />
             <FormInput
                 label="LOCALIZAÇÃO (ENDEREÇO OU PONTO)"
                 placeholder="Onde vamos nos encontrar?"
@@ -109,8 +93,6 @@ export default function CreateEventForm() {
 
 const styles = StyleSheet.create({
     form: { padding: 20 },
-    row: { flexDirection: 'row', justifyContent: 'space-between' },
-    halfWidth: { width: '48%' },
     createButton: {
         marginTop: 30,
         height: 55,
