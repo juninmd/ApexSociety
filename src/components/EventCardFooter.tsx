@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Users } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import { useEvents } from '../context/EventContext';
+import GarageQRPass from './GarageQRPass';
 
 interface EventCardFooterProps {
     eventId: string;
@@ -14,6 +15,7 @@ interface EventCardFooterProps {
 
 export default function EventCardFooter({ eventId, attendees, startTime }: EventCardFooterProps) {
     const [rsvp, setRsvp] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
     const isLive = startTime?.toLowerCase() === 'agora' || false;
     const { addReputation } = useReputation();
     const { incrementHype } = useEvents();
@@ -49,30 +51,53 @@ export default function EventCardFooter({ eventId, attendees, startTime }: Event
                     <Text style={styles.boostText}>🔥 BOOST</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity
-                style={[
-                    styles.rsvpButton,
-                    isLive && styles.liveButton,
-                    rsvp && !isLive && styles.rsvpButtonActive,
-                ]}
-                onPress={handlePress}
-            >
-                <Text
-                    style={[
-                        styles.rsvpText,
-                        isLive && styles.liveText,
-                        rsvp && !isLive && styles.rsvpTextActive,
-                    ]}
+            <View style={styles.actionButtons}>
+                <TouchableOpacity
+                    style={styles.fastTrackButton}
+                    onPress={() => setModalVisible(true)}
                 >
-                    {isLive
-                        ? rsvp
-                            ? 'CHECKED-IN'
-                            : 'CHECK-IN (LIVE)'
-                        : rsvp
-                          ? 'CONFIRMADO'
-                          : 'PARTICIPAR'}
-                </Text>
-            </TouchableOpacity>
+                    <Text style={styles.fastTrackText}>PASS</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[
+                        styles.rsvpButton,
+                        isLive && styles.liveButton,
+                        rsvp && !isLive && styles.rsvpButtonActive,
+                    ]}
+                    onPress={handlePress}
+                >
+                    <Text
+                        style={[
+                            styles.rsvpText,
+                            isLive && styles.liveText,
+                            rsvp && !isLive && styles.rsvpTextActive,
+                        ]}
+                    >
+                        {isLive
+                            ? rsvp
+                                ? 'CHECKED-IN'
+                                : 'CHECK-IN (LIVE)'
+                            : rsvp
+                              ? 'CONFIRMADO'
+                              : 'PARTICIPAR'}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <TouchableOpacity
+                    style={styles.modalOverlay}
+                    activeOpacity={1}
+                    onPress={() => setModalVisible(false)}
+                >
+                    <GarageQRPass eventId={eventId} />
+                </TouchableOpacity>
+            </Modal>
         </View>
     );
 }
@@ -95,6 +120,25 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 12,
         marginLeft: 6,
+    },
+    actionButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    fastTrackButton: {
+        borderWidth: 1,
+        borderColor: theme.colors.textSecondary,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        marginRight: 8,
+        transform: [{ skewX: '-10deg' }],
+    },
+    fastTrackText: {
+        color: theme.colors.textSecondary,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 10,
+        transform: [{ skewX: '10deg' }],
     },
     rsvpButton: {
         borderWidth: 1,
@@ -136,5 +180,11 @@ const styles = StyleSheet.create({
         color: '#FF4500',
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 10,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { theme } from '../theme';
+import { useConvoy } from '../context/ConvoyContext';
 
 interface TelemetryDashboardProps {
     speed: number;
@@ -8,6 +9,7 @@ interface TelemetryDashboardProps {
 }
 
 export default function TelemetryDashboard({ speed, isRaining }: TelemetryDashboardProps) {
+    const { isBroadcasting, toggleBroadcast } = useConvoy();
     // Calculate telemetry directly during render to avoid cascading updates
     const rpm = Math.round(800 + Math.min(speed * 40, 7200)); // 8000 Max RPM approx
     const boost = Number((speed > 60 ? Math.min((speed - 60) * 0.2, 2.5) : 0).toFixed(1)); // Max 2.5 bar
@@ -34,6 +36,15 @@ export default function TelemetryDashboard({ speed, isRaining }: TelemetryDashbo
                     <Text style={styles.weatherWarningText}>ROAD SLIPPERY / GRIP REDUCED</Text>
                 </View>
             )}
+
+            <TouchableOpacity
+                style={[styles.broadcastToggle, isBroadcasting && styles.broadcastActive]}
+                onPress={toggleBroadcast}
+            >
+                <Text style={[styles.broadcastText, isBroadcasting && styles.broadcastTextActive]}>
+                    {isBroadcasting ? 'BROADCAST: LIVE' : 'BROADCAST: OFF'}
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -89,6 +100,27 @@ const styles = StyleSheet.create({
         color: theme.colors.primary,
     },
     dangerText: {
+        color: theme.colors.error,
+    },
+    broadcastToggle: {
+        marginTop: 15,
+        paddingVertical: 8,
+        borderRadius: 4,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.colors.textSecondary,
+    },
+    broadcastActive: {
+        borderColor: theme.colors.error,
+        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    },
+    broadcastText: {
+        color: theme.colors.textSecondary,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 10,
+        letterSpacing: 1,
+    },
+    broadcastTextActive: {
         color: theme.colors.error,
     },
 });

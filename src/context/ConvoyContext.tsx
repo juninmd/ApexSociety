@@ -11,7 +11,9 @@ export interface CrewMemberLocation {
 interface ConvoyContextType {
     crewMembers: CrewMemberLocation[];
     isConvoyActive: boolean;
+    isBroadcasting: boolean;
     toggleConvoy: () => void;
+    toggleBroadcast: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
 }
 
@@ -20,6 +22,11 @@ const ConvoyContext = createContext<ConvoyContextType | undefined>(undefined);
 export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [crewMembers, setCrewMembers] = useState<CrewMemberLocation[]>([]);
     const [isConvoyActive, setIsConvoyActive] = useState(false);
+    const [isBroadcasting, setIsBroadcasting] = useState(false);
+
+    const toggleBroadcast = () => {
+        setIsBroadcasting((prev) => !prev);
+    };
 
     const toggleConvoy = () => {
         setIsConvoyActive((prev) => {
@@ -87,7 +94,14 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     return (
         <ConvoyContext.Provider
-            value={{ crewMembers, isConvoyActive, toggleConvoy, updateLocation }}
+            value={{
+                crewMembers,
+                isConvoyActive,
+                isBroadcasting,
+                toggleConvoy,
+                toggleBroadcast,
+                updateLocation,
+            }}
         >
             {children}
         </ConvoyContext.Provider>

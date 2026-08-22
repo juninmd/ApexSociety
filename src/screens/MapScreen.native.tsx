@@ -1,42 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import MapView, { PROVIDER_DEFAULT, Circle } from 'react-native-maps';
-import * as Location from 'expo-location';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_EVENTS, MOCK_CREWS, MOCK_TERRITORIES } from '../data/mock';
 import MapMarkers from '../components/MapScreen/MapMarkers';
 import MapOverlay from '../components/MapScreen/MapOverlay';
 import MapHazards from '../components/MapScreen/MapHazards';
+import MapHotspots from '../components/MapScreen/MapHotspots';
+import { useMapRegion } from '../hooks/useMapRegion';
 
 export default function MapScreen() {
-    const [region, setRegion] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    });
+    const { region, setRegion } = useMapRegion();
 
     // Mock "next event" for the overlay - simply taking the first one
     const nextEvent = MOCK_EVENTS[0];
     const nextEventHost = MOCK_CREWS.find((c) => c.id === nextEvent.hostId)?.name || 'Unknown Host';
-
-    useEffect(() => {
-        (async () => {
-            const { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                return;
-            }
-
-            const location = await Location.getCurrentPositionAsync({});
-            setRegion({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            });
-        })();
-    }, []);
 
     return (
         <View style={styles.container}>
@@ -60,6 +39,7 @@ export default function MapScreen() {
                     />
                 ))}
 
+                <MapHotspots />
                 <MapMarkers />
                 <MapHazards />
             </MapView>
