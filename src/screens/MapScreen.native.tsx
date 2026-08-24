@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
-import MapView, { PROVIDER_DEFAULT, Circle } from 'react-native-maps';
+import MapView, { PROVIDER_DEFAULT, Circle, Polyline, Marker } from 'react-native-maps';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_EVENTS, MOCK_CREWS, MOCK_TERRITORIES } from '../data/mock';
@@ -9,9 +9,12 @@ import MapOverlay from '../components/MapScreen/MapOverlay';
 import MapHazards from '../components/MapScreen/MapHazards';
 import MapHotspots from '../components/MapScreen/MapHotspots';
 import { useMapRegion } from '../hooks/useMapRegion';
+import { useCruisePlanner } from '../hooks/useCruisePlanner';
+import CustomButton from '../components/CustomButton';
 
 export default function MapScreen() {
     const { region, setRegion } = useMapRegion();
+    const { isPlannerActive, waypoints, togglePlanner, addWaypoint } = useCruisePlanner();
 
     // Mock "next event" for the overlay - simply taking the first one
     const nextEvent = MOCK_EVENTS[0];
@@ -24,9 +27,28 @@ export default function MapScreen() {
                 style={styles.map}
                 region={region}
                 onRegionChangeComplete={setRegion}
+                onPress={(e) => {
+                    if (isPlannerActive) {
+                        addWaypoint({
+                            latitude: e.nativeEvent.coordinate.latitude,
+                            longitude: e.nativeEvent.coordinate.longitude,
+                        });
+                    }
+                }}
                 customMapStyle={DARK_MAP_STYLE}
                 showsUserLocation={true}
             >
+                {waypoints.length > 0 && (
+                    <Polyline
+                        coordinates={waypoints}
+                        strokeColor={theme.colors.secondary}
+                        strokeWidth={4}
+                        lineDashPattern={[1]}
+                    />
+                )}
+                {waypoints.map((wp, index) => (
+                    <Marker key={`wp-${index}`} coordinate={wp} pinColor={theme.colors.secondary} />
+                ))}
                 {/* Crew Territories Layer */}
                 {MOCK_TERRITORIES.map((territory) => (
                     <Circle
@@ -43,6 +65,14 @@ export default function MapScreen() {
                 <MapMarkers />
                 <MapHazards />
             </MapView>
+
+            <View style={styles.plannerToggleContainer}>
+                <CustomButton
+                    title={isPlannerActive ? 'CANCEL CRUISE' : 'PLAN CRUISE'}
+                    onPress={togglePlanner}
+                    variant={isPlannerActive ? 'danger' : 'primary'}
+                />
+            </View>
 
             {/* Crew Wars Legend */}
             <View style={styles.legendContainer}>
@@ -83,6 +113,12 @@ const styles = StyleSheet.create({
     map: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
+    },
+    plannerToggleContainer: {
+        position: 'absolute',
+        top: 60,
+        right: 20,
+        width: 140,
     },
     legendContainer: {
         position: 'absolute',
