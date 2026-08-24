@@ -8,7 +8,9 @@ import GarageSection from '../components/GarageSection';
 import CrewsSection from '../components/CrewsSection';
 import ProfileHeader from '../components/ProfileHeader';
 import StickersSection from '../components/StickersSection';
+import DriveHistorySection from '../components/DriveHistorySection';
 import { useReputation } from '../context/ReputationContext';
+import { useDriveHistory } from '../context/DriveHistoryContext';
 import { MOCK_PROFILE_USER } from '../data/mock';
 
 const COVER_IMAGE_URL =
@@ -16,6 +18,7 @@ const COVER_IMAGE_URL =
 
 export default function ProfileScreen() {
     const { reputation } = useReputation();
+    const { runs } = useDriveHistory();
 
     const dynamicStats = {
         ...MOCK_PROFILE_USER.stats,
@@ -62,6 +65,9 @@ export default function ProfileScreen() {
 
             {/* Crews Section */}
             <CrewsSection crews={MOCK_PROFILE_USER.crews} />
+
+            {/* Drive History Section */}
+            <DriveHistorySection runs={runs} />
 
             <View style={{ height: 100 }} />
         </ScrollView>

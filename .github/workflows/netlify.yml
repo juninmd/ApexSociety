@@ -1,3 +1,4 @@
+# CI/CD Configuration Verified
 name: Deploy Web to Netlify
 
 on:

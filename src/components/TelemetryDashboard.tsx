@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { theme } from '../theme';
 import { useConvoy } from '../context/ConvoyContext';
+import { useTelemetry } from '../hooks/useTelemetry';
+import { useDriveHistory } from '../context/DriveHistoryContext';
 
 interface TelemetryDashboardProps {
     speed: number;
@@ -10,10 +12,32 @@ interface TelemetryDashboardProps {
 
 export default function TelemetryDashboard({ speed, isRaining }: TelemetryDashboardProps) {
     const { isBroadcasting, toggleBroadcast } = useConvoy();
-    // Calculate telemetry directly during render to avoid cascading updates
-    const rpm = Math.round(800 + Math.min(speed * 40, 7200)); // 8000 Max RPM approx
-    const boost = Number((speed > 60 ? Math.min((speed - 60) * 0.2, 2.5) : 0).toFixed(1)); // Max 2.5 bar
-    const temp = Math.round(90 + Math.min(speed * 0.1, 30)); // Max 120 C
+    const { rpm, boost, temp } = useTelemetry(speed);
+    const { addRun } = useDriveHistory();
+
+    const [isRecording, setIsRecording] = useState(false);
+    const maxStats = useRef({ maxSpeed: 0, maxRpm: 0, maxBoost: 0 });
+
+    useEffect(() => {
+        if (isRecording) {
+            if (speed > maxStats.current.maxSpeed) maxStats.current.maxSpeed = speed;
+            if (rpm > maxStats.current.maxRpm) maxStats.current.maxRpm = rpm;
+            if (boost > maxStats.current.maxBoost) maxStats.current.maxBoost = boost;
+        }
+    }, [speed, rpm, boost, isRecording]);
+
+    const toggleRecording = () => {
+        if (isRecording) {
+            // Stop and save
+            addRun({
+                maxSpeed: maxStats.current.maxSpeed,
+                maxRpm: maxStats.current.maxRpm,
+                maxBoost: maxStats.current.maxBoost,
+            });
+            maxStats.current = { maxSpeed: 0, maxRpm: 0, maxBoost: 0 };
+        }
+        setIsRecording(!isRecording);
+    };
 
     return (
         <View style={styles.wrapper}>
@@ -37,14 +61,27 @@ export default function TelemetryDashboard({ speed, isRaining }: TelemetryDashbo
                 </View>
             )}
 
-            <TouchableOpacity
-                style={[styles.broadcastToggle, isBroadcasting && styles.broadcastActive]}
-                onPress={toggleBroadcast}
-            >
-                <Text style={[styles.broadcastText, isBroadcasting && styles.broadcastTextActive]}>
-                    {isBroadcasting ? 'BROADCAST: LIVE' : 'BROADCAST: OFF'}
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.controlsContainer}>
+                <TouchableOpacity
+                    style={[styles.broadcastToggle, isBroadcasting && styles.broadcastActive]}
+                    onPress={toggleBroadcast}
+                >
+                    <Text
+                        style={[styles.broadcastText, isBroadcasting && styles.broadcastTextActive]}
+                    >
+                        {isBroadcasting ? 'BROADCAST: LIVE' : 'BROADCAST: OFF'}
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.broadcastToggle, isRecording && styles.recordingActive]}
+                    onPress={toggleRecording}
+                >
+                    <Text style={[styles.broadcastText, isRecording && styles.recordingTextActive]}>
+                        {isRecording ? 'STOP RECORDING' : 'RECORD RUN'}
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -122,5 +159,19 @@ const styles = StyleSheet.create({
     },
     broadcastTextActive: {
         color: theme.colors.error,
+    },
+    controlsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginTop: 15,
+        gap: 10,
+    },
+    recordingActive: {
+        borderColor: theme.colors.primary,
+        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+    },
+    recordingTextActive: {
+        color: theme.colors.primary,
     },
 });

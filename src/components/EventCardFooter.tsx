@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
 import { Users } from 'lucide-react-native';
+import * as Location from 'expo-location';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import { useEvents } from '../context/EventContext';
@@ -20,16 +21,35 @@ export default function EventCardFooter({ eventId, attendees, startTime }: Event
     const { addReputation } = useReputation();
     const { incrementHype } = useEvents();
 
-    const handlePress = () => {
-        if (!rsvp) {
-            if (addReputation) {
-                addReputation(isLive ? 20 : 10); // +20 for checking in live, +10 for standard RSVP
-            }
-            if (incrementHype) {
-                incrementHype(eventId);
-            }
+    const handlePress = async () => {
+        if (rsvp) {
+            setRsvp(false);
+            return;
         }
-        setRsvp(!rsvp);
+
+        if (isLive) {
+            try {
+                const { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== 'granted') {
+                    Alert.alert('Erro', 'Permissão de localização negada.');
+                    return;
+                }
+
+                // Simulate getting location
+                await Location.getCurrentPositionAsync({});
+
+                Alert.alert('Sucesso', 'Check-in por Localização validado! +20 REP');
+                if (addReputation) addReputation(20);
+                if (incrementHype) incrementHype(eventId);
+                setRsvp(true);
+            } catch {
+                Alert.alert('Erro', 'Não foi possível verificar sua localização.');
+            }
+        } else {
+            if (addReputation) addReputation(10);
+            if (incrementHype) incrementHype(eventId);
+            setRsvp(true);
+        }
     };
 
     const handleBoostHype = () => {

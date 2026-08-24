@@ -9,6 +9,7 @@ import { HazardProvider } from './src/context/HazardContext';
 import { ReputationProvider } from './src/context/ReputationContext';
 import { AuthProvider } from './src/context/AuthContext';
 import { ConvoyProvider } from './src/context/ConvoyContext';
+import { DriveHistoryProvider } from './src/context/DriveHistoryContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import GlobalAlert from './src/components/GlobalAlert';
 import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
@@ -67,11 +68,13 @@ export default function App() {
                         <HazardProvider>
                             <ReputationProvider>
                                 <ConvoyProvider>
-                                    <NavigationContainer theme={customTheme} linking={linking}>
-                                        <StatusBar style="light" />
-                                        <AppNavigator />
-                                        <GlobalAlert />
-                                    </NavigationContainer>
+                                    <DriveHistoryProvider>
+                                        <NavigationContainer theme={customTheme} linking={linking}>
+                                            <StatusBar style="light" />
+                                            <AppNavigator />
+                                            <GlobalAlert />
+                                        </NavigationContainer>
+                                    </DriveHistoryProvider>
                                 </ConvoyProvider>
                             </ReputationProvider>
                         </HazardProvider>
