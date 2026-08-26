@@ -7,6 +7,9 @@ import { MOCK_CREWS } from '../data/mock';
 import CrewMenuItem from '../components/CrewMenuItem';
 import CrewHeader from '../components/CrewHeader';
 import CrewBanner from '../components/CrewBanner';
+import ChallengeCrewModal from '../components/ChallengeCrewModal';
+import { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 export default function CrewScreen() {
     const route = useRoute();
@@ -14,6 +17,7 @@ export default function CrewScreen() {
     const crewId = params?.crewId;
 
     // Use specific crew if ID provided, otherwise default to first
+    const [challengeModalVisible, setChallengeModalVisible] = useState(false);
     const crew = crewId ? MOCK_CREWS.find((c) => c.id === crewId) : MOCK_CREWS[0];
 
     if (!crew) {
@@ -31,6 +35,15 @@ export default function CrewScreen() {
 
             {/* Red Banner */}
             <CrewBanner name={crew.name} tag={crew.tag} foundedYear={crew.foundedYear} />
+
+            <View style={styles.actionContainer}>
+                <TouchableOpacity
+                    style={styles.challengeButton}
+                    onPress={() => setChallengeModalVisible(true)}
+                >
+                    <Text style={styles.challengeButtonText}>CHALLENGE CREW (TURF WAR)</Text>
+                </TouchableOpacity>
+            </View>
 
             <Text style={styles.sectionHeader}>GERENCIAR</Text>
 
@@ -56,6 +69,11 @@ export default function CrewScreen() {
                     subtitle="Ver estatísticas e ranking da equipe"
                 />
             </View>
+            <ChallengeCrewModal
+                visible={challengeModalVisible}
+                crewName={crew.name}
+                onClose={() => setChallengeModalVisible(false)}
+            />
         </ScrollView>
     );
 }
@@ -85,5 +103,25 @@ const styles = StyleSheet.create({
     menuList: {
         paddingHorizontal: 20,
         paddingBottom: 40,
+    },
+    actionContainer: {
+        paddingHorizontal: 20,
+        marginVertical: 15,
+    },
+    challengeButton: {
+        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+        borderWidth: 1,
+        borderColor: theme.colors.error,
+        paddingVertical: 12,
+        borderRadius: 4,
+        alignItems: 'center',
+        transform: [{ skewX: '-10deg' }],
+    },
+    challengeButtonText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 14,
+        letterSpacing: 1,
+        transform: [{ skewX: '10deg' }],
     },
 });
