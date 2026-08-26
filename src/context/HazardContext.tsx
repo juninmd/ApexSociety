@@ -8,11 +8,14 @@ export interface Hazard {
     type: HazardType;
     location: Location;
     reportedAt: string;
+    verifications?: number;
+    fakes?: number;
 }
 
 interface HazardContextType {
     hazards: Hazard[];
     addHazard: (hazard: Hazard) => void;
+    verifyHazard: (id: string, isFake?: boolean) => void;
     heatLevel: number;
     getHeatMapDensity: () => number;
 }
@@ -35,7 +38,23 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
     const [hazards, setHazards] = useState<Hazard[]>([]);
 
     const addHazard = (hazard: Hazard) => {
-        setHazards((prev) => [...prev, hazard]);
+        setHazards((prev) => [...prev, { ...hazard, verifications: 1, fakes: 0 }]);
+    };
+
+    const verifyHazard = (id: string, isFake?: boolean) => {
+        setHazards((prev) =>
+            prev
+                .map((h) => {
+                    if (h.id === id) {
+                        if (isFake) {
+                            return { ...h, fakes: (h.fakes || 0) + 1 };
+                        }
+                        return { ...h, verifications: (h.verifications || 0) + 1 };
+                    }
+                    return h;
+                })
+                .filter((h) => (h.fakes || 0) < 5),
+        ); // Remove if 5 people flagged it as fake
     };
 
     const heatLevel = hazards.filter((h) => h.type === 'blitz' || h.type === 'radar').length;
@@ -77,6 +96,7 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
             value={{
                 hazards,
                 addHazard,
+                verifyHazard,
                 heatLevel: heatLevel * getHeatMapDensity(),
                 getHeatMapDensity,
             }}

@@ -4,6 +4,7 @@ import { theme } from '../theme';
 import { useConvoy } from '../context/ConvoyContext';
 import { useTelemetry } from '../hooks/useTelemetry';
 import { useDriveHistory } from '../context/DriveHistoryContext';
+import TelemetryMetrics from './TelemetryMetrics';
 
 interface TelemetryDashboardProps {
     speed: number;
@@ -41,20 +42,8 @@ export default function TelemetryDashboard({ speed, isRaining }: TelemetryDashbo
 
     return (
         <View style={styles.wrapper}>
-            <View style={styles.container}>
-                <View style={styles.metricCard}>
-                    <Text style={styles.value}>{boost.toFixed(1)}</Text>
-                    <Text style={styles.label}>BOOST (BAR)</Text>
-                </View>
-                <View style={styles.metricCard}>
-                    <Text style={[styles.value, rpm > 6500 && styles.warningText]}>{rpm}</Text>
-                    <Text style={styles.label}>RPM</Text>
-                </View>
-                <View style={styles.metricCard}>
-                    <Text style={[styles.value, temp > 110 && styles.dangerText]}>{temp}°</Text>
-                    <Text style={styles.label}>TEMP (C)</Text>
-                </View>
-            </View>
+            <TelemetryMetrics boost={boost} rpm={rpm} temp={temp} />
+
             {isRaining && (
                 <View style={styles.weatherWarning}>
                     <Text style={styles.weatherWarningText}>ROAD SLIPPERY / GRIP REDUCED</Text>
@@ -91,17 +80,6 @@ const styles = StyleSheet.create({
         width: '100%',
         marginVertical: 20,
     },
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        paddingHorizontal: 20,
-        backgroundColor: 'rgba(0,0,0,0.4)',
-        paddingVertical: 15,
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-    },
     weatherWarning: {
         marginTop: 10,
         backgroundColor: 'rgba(255, 0, 0, 0.2)',
@@ -116,28 +94,6 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 12,
         letterSpacing: 1,
-    },
-    metricCard: {
-        alignItems: 'center',
-        flex: 1,
-    },
-    value: {
-        color: theme.colors.white,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 22,
-    },
-    label: {
-        color: theme.colors.primary,
-        fontFamily: theme.fonts.secondary.regular,
-        fontSize: 10,
-        marginTop: 4,
-        letterSpacing: 1,
-    },
-    warningText: {
-        color: theme.colors.primary,
-    },
-    dangerText: {
-        color: theme.colors.error,
     },
     broadcastToggle: {
         marginTop: 15,

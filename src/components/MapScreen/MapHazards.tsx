@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Animated } from 'react-native';
 import { Marker, Circle } from 'react-native-maps';
 import { theme } from '../../theme';
-import { useHazards } from '../../context/HazardContext';
+import { useHazards, Hazard } from '../../context/HazardContext';
+import HazardVerificationModal from '../HazardVerificationModal';
 
 const AnimatedMarker = Animated.createAnimatedComponent(Marker);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function MapHazards() {
     const { hazards, getHeatMapDensity } = useHazards();
+    const [selectedHazard, setSelectedHazard] = useState<Hazard | null>(null);
 
     // Create animated values for all markers. If sos, animate opacity
     const [pulseAnim] = useState(() => new Animated.Value(0.4));
@@ -91,9 +93,10 @@ export default function MapHazards() {
                                 longitude: hazard.location.longitude,
                             }}
                             title={title}
-                            description={`Reportado em: ${new Date(hazard.reportedAt).toLocaleTimeString()}`}
+                            description={`Reportado às ${new Date(hazard.reportedAt).toLocaleTimeString()} | Verificações: ${hazard.verifications || 1} | Falsos: ${hazard.fakes || 0}`}
                             pinColor={markerColor}
                             opacity={0.8}
+                            onCalloutPress={() => setSelectedHazard(hazard)}
                         />
                         {(hazard.type === 'blitz' || hazard.type === 'radar') && (
                             <Circle
@@ -114,6 +117,11 @@ export default function MapHazards() {
                     </React.Fragment>
                 );
             })}
+            <HazardVerificationModal
+                visible={!!selectedHazard}
+                hazard={selectedHazard}
+                onClose={() => setSelectedHazard(null)}
+            />
         </>
     );
 }

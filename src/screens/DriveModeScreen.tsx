@@ -11,10 +11,12 @@ import DriveModeTopBar from '../components/DriveModeTopBar';
 import PanicButton from '../components/PanicButton';
 import TelemetryDashboard from '../components/TelemetryDashboard';
 import { useDriveTracking } from '../hooks/useDriveTracking';
+import { useWeather } from '../hooks/useWeather';
 
 export default function DriveModeScreen() {
     const [pulseAnim] = useState(() => new Animated.Value(1));
     const { hazards, heatLevel } = useHazards();
+    const { isRaining } = useWeather();
     const { showAlert } = useAlert();
 
     const { speed, isGhostMode, handleToggleGhostMode } = useDriveTracking({
@@ -47,7 +49,7 @@ export default function DriveModeScreen() {
                 <View style={styles.content}>
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
-                    <TelemetryDashboard speed={speed} isRaining={true} />
+                    <TelemetryDashboard speed={speed} isRaining={isRaining} />
 
                     <View style={styles.actionsContainer}>
                         <ReportHazardButton type="blitz" />

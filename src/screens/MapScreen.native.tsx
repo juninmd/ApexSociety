@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
-import MapView, { PROVIDER_DEFAULT, Circle, Polyline, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_EVENTS, MOCK_CREWS, MOCK_TERRITORIES } from '../data/mock';
@@ -8,6 +8,7 @@ import MapMarkers from '../components/MapScreen/MapMarkers';
 import MapOverlay from '../components/MapScreen/MapOverlay';
 import MapHazards from '../components/MapScreen/MapHazards';
 import MapHotspots from '../components/MapScreen/MapHotspots';
+import MapCruisePlanner from '../components/MapScreen/MapCruisePlanner';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
 import CustomButton from '../components/CustomButton';
@@ -38,29 +39,7 @@ export default function MapScreen() {
                 customMapStyle={DARK_MAP_STYLE}
                 showsUserLocation={true}
             >
-                {waypoints.length > 0 && (
-                    <Polyline
-                        coordinates={waypoints}
-                        strokeColor={theme.colors.secondary}
-                        strokeWidth={4}
-                        lineDashPattern={[1]}
-                    />
-                )}
-                {waypoints.map((wp, index) => (
-                    <Marker key={`wp-${index}`} coordinate={wp} pinColor={theme.colors.secondary} />
-                ))}
-                {/* Crew Territories Layer */}
-                {MOCK_TERRITORIES.map((territory) => (
-                    <Circle
-                        key={territory.id}
-                        center={territory.center}
-                        radius={territory.radius}
-                        fillColor={territory.color}
-                        strokeColor={territory.color.replace('0.2', '0.8')}
-                        strokeWidth={2}
-                    />
-                ))}
-
+                <MapCruisePlanner waypoints={waypoints} />
                 <MapHotspots />
                 <MapMarkers />
                 <MapHazards />

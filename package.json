@@ -88,7 +88,7 @@
         "jest-expo": "54.0.17",
         "jiti": "^2.7.0",
         "lint-staged": "^16.2.7",
-        "netlify-cli": "^24.4.1",
+        "netlify-cli": "^27.3.0",
         "prettier": "^3.8.1",
         "prettier-plugin-organize-imports": "^4.3.0",
         "react-test-renderer": "19.1.0",
