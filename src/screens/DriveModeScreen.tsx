@@ -10,6 +10,7 @@ import RadarStatus from '../components/RadarStatus';
 import DriveModeTopBar from '../components/DriveModeTopBar';
 import PanicButton from '../components/PanicButton';
 import TelemetryDashboard from '../components/TelemetryDashboard';
+import PitWallFeed from '../components/PitWallFeed';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 import { useWeather } from '../hooks/useWeather';
 
@@ -46,6 +47,7 @@ export default function DriveModeScreen() {
                     onToggleGhostMode={handleToggleGhostMode}
                     heatLevel={heatLevel}
                 />
+                {!isGhostMode && <PitWallFeed />}
                 <View style={styles.content}>
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
