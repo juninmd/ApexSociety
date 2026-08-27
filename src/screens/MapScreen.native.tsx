@@ -9,6 +9,7 @@ import MapOverlay from '../components/MapScreen/MapOverlay';
 import MapHazards from '../components/MapScreen/MapHazards';
 import MapHotspots from '../components/MapScreen/MapHotspots';
 import MapCruisePlanner from '../components/MapScreen/MapCruisePlanner';
+import MapTerritories from '../components/MapScreen/MapTerritories';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
 import CustomButton from '../components/CustomButton';
@@ -40,6 +41,7 @@ export default function MapScreen() {
                 showsUserLocation={true}
             >
                 <MapCruisePlanner waypoints={waypoints} />
+                <MapTerritories />
                 <MapHotspots />
                 <MapMarkers />
                 <MapHazards />

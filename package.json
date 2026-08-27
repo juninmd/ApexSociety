@@ -88,7 +88,7 @@
         "jest-expo": "54.0.17",
         "jiti": "^2.7.0",
         "lint-staged": "^16.2.7",
-        "netlify-cli": "^27.3.0",
+        "netlify-cli": "^17.38.1",
         "prettier": "^3.8.1",
         "prettier-plugin-organize-imports": "^4.3.0",
         "react-test-renderer": "19.1.0",
@@ -136,7 +136,17 @@
             "fast-uri": ">=4.1.2",
             "sharp": ">=0.35.0",
             "multiparty": ">=4.3.0",
-            "@opentelemetry/propagator-jaeger": ">=2.9.0"
+            "@opentelemetry/propagator-jaeger": ">=2.9.0",
+            "netlify-cli": "^17.38.1",
+            "ipx": ">=2.1.1",
+            "qs": ">=6.14.2",
+            "file-type": ">=21.3.1",
+            "lodash": ">=4.18.0",
+            "tmp": ">=0.2.4",
+            "body-parser": ">=1.20.6",
+            "@xhmikosr/decompress": ">=10.2.1",
+            "path-to-regexp": ">=0.1.13",
+            "@octokit/plugin-paginate-rest": ">=11.4.1"
         }
     },
     "private": true
