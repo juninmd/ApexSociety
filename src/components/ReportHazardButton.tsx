@@ -17,6 +17,12 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
     const { addHazard } = useHazards();
     const { isConvoyActive } = useConvoy();
 
+    const getSeverityForType = (hazardType: HazardType): 'low' | 'medium' | 'high' => {
+        if (hazardType === 'sos' || hazardType === 'acidente') return 'high';
+        if (hazardType === 'blitz') return 'medium';
+        return 'low';
+    };
+
     const hazardConfig = {
         blitz: {
             text: 'REPORTAR BLITZ',
@@ -61,6 +67,7 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
                     longitude: location.coords.longitude,
                 },
                 reportedAt: new Date().toISOString(),
+                severity: getSeverityForType(type),
             });
 
             if (type === 'sos' && isConvoyActive) {
