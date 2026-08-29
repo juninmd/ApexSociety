@@ -8,6 +8,7 @@ export interface Hazard {
     type: HazardType;
     location: Location;
     reportedAt: string;
+    severity?: 'low' | 'medium' | 'high';
     verifications?: number;
     fakes?: number;
 }
@@ -85,9 +86,20 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
     }, []);
 
     const getHeatMapDensity = () => {
-        // Base multiplier is 1. For every hazard, we increase the density by 10% (0.1)
+        // Base multiplier is 1.
         // Cap the multiplier at 3x to prevent map over-saturation.
-        const multiplier = 1 + hazards.length * 0.1;
+        let densityAddition = 0;
+        for (const hazard of hazards) {
+            if (hazard.severity === 'high') {
+                densityAddition += 0.3;
+            } else if (hazard.severity === 'medium') {
+                densityAddition += 0.2;
+            } else {
+                densityAddition += 0.1;
+            }
+        }
+
+        const multiplier = 1 + densityAddition;
         return Math.min(multiplier, 3);
     };
 
