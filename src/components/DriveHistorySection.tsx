@@ -1,16 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { theme } from '../theme';
 import { DriveRun } from '../context/DriveHistoryContext';
+import { BarChart2 } from 'lucide-react-native';
 
 interface DriveHistorySectionProps {
     runs: DriveRun[];
 }
 
 export default function DriveHistorySection({ runs }: DriveHistorySectionProps) {
+    const [expandedRunId, setExpandedRunId] = useState<string | null>(null);
+
     if (runs.length === 0) {
         return null;
     }
+
+    const toggleRun = (id: string) => {
+        setExpandedRunId(expandedRunId === id ? null : id);
+    };
 
     return (
         <View style={styles.container}>
@@ -18,6 +25,7 @@ export default function DriveHistorySection({ runs }: DriveHistorySectionProps) 
             {runs.map((run) => {
                 const dateObj = new Date(run.date);
                 const dateStr = `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`;
+                const isExpanded = expandedRunId === run.id;
 
                 return (
                     <View key={run.id} style={styles.card}>
@@ -38,6 +46,64 @@ export default function DriveHistorySection({ runs }: DriveHistorySectionProps) 
                                 <Text style={styles.label}>BOOST MÁX</Text>
                             </View>
                         </View>
+
+                        <TouchableOpacity
+                            style={styles.analyzeBtn}
+                            onPress={() => toggleRun(run.id)}
+                        >
+                            <BarChart2 color={theme.colors.primary} size={16} />
+                            <Text style={styles.analyzeBtnText}>
+                                {isExpanded ? 'CLOSE GHOST DATA' : 'ANALYZE GHOST DATA'}
+                            </Text>
+                        </TouchableOpacity>
+
+                        {isExpanded && (
+                            <View style={styles.chartContainer}>
+                                {/* Mock Chart utilizing flex widths based on values */}
+                                <View style={styles.chartBarWrapper}>
+                                    <Text style={styles.chartLabel}>SPEED</Text>
+                                    <View style={styles.chartBarBg}>
+                                        <View
+                                            style={[
+                                                styles.chartBarFill,
+                                                {
+                                                    width: `${Math.min((run.maxSpeed / 300) * 100, 100)}%`,
+                                                    backgroundColor: theme.colors.primary,
+                                                },
+                                            ]}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={styles.chartBarWrapper}>
+                                    <Text style={styles.chartLabel}>RPM</Text>
+                                    <View style={styles.chartBarBg}>
+                                        <View
+                                            style={[
+                                                styles.chartBarFill,
+                                                {
+                                                    width: `${Math.min((run.maxRpm / 9000) * 100, 100)}%`,
+                                                    backgroundColor: theme.colors.error,
+                                                },
+                                            ]}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={styles.chartBarWrapper}>
+                                    <Text style={styles.chartLabel}>BOOST</Text>
+                                    <View style={styles.chartBarBg}>
+                                        <View
+                                            style={[
+                                                styles.chartBarFill,
+                                                {
+                                                    width: `${Math.min((run.maxBoost / 3.0) * 100, 100)}%`,
+                                                    backgroundColor: theme.colors.secondary,
+                                                },
+                                            ]}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
+                        )}
                     </View>
                 );
             })}
@@ -90,5 +156,48 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.secondary.regular,
         fontSize: 10,
         marginTop: 2,
+    },
+    analyzeBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 15,
+        paddingTop: 15,
+        borderTopWidth: 1,
+        borderTopColor: theme.colors.border,
+    },
+    analyzeBtnText: {
+        color: theme.colors.primary,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 12,
+        marginLeft: 8,
+    },
+    chartContainer: {
+        marginTop: 15,
+        backgroundColor: '#0a0a0a',
+        padding: 10,
+        borderRadius: 4,
+    },
+    chartBarWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    chartLabel: {
+        width: 50,
+        color: theme.colors.textSecondary,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 10,
+    },
+    chartBarBg: {
+        flex: 1,
+        height: 8,
+        backgroundColor: '#222',
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
+    chartBarFill: {
+        height: '100%',
+        borderRadius: 4,
     },
 });
