@@ -10,6 +10,7 @@ export const MOCK_CREWS: Crew[] = [
         foundedYear: "'25",
         logoUrl: undefined, // Placeholder handled in UI
         bannerUrl: undefined,
+        heatScore: 9800,
     },
     {
         id: 'crew-2',
@@ -18,6 +19,7 @@ export const MOCK_CREWS: Crew[] = [
         rank: 'ELITE',
         memberCount: 12,
         foundedYear: "'23",
+        heatScore: 7500,
     },
 ];
 

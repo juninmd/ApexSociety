@@ -16,18 +16,18 @@ export default function MapHazards() {
     const [pulseAnim] = useState(() => new Animated.Value(0.4));
 
     useEffect(() => {
-        const hasSos = hazards.some((h) => h.type === 'sos');
-        if (hasSos) {
+        const hasHighSeverity = hazards.some((h) => h.type === 'sos' || h.severity === 'high');
+        if (hasHighSeverity) {
             Animated.loop(
                 Animated.sequence([
                     Animated.timing(pulseAnim, {
                         toValue: 1,
-                        duration: 800,
+                        duration: 400, // Faster pulse for high severity
                         useNativeDriver: true,
                     }),
                     Animated.timing(pulseAnim, {
-                        toValue: 0.4,
-                        duration: 800,
+                        toValue: 0.2, // Deeper pulse for high severity
+                        duration: 400,
                         useNativeDriver: true,
                     }),
                 ]),
@@ -58,7 +58,9 @@ export default function MapHazards() {
                     title = 'SINAL SOS';
                 }
 
-                if (hazard.type === 'sos') {
+                const isHighSeverity = hazard.type === 'sos' || hazard.severity === 'high';
+
+                if (isHighSeverity) {
                     return (
                         <React.Fragment key={hazard.id}>
                             <AnimatedCircle
@@ -66,7 +68,7 @@ export default function MapHazards() {
                                     latitude: hazard.location.latitude,
                                     longitude: hazard.location.longitude,
                                 }}
-                                radius={1000}
+                                radius={hazard.type === 'sos' ? 2000 : 1500} // Larger radius
                                 strokeColor={markerColor}
                                 fillColor={`${markerColor}60`}
                                 style={{ opacity: pulseAnim }}

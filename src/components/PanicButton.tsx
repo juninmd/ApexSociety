@@ -28,6 +28,7 @@ export default function PanicButton() {
                     address: 'LOCALIZAÇÃO ATUAL',
                 },
                 reportedAt: new Date().toISOString(),
+                severity: 'high' as const,
             };
 
             addHazard(hazard);

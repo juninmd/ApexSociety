@@ -22,6 +22,7 @@ export interface Crew {
     rank: string;
     memberCount: number;
     foundedYear: string;
+    heatScore?: number;
 }
 
 export interface Event {
