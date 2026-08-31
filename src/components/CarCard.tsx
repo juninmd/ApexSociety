@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Heart, Wrench } from 'lucide-react-native';
+import { Heart, Wrench, ScanEye } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import { styles } from './CarCardStyles';
@@ -35,6 +35,30 @@ export default function CarCard({
 }: CarCardProps) {
     const { addReputation } = useReputation();
     const [tunedHp, setTunedHp] = useState<number | null>(null);
+    const [isShowcaseMode, setIsShowcaseMode] = useState(false);
+    const [scanAnim] = useState(() => new Animated.Value(0));
+
+    const toggleShowcase = () => {
+        if (!isShowcaseMode) {
+            Animated.loop(
+                Animated.sequence([
+                    Animated.timing(scanAnim, {
+                        toValue: 1,
+                        duration: 1500,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(scanAnim, {
+                        toValue: 0,
+                        duration: 1500,
+                        useNativeDriver: true,
+                    }),
+                ]),
+            ).start();
+        } else {
+            scanAnim.stopAnimation();
+        }
+        setIsShowcaseMode(!isShowcaseMode);
+    };
 
     const handleRespectPress = () => {
         onRespect(car.id);
@@ -56,8 +80,31 @@ export default function CarCard({
     const hpProgress = Math.min((hpValue / 1200) * 100, 100);
 
     return (
-        <TouchableOpacity style={styles.carCard} onPress={onPress} activeOpacity={0.9}>
+        <TouchableOpacity
+            style={[styles.carCard, isShowcaseMode && styles.showcaseMode]}
+            onPress={onPress}
+            activeOpacity={0.9}
+        >
             <Image source={{ uri: car.image }} style={styles.carImage} />
+            <TouchableOpacity style={styles.showcaseButton} onPress={toggleShowcase}>
+                <ScanEye size={16} color="#00F0FF" />
+            </TouchableOpacity>
+            {isShowcaseMode && (
+                <Animated.View
+                    style={[
+                        styles.showcaseOverlay,
+                        {
+                            opacity: scanAnim.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0.5, 1],
+                            }),
+                        },
+                    ]}
+                    pointerEvents="none"
+                >
+                    <Text style={styles.showcaseText}>AR SHOWCASE ACTIVE</Text>
+                </Animated.View>
+            )}
             <LinearGradient colors={['transparent', 'rgba(0,0,0,0.9)']} style={styles.carOverlay}>
                 <View style={styles.carDetails}>
                     <View style={{ flex: 1, paddingRight: 10 }}>
