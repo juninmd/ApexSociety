@@ -5,6 +5,7 @@ import EventCardRaceDetails from './EventCardRaceDetails';
 import EventCardSecret from './EventCardSecret';
 import EventCardInfo from './EventCardInfo';
 import EventCardFooter from './EventCardFooter';
+import EventHypeIndicator from './EventHypeIndicator';
 import { styles } from './EventCardStyles';
 
 interface EventCardProps {
@@ -61,6 +62,7 @@ export default function EventCard({
 
     return (
         <TouchableOpacity style={styles.container} onPress={onPress}>
+            <EventHypeIndicator hypeScore={hypeScore} />
             <View style={styles.header}>
                 <Text style={styles.host}>HOSTED BY {host}</Text>
                 <EventCardBadges isPrivate={isPrivate} eventType={eventType} />
