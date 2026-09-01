@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
@@ -13,14 +13,41 @@ import MapTerritories from '../components/MapScreen/MapTerritories';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
 import CustomButton from '../components/CustomButton';
+import { useNotification } from '../context/NotificationContext';
 
 export default function MapScreen() {
     const { region, setRegion } = useMapRegion();
     const { isPlannerActive, waypoints, togglePlanner, addWaypoint } = useCruisePlanner();
+    const { addNotification } = useNotification();
+    const [isOfflineMapCached, setIsOfflineMapCached] = useState(false);
 
     // Mock "next event" for the overlay - simply taking the first one
     const nextEvent = MOCK_EVENTS[0];
     const nextEventHost = MOCK_CREWS.find((c) => c.id === nextEvent.hostId)?.name || 'Unknown Host';
+
+    const handleOfflineMapToggle = () => {
+        setIsOfflineMapCached(!isOfflineMapCached);
+        if (!isOfflineMapCached) {
+            addNotification({
+                title: 'OFFLINE MAP',
+                message: 'Downloading map tiles for current region...',
+                type: 'info',
+            });
+            setTimeout(() => {
+                addNotification({
+                    title: 'OFFLINE MAP',
+                    message: 'Map cached successfully.',
+                    type: 'success',
+                });
+            }, 3000);
+        } else {
+            addNotification({
+                title: 'OFFLINE MAP',
+                message: 'Offline map cache cleared.',
+                type: 'info',
+            });
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -47,7 +74,13 @@ export default function MapScreen() {
                 <MapHazards />
             </MapView>
 
-            <View style={styles.plannerToggleContainer}>
+            <View style={styles.topRightControls}>
+                <CustomButton
+                    title={isOfflineMapCached ? 'CLEAR CACHE' : 'OFFLINE MAP'}
+                    onPress={handleOfflineMapToggle}
+                    variant="secondary"
+                    style={styles.offlineButton}
+                />
                 <CustomButton
                     title={isPlannerActive ? 'CANCEL CRUISE' : 'PLAN CRUISE'}
                     onPress={togglePlanner}
@@ -95,11 +128,15 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
     },
-    plannerToggleContainer: {
+    topRightControls: {
         position: 'absolute',
         top: 60,
         right: 20,
         width: 140,
+        gap: 10,
+    },
+    offlineButton: {
+        paddingVertical: 8,
     },
     legendContainer: {
         position: 'absolute',

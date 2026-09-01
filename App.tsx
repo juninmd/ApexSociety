@@ -10,8 +10,10 @@ import { ReputationProvider } from './src/context/ReputationContext';
 import { AuthProvider } from './src/context/AuthContext';
 import { ConvoyProvider } from './src/context/ConvoyContext';
 import { DriveHistoryProvider } from './src/context/DriveHistoryContext';
+import { NotificationProvider } from './src/context/NotificationContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import GlobalAlert from './src/components/GlobalAlert';
+import NotificationToast from './src/components/NotificationToast';
 import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { theme } from './src/theme';
@@ -63,23 +65,29 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <AuthProvider>
-                <AlertProvider>
-                    <EventProvider>
-                        <HazardProvider>
-                            <ReputationProvider>
-                                <ConvoyProvider>
-                                    <DriveHistoryProvider>
-                                        <NavigationContainer theme={customTheme} linking={linking}>
-                                            <StatusBar style="light" />
-                                            <AppNavigator />
-                                            <GlobalAlert />
-                                        </NavigationContainer>
-                                    </DriveHistoryProvider>
-                                </ConvoyProvider>
-                            </ReputationProvider>
-                        </HazardProvider>
-                    </EventProvider>
-                </AlertProvider>
+                <NotificationProvider>
+                    <AlertProvider>
+                        <EventProvider>
+                            <HazardProvider>
+                                <ReputationProvider>
+                                    <ConvoyProvider>
+                                        <DriveHistoryProvider>
+                                            <NavigationContainer
+                                                theme={customTheme}
+                                                linking={linking}
+                                            >
+                                                <StatusBar style="light" />
+                                                <AppNavigator />
+                                                <GlobalAlert />
+                                                <NotificationToast />
+                                            </NavigationContainer>
+                                        </DriveHistoryProvider>
+                                    </ConvoyProvider>
+                                </ReputationProvider>
+                            </HazardProvider>
+                        </EventProvider>
+                    </AlertProvider>
+                </NotificationProvider>
             </AuthProvider>
         </SafeAreaProvider>
     );
