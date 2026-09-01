@@ -17,7 +17,6 @@ export default function MapScreen() {
     const { showAlert } = useAlert();
     const { addNotification } = useNotification();
 
-
     const handleOfflineMapToggle = () => {
         setIsOfflineMapCached(!isOfflineMapCached);
         if (!isOfflineMapCached) {
@@ -71,7 +70,6 @@ export default function MapScreen() {
                 />
             </View>
             <WebLandingContent
-
                 handleReportBlitz={handleReportBlitz}
                 handleReportRadar={handleReportRadar}
                 handleReportAcidente={handleReportAcidente}
