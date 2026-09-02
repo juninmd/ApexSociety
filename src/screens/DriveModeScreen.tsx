@@ -60,6 +60,7 @@ export default function DriveModeScreen() {
                         <ReportHazardButton type="radar" />
                         <ReportHazardButton type="acidente" />
                         <ReportHazardButton type="sos" />
+                        <ReportHazardButton type="flare" />
                     </View>
                 </View>
             </LinearGradient>
