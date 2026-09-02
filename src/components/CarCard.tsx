@@ -5,6 +5,7 @@ import { Heart, Wrench, ScanEye } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import { styles } from './CarCardStyles';
+import CarCardShowcase from './CarCardShowcase';
 
 export interface CarSpecs {
     engine?: string;
@@ -89,22 +90,9 @@ export default function CarCard({
             <TouchableOpacity style={styles.showcaseButton} onPress={toggleShowcase}>
                 <ScanEye size={16} color="#00F0FF" />
             </TouchableOpacity>
-            {isShowcaseMode && (
-                <Animated.View
-                    style={[
-                        styles.showcaseOverlay,
-                        {
-                            opacity: scanAnim.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [0.5, 1],
-                            }),
-                        },
-                    ]}
-                    pointerEvents="none"
-                >
-                    <Text style={styles.showcaseText}>AR SHOWCASE ACTIVE</Text>
-                </Animated.View>
-            )}
+
+            {isShowcaseMode && <CarCardShowcase scanAnim={scanAnim} />}
+
             <LinearGradient colors={['transparent', 'rgba(0,0,0,0.9)']} style={styles.carOverlay}>
                 <View style={styles.carDetails}>
                     <View style={{ flex: 1, paddingRight: 10 }}>

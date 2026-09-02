@@ -56,9 +56,13 @@ export default function MapHazards() {
                 } else if (hazard.type === 'sos') {
                     markerColor = '#FF00FF'; // Deep Red / Magenta for SOS
                     title = 'SINAL SOS';
+                } else if (hazard.type === 'flare') {
+                    markerColor = '#00FFFF'; // Cyan for Flare
+                    title = 'SOCIAL FLARE';
                 }
 
-                const isHighSeverity = hazard.type === 'sos' || hazard.severity === 'high';
+                const isHighSeverity =
+                    hazard.type === 'sos' || hazard.type === 'flare' || hazard.severity === 'high';
 
                 if (isHighSeverity) {
                     return (

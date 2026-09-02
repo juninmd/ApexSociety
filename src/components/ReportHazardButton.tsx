@@ -6,7 +6,7 @@ import { useHazards } from '../context/HazardContext';
 import { useConvoy } from '../context/ConvoyContext';
 import * as Location from 'expo-location';
 
-export type HazardType = 'blitz' | 'radar' | 'acidente' | 'sos';
+export type HazardType = 'blitz' | 'radar' | 'acidente' | 'sos' | 'flare';
 
 interface ReportHazardButtonProps {
     type: HazardType;
@@ -45,6 +45,11 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
             text: 'SINAL SOS',
             color: '#FF0000', // Bright Red for SOS
             alertMsg: 'SOS Ativado: Membros da equipe notificados. Aguarde por assistência.',
+        },
+        flare: {
+            text: 'SINAL FLARE',
+            color: '#00FFFF', // Cyan for flare
+            alertMsg: 'Flare Ativado: Equipe chamada para o local.',
         },
     };
 

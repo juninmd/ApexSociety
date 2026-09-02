@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { Trophy } from 'lucide-react-native';
 import { theme } from '../theme';
 import { MOCK_CREWS } from '../data/mock';
+import LeaderboardCrewCard from '../components/LeaderboardCrewCard';
 
 export default function LeaderboardScreen() {
     const [filter, setFilter] = useState<'members' | 'heat'>('members');
@@ -58,42 +59,7 @@ export default function LeaderboardScreen() {
 
             <View style={styles.list}>
                 {sortedCrews.map((crew, index) => (
-                    <View key={crew.id} style={styles.crewCard}>
-                        <View style={styles.rankContainer}>
-                            <Text style={styles.rankText}>#{index + 1}</Text>
-                        </View>
-                        <View style={styles.crewInfo}>
-                            <Text style={styles.crewName}>{crew.name}</Text>
-                            <Text style={styles.crewRank}>{crew.rank}</Text>
-                        </View>
-                        <View style={styles.memberInfo}>
-                            {filter === 'members' ? (
-                                <>
-                                    <Text style={styles.memberCount}>{crew.memberCount}</Text>
-                                    <Text style={styles.memberLabel}>MEMBERS</Text>
-                                </>
-                            ) : (
-                                <View style={styles.heatInfo}>
-                                    <Trophy
-                                        color={theme.colors.error}
-                                        size={14}
-                                        style={{ marginRight: 4 }}
-                                    />
-                                    <View>
-                                        <Text
-                                            style={[
-                                                styles.memberCount,
-                                                { color: theme.colors.error },
-                                            ]}
-                                        >
-                                            {crew.heatScore}
-                                        </Text>
-                                        <Text style={styles.memberLabel}>HEAT</Text>
-                                    </View>
-                                </View>
-                            )}
-                        </View>
-                    </View>
+                    <LeaderboardCrewCard key={crew.id} crew={crew} index={index} filter={filter} />
                 ))}
             </View>
         </ScrollView>
@@ -123,53 +89,6 @@ const styles = StyleSheet.create({
     list: {
         padding: 20,
     },
-    crewCard: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: theme.colors.card,
-        padding: 15,
-        marginBottom: 15,
-        borderLeftWidth: 3,
-        borderLeftColor: theme.colors.primary,
-    },
-    rankContainer: {
-        width: 40,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    rankText: {
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 20,
-        color: theme.colors.primary,
-    },
-    crewInfo: {
-        flex: 1,
-        marginLeft: 15,
-    },
-    crewName: {
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 18,
-        color: theme.colors.text,
-    },
-    crewRank: {
-        fontFamily: theme.fonts.secondary.regular,
-        fontSize: 12,
-        color: theme.colors.secondary,
-        marginTop: 4,
-    },
-    memberInfo: {
-        alignItems: 'flex-end',
-    },
-    memberCount: {
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 20,
-        color: theme.colors.text,
-    },
-    memberLabel: {
-        fontFamily: theme.fonts.secondary.regular,
-        fontSize: 10,
-        color: theme.colors.secondary,
-    },
     filterContainer: {
         flexDirection: 'row',
         marginTop: 20,
@@ -192,9 +111,5 @@ const styles = StyleSheet.create({
     },
     filterTextActive: {
         color: theme.colors.black,
-    },
-    heatInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
     },
 });

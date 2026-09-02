@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { theme } from '../theme';
 import { DriveRun } from '../context/DriveHistoryContext';
-import { BarChart2 } from 'lucide-react-native';
+import { BarChart2, Zap } from 'lucide-react-native';
+import DriveHistoryChart from './DriveHistoryChart';
 
 interface DriveHistorySectionProps {
     runs: DriveRun[];
@@ -57,53 +58,20 @@ export default function DriveHistorySection({ runs }: DriveHistorySectionProps) 
                             </Text>
                         </TouchableOpacity>
 
-                        {isExpanded && (
-                            <View style={styles.chartContainer}>
-                                {/* Mock Chart utilizing flex widths based on values */}
-                                <View style={styles.chartBarWrapper}>
-                                    <Text style={styles.chartLabel}>SPEED</Text>
-                                    <View style={styles.chartBarBg}>
-                                        <View
-                                            style={[
-                                                styles.chartBarFill,
-                                                {
-                                                    width: `${Math.min((run.maxSpeed / 300) * 100, 100)}%`,
-                                                    backgroundColor: theme.colors.primary,
-                                                },
-                                            ]}
-                                        />
-                                    </View>
-                                </View>
-                                <View style={styles.chartBarWrapper}>
-                                    <Text style={styles.chartLabel}>RPM</Text>
-                                    <View style={styles.chartBarBg}>
-                                        <View
-                                            style={[
-                                                styles.chartBarFill,
-                                                {
-                                                    width: `${Math.min((run.maxRpm / 9000) * 100, 100)}%`,
-                                                    backgroundColor: theme.colors.error,
-                                                },
-                                            ]}
-                                        />
-                                    </View>
-                                </View>
-                                <View style={styles.chartBarWrapper}>
-                                    <Text style={styles.chartLabel}>BOOST</Text>
-                                    <View style={styles.chartBarBg}>
-                                        <View
-                                            style={[
-                                                styles.chartBarFill,
-                                                {
-                                                    width: `${Math.min((run.maxBoost / 3.0) * 100, 100)}%`,
-                                                    backgroundColor: theme.colors.secondary,
-                                                },
-                                            ]}
-                                        />
-                                    </View>
-                                </View>
-                            </View>
-                        )}
+                        <TouchableOpacity
+                            style={styles.challengeBtn}
+                            onPress={() =>
+                                Alert.alert(
+                                    'Challenge Started',
+                                    'You are now racing against the ghost run data.',
+                                )
+                            }
+                        >
+                            <Zap color={theme.colors.black} size={16} />
+                            <Text style={styles.challengeBtnText}>CHALLENGE GHOST</Text>
+                        </TouchableOpacity>
+
+                        {isExpanded && <DriveHistoryChart run={run} />}
                     </View>
                 );
             })}
@@ -172,32 +140,19 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginLeft: 8,
     },
-    chartContainer: {
-        marginTop: 15,
-        backgroundColor: '#0a0a0a',
-        padding: 10,
-        borderRadius: 4,
-    },
-    chartBarWrapper: {
+    challengeBtn: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
+        justifyContent: 'center',
+        marginTop: 10,
+        paddingVertical: 10,
+        backgroundColor: theme.colors.primary,
+        borderRadius: 4,
     },
-    chartLabel: {
-        width: 50,
-        color: theme.colors.textSecondary,
+    challengeBtnText: {
+        color: theme.colors.black,
         fontFamily: theme.fonts.secondary.bold,
-        fontSize: 10,
-    },
-    chartBarBg: {
-        flex: 1,
-        height: 8,
-        backgroundColor: '#222',
-        borderRadius: 4,
-        overflow: 'hidden',
-    },
-    chartBarFill: {
-        height: '100%',
-        borderRadius: 4,
+        fontSize: 12,
+        marginLeft: 8,
     },
 });
