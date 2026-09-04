@@ -7,6 +7,7 @@ import { MOCK_PROFILE_USER } from '../data/mock';
 import CustomButton from '../components/CustomButton';
 import { theme } from '../theme';
 import { ArrowLeft } from 'lucide-react-native';
+import TuningSimulator from '../components/TuningSimulator';
 
 export default function CarDetailsScreen() {
     const route = useRoute();
@@ -35,13 +36,7 @@ export default function CarDetailsScreen() {
                 <Text style={styles.title}>{car.name}</Text>
 
                 {car.specs && (
-                    <View style={styles.specsContainer}>
-                        <Text style={styles.specsTitle}>ESPECIFICAÇÕES</Text>
-                        <Text style={styles.specsText}>Motor: {car.specs.engine}</Text>
-                        {car.specs.hp && (
-                            <Text style={styles.specsText}>Potência: {car.specs.hp}</Text>
-                        )}
-                    </View>
+                    <TuningSimulator initialHp={car.specs.hp} engine={car.specs.engine} />
                 )}
 
                 <View style={styles.actionContainer}>

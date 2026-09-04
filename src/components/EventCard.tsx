@@ -6,6 +6,7 @@ import EventCardSecret from './EventCardSecret';
 import EventCardInfo from './EventCardInfo';
 import EventCardFooter from './EventCardFooter';
 import EventHypeIndicator from './EventHypeIndicator';
+import GeofencedCheckIn from './GeofencedCheckIn';
 import { styles } from './EventCardStyles';
 
 interface EventCardProps {
@@ -24,6 +25,8 @@ interface EventCardProps {
     weather?: 'clear' | 'rain' | 'fog';
     elevatedRisk?: boolean;
     hypeScore?: number;
+    eventLatitude?: number;
+    eventLongitude?: number;
     onPress?: () => void;
 }
 
@@ -43,6 +46,8 @@ export default function EventCard({
     weather,
     elevatedRisk,
     hypeScore = 0,
+    eventLatitude,
+    eventLongitude,
     onPress,
 }: EventCardProps) {
     const [isUnlocked, setIsUnlocked] = React.useState(false);
@@ -88,6 +93,14 @@ export default function EventCard({
             )}
 
             <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
+
+            {eventLatitude && eventLongitude && (
+                <GeofencedCheckIn
+                    eventId={eventId}
+                    eventLatitude={eventLatitude}
+                    eventLongitude={eventLongitude}
+                />
+            )}
 
             <EventCardFooter eventId={eventId} attendees={attendees} startTime={time} />
 
