@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import { MapPin } from 'lucide-react-native';
@@ -59,7 +59,7 @@ export default function GeofencedCheckIn({
                     `Você está a ${distance.toFixed(1)}km do evento. O limite é ${radiusInKm}km.`,
                 );
             }
-        } catch (error) {
+        } catch {
             Alert.alert('Erro', 'Não foi possível obter sua localização.');
         } finally {
             setChecking(false);

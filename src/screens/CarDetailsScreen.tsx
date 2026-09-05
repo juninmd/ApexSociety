@@ -8,6 +8,7 @@ import CustomButton from '../components/CustomButton';
 import { theme } from '../theme';
 import { ArrowLeft } from 'lucide-react-native';
 import TuningSimulator from '../components/TuningSimulator';
+import GarageVerificationSystem from '../components/GarageVerificationSystem';
 
 export default function CarDetailsScreen() {
     const route = useRoute();
@@ -38,6 +39,8 @@ export default function CarDetailsScreen() {
                 {car.specs && (
                     <TuningSimulator initialHp={car.specs.hp} engine={car.specs.engine} />
                 )}
+
+                <GarageVerificationSystem carId={car.id} onVerified={() => {}} />
 
                 <View style={styles.actionContainer}>
                     <CustomButton
