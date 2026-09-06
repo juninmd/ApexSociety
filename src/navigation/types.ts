@@ -20,6 +20,8 @@ export type RootStackParamList = {
     CarDetails: { carId: string };
     DriveMode: undefined;
     Leaderboard: undefined;
+    FriendsList: undefined;
+    NotificationCenter: undefined;
 };
 
 export type RootTabScreenProps<T extends keyof RootTabParamList> = BottomTabScreenProps<
