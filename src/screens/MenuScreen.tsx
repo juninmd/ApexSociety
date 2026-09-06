@@ -55,6 +55,16 @@ export default function MenuScreen() {
                     style={styles.button}
                 />
                 <CustomButton
+                    title="NOTIFICAÇÕES"
+                    onPress={() => navigation.navigate('NotificationCenter')}
+                    style={styles.button}
+                />
+                <CustomButton
+                    title="AMIGOS"
+                    onPress={() => navigation.navigate('FriendsList')}
+                    style={styles.button}
+                />
+                <CustomButton
                     title="CONFIGURAÇÕES"
                     onPress={() => Alert.alert('Em Breve', 'Configurações em desenvolvimento.')}
                     variant="secondary"

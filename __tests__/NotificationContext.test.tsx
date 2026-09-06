@@ -3,6 +3,14 @@ import { renderHook, act } from '@testing-library/react-native';
 import { NotificationProvider, useNotification } from '../src/context/NotificationContext';
 
 describe('NotificationContext', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
     it('provides default values and allows adding/removing notifications', () => {
         const wrapper = ({ children }: { children: React.ReactNode }) => (
             <NotificationProvider>{children}</NotificationProvider>
@@ -30,5 +38,9 @@ describe('NotificationContext', () => {
         });
 
         expect(result.current.notifications.length).toBe(0);
+
+        act(() => {
+            jest.runOnlyPendingTimers();
+        });
     });
 });

@@ -11,6 +11,8 @@ import { AuthProvider } from './src/context/AuthContext';
 import { ConvoyProvider } from './src/context/ConvoyContext';
 import { DriveHistoryProvider } from './src/context/DriveHistoryContext';
 import { NotificationProvider } from './src/context/NotificationContext';
+import { FriendProvider } from './src/context/FriendContext';
+import { MOCK_FRIENDS } from './src/data/mock';
 import AppNavigator from './src/navigation/AppNavigator';
 import GlobalAlert from './src/components/GlobalAlert';
 import NotificationToast from './src/components/NotificationToast';
@@ -72,15 +74,17 @@ export default function App() {
                                 <ReputationProvider>
                                     <ConvoyProvider>
                                         <DriveHistoryProvider>
-                                            <NavigationContainer
-                                                theme={customTheme}
-                                                linking={linking}
-                                            >
-                                                <StatusBar style="light" />
-                                                <AppNavigator />
-                                                <GlobalAlert />
-                                                <NotificationToast />
-                                            </NavigationContainer>
+                                            <FriendProvider initialFriends={MOCK_FRIENDS}>
+                                                <NavigationContainer
+                                                    theme={customTheme}
+                                                    linking={linking}
+                                                >
+                                                    <StatusBar style="light" />
+                                                    <AppNavigator />
+                                                    <GlobalAlert />
+                                                    <NotificationToast />
+                                                </NavigationContainer>
+                                            </FriendProvider>
                                         </DriveHistoryProvider>
                                     </ConvoyProvider>
                                 </ReputationProvider>
