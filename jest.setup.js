@@ -6,6 +6,7 @@ jest.mock('react-native-maps', () => {
         __esModule: true,
         default: (props) => React.createElement(View, props),
         Marker: (props) => React.createElement(View, props),
+        Circle: (props) => React.createElement(View, props),
         PROVIDER_DEFAULT: 'default',
         PROVIDER_GOOGLE: 'google',
     };

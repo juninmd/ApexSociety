@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, act } from '@testing-library/react-native';
 import MapTerritories from '../src/components/MapScreen/MapTerritories';
+import { TurfProvider } from '../src/context/TurfContext';
 
 // Mock react-native-maps Circle
 jest.mock('react-native-maps', () => {
@@ -21,13 +22,21 @@ describe('MapTerritories', () => {
     });
 
     it('renders territories correctly', () => {
-        const { getByTestId } = render(<MapTerritories />);
+        const { getByTestId } = render(
+            <TurfProvider>
+                <MapTerritories />
+            </TurfProvider>,
+        );
         expect(getByTestId('territory-circle-t1')).toBeTruthy();
         expect(getByTestId('territory-circle-t2')).toBeTruthy();
     });
 
     it('pulses territories with intruders', () => {
-        const { getByTestId } = render(<MapTerritories />);
+        const { getByTestId } = render(
+            <TurfProvider>
+                <MapTerritories />
+            </TurfProvider>,
+        );
 
         // Fast forward 1 second for the pulse effect
         act(() => {

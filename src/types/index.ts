@@ -45,3 +45,7 @@ export interface Event {
     weather?: 'clear' | 'rain' | 'fog';
     hypeScore?: number; // Metric for Event Hype System
 }
+
+export interface Friend extends User {
+    status: 'online' | 'offline' | 'driving';
+}

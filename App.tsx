@@ -12,6 +12,7 @@ import { ConvoyProvider } from './src/context/ConvoyContext';
 import { DriveHistoryProvider } from './src/context/DriveHistoryContext';
 import { NotificationProvider } from './src/context/NotificationContext';
 import { FriendProvider } from './src/context/FriendContext';
+import { TurfProvider } from './src/context/TurfContext';
 import { MOCK_FRIENDS } from './src/data/mock';
 import AppNavigator from './src/navigation/AppNavigator';
 import GlobalAlert from './src/components/GlobalAlert';
@@ -74,17 +75,19 @@ export default function App() {
                                 <ReputationProvider>
                                     <ConvoyProvider>
                                         <DriveHistoryProvider>
-                                            <FriendProvider initialFriends={MOCK_FRIENDS}>
-                                                <NavigationContainer
-                                                    theme={customTheme}
-                                                    linking={linking}
-                                                >
-                                                    <StatusBar style="light" />
-                                                    <AppNavigator />
-                                                    <GlobalAlert />
-                                                    <NotificationToast />
-                                                </NavigationContainer>
-                                            </FriendProvider>
+                                            <TurfProvider>
+                                                <FriendProvider initialFriends={MOCK_FRIENDS}>
+                                                    <NavigationContainer
+                                                        theme={customTheme}
+                                                        linking={linking}
+                                                    >
+                                                        <StatusBar style="light" />
+                                                        <AppNavigator />
+                                                        <GlobalAlert />
+                                                        <NotificationToast />
+                                                    </NavigationContainer>
+                                                </FriendProvider>
+                                            </TurfProvider>
                                         </DriveHistoryProvider>
                                     </ConvoyProvider>
                                 </ReputationProvider>
