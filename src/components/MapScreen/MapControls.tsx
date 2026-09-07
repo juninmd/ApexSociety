@@ -3,6 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import CustomButton from '../CustomButton';
 
 interface MapControlsProps {
+    isAnalyzerActive: boolean;
+    toggleAnalyzer: () => void;
     isOfflineMapCached: boolean;
     handleOfflineMapToggle: () => void;
     isPlannerActive: boolean;
@@ -14,6 +16,8 @@ export default function MapControls({
     handleOfflineMapToggle,
     isPlannerActive,
     togglePlanner,
+    isAnalyzerActive,
+    toggleAnalyzer,
 }: MapControlsProps) {
     return (
         <View style={styles.topRightControls}>
@@ -27,6 +31,13 @@ export default function MapControls({
                 title={isPlannerActive ? 'CANCEL CRUISE' : 'PLAN CRUISE'}
                 onPress={togglePlanner}
                 variant={isPlannerActive ? 'danger' : 'primary'}
+            />
+
+            <CustomButton
+                title={isAnalyzerActive ? 'HIDE ANALYZER' : 'ROUTE ANALYZER'}
+                onPress={toggleAnalyzer}
+                variant={isAnalyzerActive ? 'secondary' : 'primary'}
+                style={styles.offlineButton}
             />
         </View>
     );

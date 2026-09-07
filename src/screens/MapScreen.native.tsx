@@ -12,6 +12,7 @@ import MapCruisePlanner from '../components/MapScreen/MapCruisePlanner';
 import MapTerritories from '../components/MapScreen/MapTerritories';
 import MapLegend from '../components/MapScreen/MapLegend';
 import MapControls from '../components/MapScreen/MapControls';
+import MapRouteAnalyzer from '../components/MapScreen/MapRouteAnalyzer';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
 import { useNotification } from '../context/NotificationContext';
@@ -21,6 +22,7 @@ export default function MapScreen() {
     const { isPlannerActive, waypoints, togglePlanner, addWaypoint } = useCruisePlanner();
     const { addNotification } = useNotification();
     const [isOfflineMapCached, setIsOfflineMapCached] = useState(false);
+    const [isAnalyzerActive, setIsAnalyzerActive] = useState(false);
 
     // Mock "next event" for the overlay - simply taking the first one
     const nextEvent = MOCK_EVENTS[0];
@@ -80,9 +82,12 @@ export default function MapScreen() {
                 handleOfflineMapToggle={handleOfflineMapToggle}
                 isPlannerActive={isPlannerActive}
                 togglePlanner={togglePlanner}
+                isAnalyzerActive={isAnalyzerActive}
+                toggleAnalyzer={() => setIsAnalyzerActive(!isAnalyzerActive)}
             />
 
             <MapLegend />
+            <MapRouteAnalyzer visible={isAnalyzerActive} />
 
             <MapOverlay nextEvent={nextEvent} nextEventHost={nextEventHost} />
         </View>

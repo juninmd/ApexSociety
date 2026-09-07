@@ -9,7 +9,8 @@ import CrewHeader from '../components/CrewHeader';
 import CrewBanner from '../components/CrewBanner';
 import ChallengeCrewModal from '../components/ChallengeCrewModal';
 import { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Alert } from 'react-native';
+import { useTurf } from '../context/TurfContext';
 
 export default function CrewScreen() {
     const route = useRoute();
@@ -18,6 +19,7 @@ export default function CrewScreen() {
 
     // Use specific crew if ID provided, otherwise default to first
     const [challengeModalVisible, setChallengeModalVisible] = useState(false);
+    const { claimTurf, territories } = useTurf();
     const crew = crewId ? MOCK_CREWS.find((c) => c.id === crewId) : MOCK_CREWS[0];
 
     if (!crew) {
@@ -42,6 +44,30 @@ export default function CrewScreen() {
                     onPress={() => setChallengeModalVisible(true)}
                 >
                     <Text style={styles.challengeButtonText}>CHALLENGE CREW (TURF WAR)</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[
+                        styles.challengeButton,
+                        {
+                            marginTop: 10,
+                            borderColor: theme.colors.primary,
+                            backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        },
+                    ]}
+                    onPress={() => {
+                        const turfToClaim = territories.find((t) => t.crewId === crew.id);
+                        if (turfToClaim) {
+                            claimTurf(turfToClaim.id, 5);
+                            Alert.alert('TURF WAR', '+5% DOMINANCE CLAIMED!');
+                        } else {
+                            Alert.alert('TURF WAR', 'This crew has no turf to claim.');
+                        }
+                    }}
+                >
+                    <Text style={[styles.challengeButtonText, { color: theme.colors.primary }]}>
+                        CLAIM DOMINANCE (+5%)
+                    </Text>
                 </TouchableOpacity>
             </View>
 

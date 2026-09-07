@@ -1,4 +1,4 @@
-import { User, Crew } from '../types';
+import { User, Crew, Friend } from '../types';
 
 export const MOCK_CREWS: Crew[] = [
     {
@@ -159,6 +159,6 @@ export const MOCK_FRIENDS = [
         lastActive: '2023-10-26T20:00:00Z',
         status: 'offline',
     },
-] as any[];
+] as Friend[];
 
 export { MOCK_EVENTS } from './mockEvents';

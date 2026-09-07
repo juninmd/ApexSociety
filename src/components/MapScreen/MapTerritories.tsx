@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Circle } from 'react-native-maps';
-import { MOCK_TERRITORIES, MOCK_USERS } from '../../data/mock';
+import { MOCK_USERS } from '../../data/mock';
+import { useTurf } from '../../context/TurfContext';
 import { getDistance } from '../../utils/location';
 import { theme } from '../../theme';
 
 export default function MapTerritories() {
+    const { territories } = useTurf();
     const [pulseState, setPulseState] = useState(false);
 
     // Calculate intrusions synchronously on mount or when data changes (currently static mocks)
     // Avoids setState in useEffect warning
     const intruded: Record<string, boolean> = {};
-    MOCK_TERRITORIES.forEach((territory) => {
+    territories.forEach((territory) => {
         const hasIntruder = MOCK_USERS.some((user) => {
             // If user belongs to a different crew (or no crew), and is within territory radius
             if (user.crewId !== territory.crewId) {
@@ -46,7 +48,7 @@ export default function MapTerritories() {
 
     return (
         <>
-            {MOCK_TERRITORIES.map((territory) => {
+            {territories.map((territory) => {
                 const isIntruded = pulsingTerritories[territory.id];
 
                 let fillColor = territory.color;

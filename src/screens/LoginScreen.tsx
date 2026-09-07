@@ -22,8 +22,8 @@ export default function LoginScreen() {
         try {
             await login(username);
             // After successful login, navigation should be handled by AppNavigator observing AuthContext
-        } catch (error: any) {
-            Alert.alert('Erro no Login', error.message);
+        } catch (error: unknown) {
+            Alert.alert('Erro no Login', error instanceof Error ? error.message : String(error));
         }
     };
 
