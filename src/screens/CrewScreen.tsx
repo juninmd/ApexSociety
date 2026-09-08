@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Settings, Users, UserPlus, Handshake } from 'lucide-react-native';
 import { useRoute } from '@react-navigation/native';
 import { theme } from '../theme';
@@ -11,6 +11,8 @@ import ChallengeCrewModal from '../components/ChallengeCrewModal';
 import { useState } from 'react';
 import { TouchableOpacity, Alert } from 'react-native';
 import { useTurf } from '../context/TurfContext';
+
+import { styles } from './CrewScreenStyles';
 
 export default function CrewScreen() {
     const route = useRoute();
@@ -33,7 +35,12 @@ export default function CrewScreen() {
     return (
         <ScrollView style={styles.container}>
             {/* Crew Card */}
-            <CrewHeader name={crew.name} memberCount={crew.memberCount} rank={crew.rank} />
+            <CrewHeader
+                name={crew.name}
+                memberCount={crew.memberCount}
+                rank={crew.rank}
+                notoriety={crew.notoriety}
+            />
 
             {/* Red Banner */}
             <CrewBanner name={crew.name} tag={crew.tag} foundedYear={crew.foundedYear} />
@@ -103,51 +110,3 @@ export default function CrewScreen() {
         </ScrollView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: theme.colors.background,
-    },
-    center: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    errorText: {
-        fontFamily: theme.fonts.primary.bold,
-        color: theme.colors.error,
-        fontSize: 18,
-    },
-    sectionHeader: {
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 18,
-        color: theme.colors.textSecondary,
-        marginHorizontal: 20,
-        marginTop: 30,
-        marginBottom: 10,
-    },
-    menuList: {
-        paddingHorizontal: 20,
-        paddingBottom: 40,
-    },
-    actionContainer: {
-        paddingHorizontal: 20,
-        marginVertical: 15,
-    },
-    challengeButton: {
-        backgroundColor: 'rgba(255, 0, 0, 0.1)',
-        borderWidth: 1,
-        borderColor: theme.colors.error,
-        paddingVertical: 12,
-        borderRadius: 4,
-        alignItems: 'center',
-        transform: [{ skewX: '-10deg' }],
-    },
-    challengeButtonText: {
-        color: theme.colors.error,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 14,
-        letterSpacing: 1,
-        transform: [{ skewX: '10deg' }],
-    },
-});

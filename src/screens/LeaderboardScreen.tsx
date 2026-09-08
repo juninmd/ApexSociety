@@ -6,11 +6,14 @@ import { MOCK_CREWS } from '../data/mock';
 import LeaderboardCrewCard from '../components/LeaderboardCrewCard';
 
 export default function LeaderboardScreen() {
-    const [filter, setFilter] = useState<'members' | 'heat'>('members');
+    const [filter, setFilter] = useState<'members' | 'heat' | 'notoriety'>('members');
 
     const sortedCrews = [...MOCK_CREWS].sort((a, b) => {
         if (filter === 'heat') {
             return (b.heatScore || 0) - (a.heatScore || 0);
+        }
+        if (filter === 'notoriety') {
+            return (b.notoriety || 0) - (a.notoriety || 0);
         }
         return b.memberCount - a.memberCount;
     });
@@ -52,6 +55,22 @@ export default function LeaderboardScreen() {
                             ]}
                         >
                             MOST WANTED
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[
+                            styles.filterButton,
+                            filter === 'notoriety' && styles.filterButtonActive,
+                        ]}
+                        onPress={() => setFilter('notoriety')}
+                    >
+                        <Text
+                            style={[
+                                styles.filterText,
+                                filter === 'notoriety' && styles.filterTextActive,
+                            ]}
+                        >
+                            NOTORIETY
                         </Text>
                     </TouchableOpacity>
                 </View>
