@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Animated } from 'react-native';
 import { Circle } from 'react-native-maps';
-import { MOCK_HOTSPOTS } from '../../data/mock';
+import { MOCK_HOTSPOTS } from '../../data/mockExtra';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 

@@ -13,7 +13,7 @@ import { DriveHistoryProvider } from './src/context/DriveHistoryContext';
 import { NotificationProvider } from './src/context/NotificationContext';
 import { FriendProvider } from './src/context/FriendContext';
 import { TurfProvider } from './src/context/TurfContext';
-import { MOCK_FRIENDS } from './src/data/mock';
+import { MOCK_FRIENDS } from './src/data/mockExtra';
 import AppNavigator from './src/navigation/AppNavigator';
 import GlobalAlert from './src/components/GlobalAlert';
 import NotificationToast from './src/components/NotificationToast';

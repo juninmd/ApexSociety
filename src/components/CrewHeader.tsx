@@ -1,15 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Users } from 'lucide-react-native';
+import { Users, AlertTriangle } from 'lucide-react-native';
 import { theme } from '../theme';
 
 interface CrewHeaderProps {
     name: string;
     memberCount: number;
     rank: string;
+    notoriety?: number;
 }
 
-export default function CrewHeader({ name, memberCount, rank }: CrewHeaderProps) {
+export default function CrewHeader({ name, memberCount, rank, notoriety }: CrewHeaderProps) {
     const getInitials = (name: string) => {
         return name
             .split(' ')
@@ -30,6 +31,14 @@ export default function CrewHeader({ name, memberCount, rank }: CrewHeaderProps)
                     <Users color={theme.colors.secondary} size={14} />
                     <Text style={styles.statsText}>{memberCount} MEMBROS</Text>
                     <Text style={styles.rankText}>{rank}</Text>
+
+                    {notoriety !== undefined && (
+                        <>
+                            <View style={styles.divider} />
+                            <AlertTriangle color={theme.colors.error} size={14} />
+                            <Text style={styles.notorietyText}>{notoriety} WTD</Text>
+                        </>
+                    )}
                 </View>
             </View>
         </View>
@@ -94,5 +103,17 @@ const styles = StyleSheet.create({
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 12,
         color: theme.colors.primary,
+    },
+    divider: {
+        width: 1,
+        height: 12,
+        backgroundColor: theme.colors.border,
+        marginHorizontal: 15,
+    },
+    notorietyText: {
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 12,
+        color: theme.colors.error,
+        marginLeft: 5,
     },
 });
