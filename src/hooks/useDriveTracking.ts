@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Vibration } from 'react-native';
 import * as Location from 'expo-location';
 import { Hazard } from '../context/HazardContext';
 import { getDistance } from '../utils/location';
 import { MOCK_EVENTS } from '../data/mock';
+import { useAuth } from '../context/AuthContext';
+import { useTurf } from '../context/TurfContext';
 
 interface UseDriveTrackingProps {
     hazards: Hazard[];
@@ -15,6 +17,9 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
     const [proximityAlert, setProximityAlert] = useState<string | null>(null);
     const [isGhostMode, setIsGhostMode] = useState(false);
     const [ghostStartTime, setGhostStartTime] = useState<number | null>(null);
+    const { user } = useAuth();
+    const { boostCrewHeat } = useTurf();
+    const speedingTicksRef = useRef(0);
 
     const handleToggleGhostMode = () => {
         if (!isGhostMode) {
@@ -39,6 +44,19 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
         }, 300);
         return () => clearInterval(interval);
     }, []);
+
+    // Track speeding for gamification
+    useEffect(() => {
+        if (speed > 135 && user?.crewId) {
+            speedingTicksRef.current += 1;
+            if (speedingTicksRef.current >= 3) {
+                boostCrewHeat(user.crewId, 10);
+                speedingTicksRef.current = 0; // Reset after boosting
+            }
+        } else {
+            speedingTicksRef.current = 0;
+        }
+    }, [speed, user, boostCrewHeat]);
 
     // Location Tracking
     useEffect(() => {

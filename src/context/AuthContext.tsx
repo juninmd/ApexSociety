@@ -21,6 +21,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     const login = async (username: string) => {
+        if (!username || username.trim().length < 3) {
+            return Promise.reject(new Error('Username must be at least 3 characters long.'));
+        }
+
         // Simulate an API call
         return new Promise<void>((resolve, reject) => {
             setTimeout(() => {

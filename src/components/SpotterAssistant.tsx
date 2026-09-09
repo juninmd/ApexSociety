@@ -3,10 +3,12 @@ import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '../theme';
 import { useHazards } from '../context/HazardContext';
 import { useWeather } from '../hooks/useWeather';
+import { useConvoy } from '../context/ConvoyContext';
 
 export default function SpotterAssistant() {
     const { heatLevel } = useHazards();
     const { isRaining, isFoggy } = useWeather();
+    const { crewMembers } = useConvoy();
 
     let advice = 'SPOTTER: Route Clear. Keep pushing.';
     let level = 'safe';
@@ -17,6 +19,9 @@ export default function SpotterAssistant() {
     } else if (heatLevel > 0) {
         advice = 'SPOTTER: Radar or Blitz ahead. Stay alert.';
         level = 'warning';
+    } else if (crewMembers.length > 0) {
+        advice = 'SPOTTER: Convoy detected nearby. Stay in formation.';
+        level = 'safe';
     } else if (isRaining) {
         advice = 'SPOTTER: Wet conditions. Traction reduced. Corner with care.';
         level = 'warning';
