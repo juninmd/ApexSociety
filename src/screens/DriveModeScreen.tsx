@@ -13,12 +13,16 @@ import TelemetryDashboard from '../components/TelemetryDashboard';
 import PitWallFeed from '../components/PitWallFeed';
 import SpotterAssistant from '../components/SpotterAssistant';
 import PoliceScannerFeed from '../components/PoliceScannerFeed';
+import RouteThreatBanner from '../components/RouteThreatBanner';
+import EBSFlare from '../components/EBSFlare';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 import { useWeather } from '../hooks/useWeather';
+import { useRouteThreat } from '../hooks/useRouteThreat';
 
 export default function DriveModeScreen() {
     const [pulseAnim] = useState(() => new Animated.Value(1));
     const { hazards, heatLevel } = useHazards();
+    const threatInfo = useRouteThreat();
     const { isRaining } = useWeather();
     const { showAlert } = useAlert();
 
@@ -51,6 +55,7 @@ export default function DriveModeScreen() {
                 />
                 {!isGhostMode && <PitWallFeed />}
                 <View style={styles.content}>
+                    {!isGhostMode && <RouteThreatBanner threatInfo={threatInfo} />}
                     {!isGhostMode && <SpotterAssistant />}
                     <PoliceScannerFeed />
                     <RadarStatus isHighSpeed={isHighSpeed} />
@@ -67,6 +72,7 @@ export default function DriveModeScreen() {
                 </View>
             </LinearGradient>
             <PanicButton />
+            <EBSFlare />
         </View>
     );
 }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { Wrench } from 'lucide-react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { Wrench, Trophy } from 'lucide-react-native';
 import { theme } from '../theme';
+import { useReputation } from '../context/ReputationContext';
 
 import { styles } from './TuningSimulatorStyles';
 
@@ -13,11 +14,13 @@ interface TuningSimulatorProps {
 export default function TuningSimulator({ initialHp, engine }: TuningSimulatorProps) {
     const defaultHp = initialHp ? parseInt(initialHp.replace(/[^0-9]/g, ''), 10) : 0;
     const [hp, setHp] = useState(defaultHp);
+    const { addReputation } = useReputation();
     const [upgrades, setUpgrades] = useState({
         ecu: false,
         turbo: false,
         exhaust: false,
     });
+    const [hasWagered, setHasWagered] = useState(false);
 
     const handleUpgrade = (part: keyof typeof upgrades, hpBoost: number) => {
         if (!upgrades[part]) {
@@ -26,9 +29,60 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
         }
     };
 
+    const handleWager = () => {
+        if (hasWagered) {
+            Alert.alert('Wager Closed', 'You have already raced this build.');
+            return;
+        }
+
+        const rivalHp = defaultHp + 100; // Mock rival with +100 HP base
+        setHasWagered(true);
+
+        if (hp > rivalHp) {
+            addReputation(500); // Win
+            Alert.alert(
+                'PINK SLIP WON',
+                'Your tuning paid off! You beat the rival and gained 500 REP.',
+            );
+        } else {
+            addReputation(-200); // Lose
+            Alert.alert(
+                'BUSTED',
+                "Your build wasn't fast enough. The rival won, you lost 200 REP.",
+            );
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>TUNING SIMULATOR</Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <Text style={styles.title}>TUNING SIMULATOR</Text>
+                <TouchableOpacity
+                    onPress={handleWager}
+                    style={{ flexDirection: 'row', alignItems: 'center' }}
+                >
+                    <Trophy
+                        color={hasWagered ? theme.colors.textSecondary : theme.colors.primary}
+                        size={16}
+                    />
+                    <Text
+                        style={{
+                            color: hasWagered ? theme.colors.textSecondary : theme.colors.primary,
+                            marginLeft: 4,
+                            fontFamily: theme.fonts.secondary.bold,
+                            fontSize: 12,
+                        }}
+                    >
+                        WAGER PINK SLIP
+                    </Text>
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.statsRow}>
                 <View style={styles.statBox}>
