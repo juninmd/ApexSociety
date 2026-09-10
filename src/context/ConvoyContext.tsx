@@ -12,9 +12,11 @@ interface ConvoyContextType {
     crewMembers: CrewMemberLocation[];
     isConvoyActive: boolean;
     isBroadcasting: boolean;
+    ebsActive: boolean;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
+    triggerEBS: () => void;
 }
 
 const ConvoyContext = createContext<ConvoyContextType | undefined>(undefined);
@@ -23,6 +25,12 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [crewMembers, setCrewMembers] = useState<CrewMemberLocation[]>([]);
     const [isConvoyActive, setIsConvoyActive] = useState(false);
     const [isBroadcasting, setIsBroadcasting] = useState(false);
+    const [ebsActive, setEbsActive] = useState(false);
+
+    const triggerEBS = () => {
+        setEbsActive(true);
+        setTimeout(() => setEbsActive(false), 5000); // Auto dismiss after 5 seconds
+    };
 
     const toggleBroadcast = () => {
         setIsBroadcasting((prev) => !prev);
@@ -98,9 +106,11 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 crewMembers,
                 isConvoyActive,
                 isBroadcasting,
+                ebsActive,
                 toggleConvoy,
                 toggleBroadcast,
                 updateLocation,
+                triggerEBS,
             }}
         >
             {children}

@@ -15,7 +15,7 @@ interface ReportHazardButtonProps {
 export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
     const { showAlert } = useAlert();
     const { addHazard } = useHazards();
-    const { isConvoyActive } = useConvoy();
+    const { isConvoyActive, triggerEBS } = useConvoy();
 
     const getSeverityForType = (hazardType: HazardType): 'low' | 'medium' | 'high' => {
         if (hazardType === 'sos' || hazardType === 'acidente') return 'high';
@@ -76,6 +76,7 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
             });
 
             if (type === 'sos' && isConvoyActive) {
+                triggerEBS();
                 showAlert('🚨 CONVOY SOS FLARE ATIVADO 🚨 Membros da equipe notificados.');
             } else {
                 showAlert(config.alertMsg);
