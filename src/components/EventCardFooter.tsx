@@ -7,17 +7,27 @@ import { useReputation } from '../context/ReputationContext';
 import { useEvents } from '../context/EventContext';
 import GarageQRPassModal from './GarageQRPassModal';
 import EventCardActionButtons from './EventCardActionButtons';
+import EventDroneRecon from './EventDroneRecon';
 
 interface EventCardFooterProps {
     eventId: string;
     attendees: number;
     startTime?: string;
     endTime?: string;
+    eventLatitude?: number;
+    eventLongitude?: number;
 }
 
-export default function EventCardFooter({ eventId, attendees, startTime }: EventCardFooterProps) {
+export default function EventCardFooter({
+    eventId,
+    attendees,
+    startTime,
+    eventLatitude,
+    eventLongitude,
+}: EventCardFooterProps) {
     const [rsvp, setRsvp] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [droneReconVisible, setDroneReconVisible] = useState(false);
     const isLive = startTime?.toLowerCase() === 'agora' || false;
     const { addReputation } = useReputation();
     const { incrementHype } = useEvents();
@@ -77,6 +87,11 @@ export default function EventCardFooter({ eventId, attendees, startTime }: Event
                 rsvp={rsvp}
                 onFastTrackPress={() => setModalVisible(true)}
                 onRsvpPress={handlePress}
+                onDroneReconPress={
+                    eventLatitude !== undefined && eventLongitude !== undefined
+                        ? () => setDroneReconVisible(true)
+                        : undefined
+                }
             />
 
             <GarageQRPassModal
@@ -84,6 +99,14 @@ export default function EventCardFooter({ eventId, attendees, startTime }: Event
                 onClose={() => setModalVisible(false)}
                 eventId={eventId}
             />
+
+            {eventLatitude !== undefined && eventLongitude !== undefined && (
+                <EventDroneRecon
+                    visible={droneReconVisible}
+                    eventLocation={{ latitude: eventLatitude, longitude: eventLongitude }}
+                    onClose={() => setDroneReconVisible(false)}
+                />
+            )}
         </View>
     );
 }

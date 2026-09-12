@@ -7,6 +7,7 @@ interface EventCardActionButtonsProps {
     rsvp: boolean;
     onFastTrackPress: () => void;
     onRsvpPress: () => void;
+    onDroneReconPress?: () => void;
 }
 
 export default function EventCardActionButtons({
@@ -14,9 +15,15 @@ export default function EventCardActionButtons({
     rsvp,
     onFastTrackPress,
     onRsvpPress,
+    onDroneReconPress,
 }: EventCardActionButtonsProps) {
     return (
         <View style={styles.actionButtons}>
+            {onDroneReconPress && (
+                <TouchableOpacity style={styles.droneButton} onPress={onDroneReconPress}>
+                    <Text style={styles.droneText}>RECON</Text>
+                </TouchableOpacity>
+            )}
             <TouchableOpacity style={styles.fastTrackButton} onPress={onFastTrackPress}>
                 <Text style={styles.fastTrackText}>PASS</Text>
             </TouchableOpacity>
@@ -64,6 +71,21 @@ const styles = StyleSheet.create({
     },
     fastTrackText: {
         color: theme.colors.textSecondary,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 10,
+        transform: [{ skewX: '10deg' }],
+    },
+    droneButton: {
+        borderWidth: 1,
+        borderColor: theme.colors.secondary,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        marginRight: 8,
+        transform: [{ skewX: '-10deg' }],
+    },
+    droneText: {
+        color: theme.colors.secondary,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 10,
         transform: [{ skewX: '10deg' }],
