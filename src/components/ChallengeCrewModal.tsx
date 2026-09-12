@@ -1,23 +1,39 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert, TextInput } from 'react-native';
 import { theme } from '../theme';
 
 interface ChallengeCrewModalProps {
     visible: boolean;
     crewName: string;
     onClose: () => void;
+    onChallenge?: (wagerAmount: number) => void;
 }
 
 export default function ChallengeCrewModal({
     visible,
     crewName,
     onClose,
+    onChallenge,
 }: ChallengeCrewModalProps) {
+    const [wager, setWager] = useState('100');
+
     const handleChallenge = () => {
-        Alert.alert(
-            'Desafio Enviado',
-            `Você desafiou a equipe ${crewName} para uma Turf War! Eles foram notificados.`,
-        );
+        const wagerAmount = parseInt(wager) || 0;
+
+        if (wagerAmount < 10) {
+            Alert.alert('Erro', 'A aposta mínima é 10 REP.');
+            return;
+        }
+
+        if (onChallenge) {
+            onChallenge(wagerAmount);
+        } else {
+            Alert.alert(
+                'Desafio Enviado',
+                `Você desafiou a equipe ${crewName} para uma Turf War apostando ${wagerAmount} REP! Eles foram notificados.`,
+            );
+        }
+
         onClose();
     };
 
@@ -33,8 +49,19 @@ export default function ChallengeCrewModal({
 
                     <Text style={styles.description}>
                         Isso irá notificar o líder da equipe. Caso aceitem, um evento de Turf War
-                        será criado no mapa! O vencedor leva 100 REP e controle territorial.
+                        será criado no mapa! Insira o valor de REP que deseja apostar (WAGER):
                     </Text>
+
+                    <View style={styles.wagerContainer}>
+                        <Text style={styles.wagerLabel}>WAGER (REP):</Text>
+                        <TextInput
+                            style={styles.wagerInput}
+                            keyboardType="numeric"
+                            value={wager}
+                            onChangeText={setWager}
+                            maxLength={5}
+                        />
+                    </View>
 
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
@@ -89,7 +116,28 @@ const styles = StyleSheet.create({
         color: theme.colors.textSecondary,
         fontFamily: theme.fonts.secondary.regular,
         fontSize: 12,
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    wagerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 25,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.colors.primary,
+        paddingBottom: 5,
+    },
+    wagerLabel: {
+        color: theme.colors.primary,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 14,
+        marginRight: 10,
+    },
+    wagerInput: {
+        color: theme.colors.white,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 18,
+        minWidth: 60,
         textAlign: 'center',
     },
     buttonContainer: {

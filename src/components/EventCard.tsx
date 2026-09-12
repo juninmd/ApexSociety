@@ -102,7 +102,13 @@ export default function EventCard({
                 />
             )}
 
-            <EventCardFooter eventId={eventId} attendees={attendees} startTime={time} />
+            <EventCardFooter
+                eventId={eventId}
+                attendees={attendees}
+                startTime={time}
+                eventLatitude={eventLatitude}
+                eventLongitude={eventLongitude}
+            />
 
             {/* Decorative "Stitch" corner */}
             <View style={styles.cornerDecor} />
