@@ -101,9 +101,6 @@ importers:
       follow-redirects:
         specifier: ^1.16.0
         version: 1.16.0(debug@4.3.7)
-      lucide-react-native:
-        specifier: ^0.563.0
-        version: 0.563.0(react-native-svg@15.12.1(react-native@0.81.5(@babel/core@7.29.7)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.7)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -195,6 +192,9 @@ importers:
       lint-staged:
         specifier: ^16.2.7
         version: 16.4.0
+      lucide-react-native:
+        specifier: ^0.563.0
+        version: 0.563.0(react-native-svg@15.12.1(react-native@0.81.5(@babel/core@7.29.7)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.7)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       netlify-cli:
         specifier: ^17.38.1
         version: 17.38.1(@types/node@25.9.5)(picomatch@4.0.5)

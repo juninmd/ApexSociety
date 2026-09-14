@@ -33,4 +33,13 @@ describe('TuningSimulator', () => {
 
         expect(getByText('470 HP')).toBeTruthy();
     });
+
+    it('increases wear when upgrades are applied', () => {
+        const { getByText } = renderWithContext(<TuningSimulator initialHp="300 HP" engine="V8" />);
+
+        expect(getByText('0%')).toBeTruthy(); // Initial wear
+
+        fireEvent.press(getByText('ECU TUNE (+50)'));
+        expect(getByText('10%')).toBeTruthy(); // Wear after one upgrade
+    });
 });

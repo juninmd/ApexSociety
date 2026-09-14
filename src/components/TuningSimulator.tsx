@@ -21,15 +21,22 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
         exhaust: false,
     });
     const [hasWagered, setHasWagered] = useState(false);
+    const [wear, setWear] = useState(0);
 
     const handleUpgrade = (part: keyof typeof upgrades, hpBoost: number) => {
         if (!upgrades[part]) {
             setUpgrades((prev) => ({ ...prev, [part]: true }));
             setHp((prev) => prev + hpBoost);
+            setWear((prev) => Math.min(prev + 10, 100)); // Increase wear on tuning
         }
     };
 
     const handleWager = () => {
+        if (wear >= 100) {
+            Alert.alert('Vehicle Damaged', 'Your vehicle wear is at 100%. Repair it before racing.');
+            return;
+        }
+
         if (hasWagered) {
             Alert.alert('Wager Closed', 'You have already raced this build.');
             return;
@@ -37,6 +44,7 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
 
         const rivalHp = defaultHp + 100; // Mock rival with +100 HP base
         setHasWagered(true);
+        setWear((prev) => Math.min(prev + 20, 100)); // Increase wear on racing
 
         if (hp > rivalHp) {
             addReputation(500); // Win
@@ -51,6 +59,13 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 "Your build wasn't fast enough. The rival won, you lost 200 REP.",
             );
         }
+    };
+
+    const handleRepair = () => {
+        if (wear === 0) return;
+        addReputation(-100);
+        setWear(0);
+        Alert.alert('Repaired', 'Vehicle fully repaired for 100 REP.');
     };
 
     return (
@@ -68,12 +83,12 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                     style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
                     <Trophy
-                        color={hasWagered ? theme.colors.textSecondary : theme.colors.primary}
+                        color={(hasWagered || wear >= 100) ? theme.colors.textSecondary : theme.colors.primary}
                         size={16}
                     />
                     <Text
                         style={{
-                            color: hasWagered ? theme.colors.textSecondary : theme.colors.primary,
+                            color: (hasWagered || wear >= 100) ? theme.colors.textSecondary : theme.colors.primary,
                             marginLeft: 4,
                             fontFamily: theme.fonts.secondary.bold,
                             fontSize: 12,
@@ -95,7 +110,20 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                         {hp} HP
                     </Text>
                 </View>
+                <View style={styles.statBox}>
+                    <Text style={styles.statLabel}>WEAR</Text>
+                    <Text style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}>
+                        {wear}%
+                    </Text>
+                </View>
             </View>
+
+            {wear > 0 && (
+                <TouchableOpacity style={styles.repairButton} onPress={handleRepair}>
+                    <Wrench size={16} color={theme.colors.black} />
+                    <Text style={styles.repairButtonText}>REPAIR VEHICLE (-100 REP)</Text>
+                </TouchableOpacity>
+            )}
 
             <View style={styles.partsContainer}>
                 <TouchableOpacity
