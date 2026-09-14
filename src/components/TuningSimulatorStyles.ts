@@ -63,4 +63,25 @@ export const styles = StyleSheet.create({
     partTextActive: {
         color: theme.colors.black,
     },
+    normalWear: {
+        color: theme.colors.white,
+    },
+    highWear: {
+        color: theme.colors.error,
+    },
+    repairButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: theme.colors.primary,
+        padding: 10,
+        borderRadius: 4,
+        marginBottom: 15,
+    },
+    repairButtonText: {
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 12,
+        color: theme.colors.black,
+        marginLeft: 8,
+    },
 });
