@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Alert, TextInput } from 'react-native';
-import { theme } from '../theme';
 import { styles } from './ChallengeCrewModalStyles';
 
 interface ChallengeCrewModalProps {

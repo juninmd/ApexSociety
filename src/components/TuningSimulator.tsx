@@ -33,7 +33,10 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
 
     const handleWager = () => {
         if (wear >= 100) {
-            Alert.alert('Vehicle Damaged', 'Your vehicle wear is at 100%. Repair it before racing.');
+            Alert.alert(
+                'Vehicle Damaged',
+                'Your vehicle wear is at 100%. Repair it before racing.',
+            );
             return;
         }
 
@@ -83,12 +86,19 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                     style={{ flexDirection: 'row', alignItems: 'center' }}
                 >
                     <Trophy
-                        color={(hasWagered || wear >= 100) ? theme.colors.textSecondary : theme.colors.primary}
+                        color={
+                            hasWagered || wear >= 100
+                                ? theme.colors.textSecondary
+                                : theme.colors.primary
+                        }
                         size={16}
                     />
                     <Text
                         style={{
-                            color: (hasWagered || wear >= 100) ? theme.colors.textSecondary : theme.colors.primary,
+                            color:
+                                hasWagered || wear >= 100
+                                    ? theme.colors.textSecondary
+                                    : theme.colors.primary,
                             marginLeft: 4,
                             fontFamily: theme.fonts.secondary.bold,
                             fontSize: 12,
@@ -112,7 +122,9 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 </View>
                 <View style={styles.statBox}>
                     <Text style={styles.statLabel}>WEAR</Text>
-                    <Text style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}>
+                    <Text
+                        style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}
+                    >
                         {wear}%
                     </Text>
                 </View>
