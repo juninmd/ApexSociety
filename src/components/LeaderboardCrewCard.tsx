@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Trophy, AlertTriangle } from 'lucide-react-native';
 import { theme } from '../theme';
 import { Crew } from '../types';
@@ -11,8 +11,10 @@ interface LeaderboardCrewCardProps {
 }
 
 export default function LeaderboardCrewCard({ crew, index, filter }: LeaderboardCrewCardProps) {
+    const isBountyTarget = index === 0 && filter === 'notoriety';
+
     return (
-        <View style={styles.crewCard}>
+        <View style={[styles.crewCard, isBountyTarget && styles.bountyCard]}>
             <View style={styles.rankContainer}>
                 <Text style={styles.rankText}>#{index + 1}</Text>
             </View>
@@ -21,6 +23,16 @@ export default function LeaderboardCrewCard({ crew, index, filter }: Leaderboard
                 <Text style={styles.crewRank}>{crew.rank}</Text>
             </View>
             <View style={styles.memberInfo}>
+                {isBountyTarget && (
+                    <TouchableOpacity style={styles.bountyButton}>
+                        <AlertTriangle
+                            color={theme.colors.black}
+                            size={12}
+                            style={{ marginRight: 4 }}
+                        />
+                        <Text style={styles.bountyButtonText}>CLAIM BOUNTY</Text>
+                    </TouchableOpacity>
+                )}
                 {filter === 'members' ? (
                     <>
                         <Text style={styles.memberCount}>{crew.memberCount}</Text>
@@ -111,5 +123,23 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
+    },
+    bountyCard: {
+        borderColor: theme.colors.error,
+        borderWidth: 2,
+    },
+    bountyButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: theme.colors.error,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        marginBottom: 8,
+    },
+    bountyButtonText: {
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 10,
+        color: theme.colors.black,
     },
 });

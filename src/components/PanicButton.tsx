@@ -5,10 +5,12 @@ import * as Location from 'expo-location';
 import { theme } from '../theme';
 import { useHazards } from '../context/HazardContext';
 import { useAlert } from '../context/AlertContext';
+import { useConvoy } from '../context/ConvoyContext';
 
 export default function PanicButton() {
     const { addHazard } = useHazards();
     const { showAlert } = useAlert();
+    const { isConvoyActive, triggerEBS } = useConvoy();
 
     const handlePanic = async () => {
         try {
@@ -30,6 +32,10 @@ export default function PanicButton() {
                 reportedAt: new Date().toISOString(),
                 severity: 'high' as const,
             };
+
+            if (isConvoyActive) {
+                triggerEBS(hazard.location);
+            }
 
             addHazard(hazard);
             showAlert('ALERTA: POLÍCIA REPORTADA!');
