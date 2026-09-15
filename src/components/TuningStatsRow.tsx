@@ -24,9 +24,7 @@ export default function TuningStatsRow({ engine, hp, defaultHp, wear }: TuningSt
             </View>
             <View style={styles.statBox}>
                 <Text style={styles.statLabel}>WEAR</Text>
-                <Text
-                    style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}
-                >
+                <Text style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}>
                     {wear}%
                 </Text>
             </View>

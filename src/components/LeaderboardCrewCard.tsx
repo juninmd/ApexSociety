@@ -24,7 +24,15 @@ export default function LeaderboardCrewCard({ crew, index, filter }: Leaderboard
             </View>
             <View style={styles.memberInfo}>
                 {isBountyTarget && (
-                    <TouchableOpacity style={styles.bountyButton}>
+                    <TouchableOpacity
+                        style={styles.bountyButton}
+                        onPress={() =>
+                            Alert.alert(
+                                'Bounty Claimed',
+                                `You have challenged ${crew.name} for the bounty!`,
+                            )
+                        }
+                    >
                         <AlertTriangle
                             color={theme.colors.black}
                             size={12}
