@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Wrench, Trophy } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
+import TuningStatsRow from './TuningStatsRow';
 
 import { styles } from './TuningSimulatorStyles';
 
@@ -109,26 +110,7 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.statsRow}>
-                <View style={styles.statBox}>
-                    <Text style={styles.statLabel}>ENGINE</Text>
-                    <Text style={styles.statValue}>{engine || 'UNKNOWN'}</Text>
-                </View>
-                <View style={styles.statBox}>
-                    <Text style={styles.statLabel}>POWER (HP)</Text>
-                    <Text style={[styles.statValue, hp > defaultHp && styles.boostedValue]}>
-                        {hp} HP
-                    </Text>
-                </View>
-                <View style={styles.statBox}>
-                    <Text style={styles.statLabel}>WEAR</Text>
-                    <Text
-                        style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}
-                    >
-                        {wear}%
-                    </Text>
-                </View>
-            </View>
+            <TuningStatsRow engine={engine} hp={hp} defaultHp={defaultHp} wear={wear} />
 
             {wear > 0 && (
                 <TouchableOpacity style={styles.repairButton} onPress={handleRepair}>
