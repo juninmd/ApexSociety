@@ -1,11 +1,11 @@
 import React from 'react';
-import { Marker } from 'react-native-maps';
+import { Marker, Polyline } from 'react-native-maps';
 import { theme } from '../../theme';
 import { MOCK_USERS, MOCK_EVENTS } from '../../data/mock';
 import { useConvoy } from '../../context/ConvoyContext';
 
 export default function MapMarkers() {
-    const { crewMembers, isConvoyActive } = useConvoy();
+    const { crewMembers, isConvoyActive, sosLocation } = useConvoy();
 
     return (
         <>
@@ -21,6 +21,25 @@ export default function MapMarkers() {
                         title={member.username}
                         description="Convoy Member"
                         pinColor="#00FF00" // Green for convoy members
+                    />
+                ))}
+
+            {/* Render Convoy Convergence Lines if SOS Flare is active */}
+            {isConvoyActive &&
+                sosLocation &&
+                crewMembers.map((member) => (
+                    <Polyline
+                        key={`convoy-line-${member.userId}`}
+                        coordinates={[
+                            {
+                                latitude: member.location.latitude,
+                                longitude: member.location.longitude,
+                            },
+                            { latitude: sosLocation.latitude, longitude: sosLocation.longitude },
+                        ]}
+                        strokeColor={theme.colors.error}
+                        strokeWidth={3}
+                        lineDashPattern={[10, 10]}
                     />
                 ))}
 

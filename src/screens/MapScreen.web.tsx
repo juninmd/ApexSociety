@@ -7,15 +7,13 @@ import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
 import { RootTabParamList } from '../navigation/types';
 import WebLandingContent from '../components/WebLandingContent';
-import { useAlert } from '../context/AlertContext';
-import { useNotification } from '../context/NotificationContext';
+import { useUI } from '../context/UIContext';
 import CustomButton from '../components/CustomButton';
 
 export default function MapScreen() {
     const [isOfflineMapCached, setIsOfflineMapCached] = React.useState(false);
     const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
-    const { showAlert } = useAlert();
-    const { addNotification } = useNotification();
+    const { showAlert, addNotification } = useUI();
 
     const handleOfflineMapToggle = () => {
         setIsOfflineMapCached(!isOfflineMapCached);

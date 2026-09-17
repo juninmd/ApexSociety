@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import { useNotification, Notification } from '../context/NotificationContext';
+import { useUI, Notification } from '../context/UIContext';
 import { theme } from '../theme';
 
 export default function NotificationToast() {
-    const { notifications, removeNotification } = useNotification();
+    const { notifications, removeNotification } = useUI();
 
     if (notifications.length === 0) return null;
 

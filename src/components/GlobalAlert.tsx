@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { XCircle, AlertTriangle } from 'lucide-react-native';
 import { theme } from '../theme';
-import { useAlert } from '../context/AlertContext';
+import { useUI } from '../context/UIContext';
 
 export default function GlobalAlert() {
-    const { alertMessage, hideAlert } = useAlert();
+    const { alertMessage, hideAlert } = useUI();
     const insets = useSafeAreaInsets();
     const [translateY] = useState(new Animated.Value(-100));
 
