@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { useNotification, Notification } from '../context/NotificationContext';
+import { useUI, Notification } from '../context/UIContext';
 import { theme } from '../theme';
 import { Bell, Info, AlertTriangle, CheckCircle, XCircle, Trash2 } from 'lucide-react-native';
 
@@ -11,7 +11,7 @@ export default function NotificationCenterScreen() {
     // we should ideally maintain a separate history list in the context.
     // To adhere to KISS without large context rewrites, we will use a local mock history list
     // combining the current notifications and some historical data.
-    const { notifications } = useNotification();
+    const { notifications } = useUI();
     const [history, setHistory] = useState<Notification[]>([
         { id: 'h1', title: 'Boas vindas', message: 'Bem-vindo ao ApexSociety!', type: 'success' },
         { id: 'h2', title: 'Radar Evitado', message: 'Você evitou 1 radar ontem.', type: 'info' },

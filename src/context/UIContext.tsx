@@ -7,15 +7,44 @@ export interface Notification {
     type: 'info' | 'success' | 'warning' | 'error';
 }
 
-interface NotificationContextType {
+interface UIContextType {
+    // Alert State
+    alertMessage: string | null;
+    showAlert: (message: string) => void;
+    hideAlert: () => void;
+
+    // Notification State
     notifications: Notification[];
     addNotification: (notification: Omit<Notification, 'id'>) => void;
     removeNotification: (id: string) => void;
 }
 
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+const UIContext = createContext<UIContextType | undefined>(undefined);
 
-export function NotificationProvider({ children }: { children: ReactNode }) {
+export function UIProvider({ children }: { children: ReactNode }) {
+    // --- Alert Logic ---
+    const [alertMessage, setAlertMessage] = useState<string | null>(null);
+    const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
+
+    const showAlert = (message: string) => {
+        setAlertMessage(message);
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        // Automatically hide after 4 seconds
+        const id = setTimeout(() => {
+            setAlertMessage(null);
+        }, 4000);
+        setTimeoutId(id);
+    };
+
+    const hideAlert = () => {
+        setAlertMessage(null);
+    };
+
+    // --- Notification Logic ---
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const idCounter = useRef(0);
 
@@ -72,18 +101,25 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     }, [addNotification]);
 
     return (
-        <NotificationContext.Provider
-            value={{ notifications, addNotification, removeNotification }}
+        <UIContext.Provider
+            value={{
+                alertMessage,
+                showAlert,
+                hideAlert,
+                notifications,
+                addNotification,
+                removeNotification,
+            }}
         >
             {children}
-        </NotificationContext.Provider>
+        </UIContext.Provider>
     );
 }
 
-export function useNotification() {
-    const context = useContext(NotificationContext);
+export function useUI() {
+    const context = useContext(UIContext);
     if (context === undefined) {
-        throw new Error('useNotification must be used within a NotificationProvider');
+        throw new Error('useUI must be used within a UIProvider');
     }
     return context;
 }

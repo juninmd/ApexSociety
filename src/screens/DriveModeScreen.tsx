@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme';
 import ReportHazardButton from '../components/ReportHazardButton';
 import { useHazards } from '../context/HazardContext';
-import { useAlert } from '../context/AlertContext';
+import { useUI } from '../context/UIContext';
 import Speedometer from '../components/Speedometer';
 import RadarStatus from '../components/RadarStatus';
 import DriveModeTopBar from '../components/DriveModeTopBar';
@@ -24,7 +24,7 @@ export default function DriveModeScreen() {
     const { hazards, heatLevel } = useHazards();
     const threatInfo = useRouteThreat();
     const { isRaining } = useWeather();
-    const { showAlert } = useAlert();
+    const { showAlert } = useUI();
 
     const { speed, isGhostMode, handleToggleGhostMode } = useDriveTracking({
         hazards,

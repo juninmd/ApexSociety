@@ -15,12 +15,12 @@ import MapControls from '../components/MapScreen/MapControls';
 import MapRouteAnalyzer from '../components/MapScreen/MapRouteAnalyzer';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
-import { useNotification } from '../context/NotificationContext';
+import { useUI } from '../context/UIContext';
 
 export default function MapScreen() {
     const { region, setRegion } = useMapRegion();
     const { isPlannerActive, waypoints, togglePlanner, addWaypoint } = useCruisePlanner();
-    const { addNotification } = useNotification();
+    const { addNotification } = useUI();
     const [isOfflineMapCached, setIsOfflineMapCached] = useState(false);
     const [isAnalyzerActive, setIsAnalyzerActive] = useState(false);
 

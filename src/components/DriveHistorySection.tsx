@@ -4,6 +4,7 @@ import { theme } from '../theme';
 import { DriveRun } from '../context/DriveHistoryContext';
 import { BarChart2, Zap } from 'lucide-react-native';
 import DriveHistoryChart from './DriveHistoryChart';
+import GhostReplayMap from './GhostReplayMap';
 
 import { styles } from './DriveHistorySectionStyles';
 
@@ -73,7 +74,12 @@ export default function DriveHistorySection({ runs }: DriveHistorySectionProps) 
                             <Text style={styles.challengeBtnText}>CHALLENGE GHOST</Text>
                         </TouchableOpacity>
 
-                        {isExpanded && <DriveHistoryChart run={run} />}
+                        {isExpanded && (
+                            <View>
+                                <GhostReplayMap run={run} />
+                                <DriveHistoryChart run={run} />
+                            </View>
+                        )}
                     </View>
                 );
             })}
