@@ -5,10 +5,14 @@ import { MOCK_USERS, MOCK_EVENTS } from '../../data/mock';
 import { useConvoy } from '../../context/ConvoyContext';
 
 export default function MapMarkers() {
-    const { crewMembers, isConvoyActive } = useConvoy();
+    const { crewMembers, isConvoyActive, sosLocation } = useConvoy();
 
     return (
         <>
+            {sosLocation && (
+                <Marker coordinate={sosLocation} title="CONVOY SOS BEACON" pinColor="#FF00FF" />
+            )}
+
             {/* Display active convoy members if convoy mode is enabled */}
             {isConvoyActive &&
                 crewMembers.map((member) => (

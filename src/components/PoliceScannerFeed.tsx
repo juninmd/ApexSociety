@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Radio } from 'lucide-react-native';
 import { useHazards } from '../context/HazardContext';
+import { useEvents } from '../context/EventContext';
 import { theme } from '../theme';
 
 interface Transmission {
@@ -12,6 +13,7 @@ interface Transmission {
 
 export default function PoliceScannerFeed() {
     const { hazards } = useHazards();
+    const { events, updateEventStatus } = useEvents();
     const [transmissions, setTransmissions] = useState<Transmission[]>([]);
     const [isScanning, setIsScanning] = useState(false);
     const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -33,6 +35,9 @@ export default function PoliceScannerFeed() {
                 if (latestHazard.type === 'blitz') {
                     msg =
                         'DISPATCH: All units, unauthorized street race detected. Set up barricades on route.';
+                    if (events.length > 0) {
+                        updateEventStatus(events[0].id, 'scatter');
+                    }
                 } else if (latestHazard.type === 'sos') {
                     msg = 'DISPATCH: Officer needs assistance, high speed pursuit in progress.';
                 } else {
@@ -68,7 +73,7 @@ export default function PoliceScannerFeed() {
                 }, 5000);
             }
         }
-    }, [hazards, transmissions, fadeAnim]);
+    }, [hazards, transmissions, fadeAnim, events, updateEventStatus]);
 
     if (transmissions.length === 0) return null;
 

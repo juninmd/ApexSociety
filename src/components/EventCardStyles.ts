@@ -2,6 +2,10 @@ import { StyleSheet } from 'react-native';
 import { theme } from '../theme';
 
 export const styles = StyleSheet.create({
+    containerElevatedRisk: {
+        borderColor: theme.colors.error,
+        borderWidth: 2,
+    },
     container: {
         backgroundColor: theme.colors.card,
         padding: 20,
@@ -47,6 +51,20 @@ export const styles = StyleSheet.create({
     },
     hypeText: {
         color: '#FF6400',
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 10,
+    },
+    scatterBadge: {
+        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: theme.colors.error,
+        marginLeft: 8,
+    },
+    scatterText: {
+        color: theme.colors.error,
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 10,
     },
