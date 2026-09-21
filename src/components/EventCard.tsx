@@ -25,6 +25,7 @@ interface EventCardProps {
     weather?: 'clear' | 'rain' | 'fog';
     elevatedRisk?: boolean;
     hypeScore?: number;
+    status?: 'active' | 'scatter';
     eventLatitude?: number;
     eventLongitude?: number;
     onPress?: () => void;
@@ -46,6 +47,7 @@ export default function EventCard({
     weather,
     elevatedRisk,
     hypeScore = 0,
+    status,
     eventLatitude,
     eventLongitude,
     onPress,
@@ -66,7 +68,10 @@ export default function EventCard({
     }
 
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity
+            style={[styles.container, elevatedRisk && styles.containerElevatedRisk]}
+            onPress={onPress}
+        >
             <EventHypeIndicator hypeScore={hypeScore} />
             <View style={styles.header}>
                 <Text style={styles.host}>HOSTED BY {host}</Text>
@@ -80,6 +85,11 @@ export default function EventCard({
                 {hypeScore >= 100 && (
                     <View style={styles.hypeBadge}>
                         <Text style={styles.hypeText}>🔥 HIGH HYPE</Text>
+                    </View>
+                )}
+                {status === 'scatter' && (
+                    <View style={styles.scatterBadge}>
+                        <Text style={styles.scatterText}>SCATTER!</Text>
                     </View>
                 )}
             </View>

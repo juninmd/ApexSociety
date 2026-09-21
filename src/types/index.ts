@@ -45,6 +45,7 @@ export interface Event {
     passcode?: string;
     weather?: 'clear' | 'rain' | 'fog';
     hypeScore?: number; // Metric for Event Hype System
+    status?: 'active' | 'scatter';
 }
 
 export interface Friend extends User {

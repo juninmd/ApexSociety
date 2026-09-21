@@ -76,7 +76,10 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
             });
 
             if (type === 'sos' && isConvoyActive) {
-                triggerEBS();
+                triggerEBS({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                });
                 showAlert('🚨 CONVOY SOS FLARE ATIVADO 🚨 Membros da equipe notificados.');
             } else {
                 showAlert(config.alertMsg);
