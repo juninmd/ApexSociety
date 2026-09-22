@@ -4,6 +4,7 @@ import { theme } from '../theme';
 import { useAlert } from '../context/AlertContext';
 import { useHazards } from '../context/HazardContext';
 import { useConvoy } from '../context/ConvoyContext';
+import { useReputation } from '../context/ReputationContext';
 import * as Location from 'expo-location';
 
 export type HazardType = 'blitz' | 'radar' | 'acidente' | 'sos' | 'flare';
@@ -16,6 +17,7 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
     const { showAlert } = useAlert();
     const { addHazard } = useHazards();
     const { isConvoyActive, triggerEBS } = useConvoy();
+    const { addScoutScore } = useReputation();
 
     const getSeverityForType = (hazardType: HazardType): 'low' | 'medium' | 'high' => {
         if (hazardType === 'sos' || hazardType === 'acidente') return 'high';
@@ -75,11 +77,13 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
                 severity: getSeverityForType(type),
             });
 
+            addScoutScore(20); // Gamification: Award score for reporting
+
             if (type === 'sos' && isConvoyActive) {
                 triggerEBS();
                 showAlert('🚨 CONVOY SOS FLARE ATIVADO 🚨 Membros da equipe notificados.');
             } else {
-                showAlert(config.alertMsg);
+                showAlert(`${config.alertMsg} (+20 SCOUT SCORE)`);
             }
         } catch {
             showAlert(config.alertMsg);

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { theme } from '../theme';
 import { useHazards, Hazard } from '../context/HazardContext';
+import { useReputation } from '../context/ReputationContext';
 
 interface HazardVerificationModalProps {
     visible: boolean;
@@ -15,11 +16,15 @@ export default function HazardVerificationModal({
     onClose,
 }: HazardVerificationModalProps) {
     const { verifyHazard } = useHazards();
+    const { addScoutScore } = useReputation();
 
     if (!hazard) return null;
 
     const handleVerify = (isFake: boolean) => {
         verifyHazard(hazard.id, isFake);
+        if (!isFake) {
+            addScoutScore(10); // Gamification: Award score for verifying
+        }
         onClose();
     };
 
