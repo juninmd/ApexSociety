@@ -35,7 +35,9 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     };
 
     return (
-        <ReputationContext.Provider value={{ reputation, scoutScore, addReputation, addScoutScore }}>
+        <ReputationContext.Provider
+            value={{ reputation, scoutScore, addReputation, addScoutScore }}
+        >
             {children}
         </ReputationContext.Provider>
     );

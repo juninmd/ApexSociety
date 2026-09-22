@@ -17,7 +17,7 @@ describe('<CrewListScreen />', () => {
         return render(
             <ReputationProvider>
                 <CrewListScreen />
-            </ReputationProvider>
+            </ReputationProvider>,
         );
     };
 

@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { MOCK_CREWS, MOCK_PROFILE_USER } from '../data/mock';
 import { useReputation } from '../context/ReputationContext';
 
@@ -11,13 +10,13 @@ export interface RecommendedCrew {
 
 export function useCrewMatchmaker() {
     const { reputation } = useReputation();
-    const [recommendations, setRecommendations] = useState<RecommendedCrew[]>([]);
 
-    useEffect(() => {
-        // Simple mock AI matchmaker logic
-        // We match based on reputation compatibility and a random "playstyle" factor
-
-        const scoredCrews = MOCK_CREWS.filter(crew => !MOCK_PROFILE_USER.crews.some(userCrew => userCrew.id === crew.id)).map(crew => {
+    // Calculate recommendations directly during render instead of using state + effect
+    // This avoids cascading renders.
+    const getRecommendations = () => {
+        const scoredCrews = MOCK_CREWS.filter(
+            (crew) => !MOCK_PROFILE_USER.crews.some((userCrew) => userCrew.id === crew.id),
+        ).map((crew) => {
             let matchScore = 50; // Base score
             let reason = 'Good general fit.';
 
@@ -44,17 +43,15 @@ export function useCrewMatchmaker() {
                 id: crew.id,
                 name: crew.name,
                 matchScore: Math.min(100, Math.max(0, matchScore)),
-                reason
+                reason,
             };
         });
 
         // Sort by match score and take top 3
-        const topMatches = scoredCrews
-            .sort((a, b) => b.matchScore - a.matchScore)
-            .slice(0, 3);
+        return scoredCrews.sort((a, b) => b.matchScore - a.matchScore).slice(0, 3);
+    };
 
-        setRecommendations(topMatches);
-    }, [reputation]);
+    const recommendations = getRecommendations();
 
     return { recommendations };
 }

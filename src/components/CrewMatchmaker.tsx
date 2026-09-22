@@ -17,7 +17,7 @@ export default function CrewMatchmaker() {
             </View>
             <Text style={styles.subtitle}>Recommended for your playstyle & rep:</Text>
 
-            {recommendations.map(crew => (
+            {recommendations.map((crew) => (
                 <View key={crew.id} style={styles.crewCard}>
                     <View style={styles.crewHeader}>
                         <Text style={styles.crewName}>{crew.name}</Text>

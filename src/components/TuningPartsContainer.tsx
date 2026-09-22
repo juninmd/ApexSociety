@@ -9,7 +9,10 @@ interface TuningPartsContainerProps {
     handleUpgrade: (part: 'ecu' | 'turbo' | 'exhaust', hpBoost: number) => void;
 }
 
-export default function TuningPartsContainer({ upgrades, handleUpgrade }: TuningPartsContainerProps) {
+export default function TuningPartsContainer({
+    upgrades,
+    handleUpgrade,
+}: TuningPartsContainerProps) {
     return (
         <View style={styles.partsContainer}>
             <TouchableOpacity
@@ -17,7 +20,10 @@ export default function TuningPartsContainer({ upgrades, handleUpgrade }: Tuning
                 onPress={() => handleUpgrade('ecu', 50)}
                 disabled={upgrades.ecu}
             >
-                <Wrench size={16} color={upgrades.ecu ? theme.colors.black : theme.colors.primary} />
+                <Wrench
+                    size={16}
+                    color={upgrades.ecu ? theme.colors.black : theme.colors.primary}
+                />
                 <Text style={[styles.partText, upgrades.ecu && styles.partTextActive]}>
                     ECU TUNE (+50)
                 </Text>
@@ -28,7 +34,10 @@ export default function TuningPartsContainer({ upgrades, handleUpgrade }: Tuning
                 onPress={() => handleUpgrade('turbo', 120)}
                 disabled={upgrades.turbo}
             >
-                <Wrench size={16} color={upgrades.turbo ? theme.colors.black : theme.colors.primary} />
+                <Wrench
+                    size={16}
+                    color={upgrades.turbo ? theme.colors.black : theme.colors.primary}
+                />
                 <Text style={[styles.partText, upgrades.turbo && styles.partTextActive]}>
                     BIG TURBO (+120)
                 </Text>
@@ -39,7 +48,10 @@ export default function TuningPartsContainer({ upgrades, handleUpgrade }: Tuning
                 onPress={() => handleUpgrade('exhaust', 15)}
                 disabled={upgrades.exhaust}
             >
-                <Wrench size={16} color={upgrades.exhaust ? theme.colors.black : theme.colors.primary} />
+                <Wrench
+                    size={16}
+                    color={upgrades.exhaust ? theme.colors.black : theme.colors.primary}
+                />
                 <Text style={[styles.partText, upgrades.exhaust && styles.partTextActive]}>
                     RACING EXHAUST (+15)
                 </Text>
