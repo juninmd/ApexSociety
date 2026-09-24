@@ -13,6 +13,9 @@ interface ConvoyContextType {
     isConvoyActive: boolean;
     isBroadcasting: boolean;
     ebsActive: boolean;
+    ghostCoordinates: Location[];
+    globalGhostMode: boolean;
+    setGlobalGhostMode: (active: boolean) => void;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
@@ -26,6 +29,8 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [isConvoyActive, setIsConvoyActive] = useState(false);
     const [isBroadcasting, setIsBroadcasting] = useState(false);
     const [ebsActive, setEbsActive] = useState(false);
+    const [globalGhostMode, setGlobalGhostMode] = useState(false);
+    const [ghostCoordinates, setGhostCoordinates] = useState<Location[]>([]);
 
     const triggerEBS = () => {
         setEbsActive(true);
@@ -100,6 +105,38 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         return () => clearInterval(interval);
     }, [isConvoyActive]);
 
+    // Ghost Decoy Trail Generator
+    useEffect(() => {
+        const resetTimer = setTimeout(() => {
+            if (!globalGhostMode) {
+                setGhostCoordinates([]);
+            }
+        }, 0);
+
+        if (!globalGhostMode) {
+            return () => clearTimeout(resetTimer);
+        }
+
+        const interval = setInterval(() => {
+            setGhostCoordinates((prev) => {
+                const newCoords = [
+                    ...prev,
+                    {
+                        latitude: -23.5505 + (Math.random() - 0.5) * 0.05,
+                        longitude: -46.6333 + (Math.random() - 0.5) * 0.05,
+                    },
+                ];
+                // Keep only the last 50 coordinates to prevent memory leaks
+                return newCoords.slice(-50);
+            });
+        }, 2000);
+
+        return () => {
+            clearTimeout(resetTimer);
+            clearInterval(interval);
+        };
+    }, [globalGhostMode]);
+
     return (
         <ConvoyContext.Provider
             value={{
@@ -107,6 +144,9 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 isConvoyActive,
                 isBroadcasting,
                 ebsActive,
+                ghostCoordinates,
+                globalGhostMode,
+                setGlobalGhostMode,
                 toggleConvoy,
                 toggleBroadcast,
                 updateLocation,
