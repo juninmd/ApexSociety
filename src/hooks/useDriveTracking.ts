@@ -6,6 +6,7 @@ import { getDistance } from '../utils/location';
 import { MOCK_EVENTS } from '../data/mock';
 import { useAuth } from '../context/AuthContext';
 import { useTurf } from '../context/TurfContext';
+import { useConvoy } from '../context/ConvoyContext';
 
 interface UseDriveTrackingProps {
     hazards: Hazard[];
@@ -19,17 +20,20 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
     const [ghostStartTime, setGhostStartTime] = useState<number | null>(null);
     const { user } = useAuth();
     const { boostCrewHeat } = useTurf();
+    const { setGlobalGhostMode } = useConvoy();
     const speedingTicksRef = useRef(0);
 
     const handleToggleGhostMode = () => {
         if (!isGhostMode) {
             setGhostStartTime(Date.now());
             setIsGhostMode(true);
+            setGlobalGhostMode(true);
         } else {
             const duration = ghostStartTime ? Math.floor((Date.now() - ghostStartTime) / 1000) : 0;
             showAlert(`GHOST MODE OFFLINE: YOU DROVE OFF THE GRID FOR ${duration} SECONDS`);
             setGhostStartTime(null);
             setIsGhostMode(false);
+            setGlobalGhostMode(false);
         }
     };
 
