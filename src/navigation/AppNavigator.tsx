@@ -11,6 +11,7 @@ import SignupScreen from '../screens/SignupScreen';
 import CarDetailsScreen from '../screens/CarDetailsScreen';
 import FriendsListScreen from '../screens/FriendsListScreen';
 import NotificationCenterScreen from '../screens/NotificationCenterScreen';
+import BlackMarketScreen from '../screens/BlackMarketScreen';
 import { RootStackParamList } from './types';
 import { useAuth } from '../context/AuthContext';
 
@@ -45,6 +46,7 @@ export default function AppNavigator() {
                     <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
                     <Stack.Screen name="FriendsList" component={FriendsListScreen} />
                     <Stack.Screen name="NotificationCenter" component={NotificationCenterScreen} />
+                    <Stack.Screen name="BlackMarket" component={BlackMarketScreen} />
                 </>
             )}
         </Stack.Navigator>
