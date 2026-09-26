@@ -65,6 +65,11 @@ export default function MenuScreen() {
                     style={styles.button}
                 />
                 <CustomButton
+                    title="MERCADO NEGRO"
+                    onPress={() => navigation.navigate('BlackMarket')}
+                    style={styles.button}
+                />
+                <CustomButton
                     title="CONFIGURAÇÕES"
                     onPress={() => Alert.alert('Em Breve', 'Configurações em desenvolvimento.')}
                     variant="secondary"

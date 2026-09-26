@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { MapPin, Share2 } from 'lucide-react-native';
 import { theme } from '../theme';
@@ -12,6 +12,7 @@ import DriveHistorySection from '../components/DriveHistorySection';
 import { useReputation } from '../context/ReputationContext';
 import { useDriveHistory } from '../context/DriveHistoryContext';
 import { MOCK_PROFILE_USER } from '../data/mock';
+import ReputationWagerModal from '../components/ReputationWagerModal';
 
 const COVER_IMAGE_URL =
     'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=1200';
@@ -19,6 +20,7 @@ const COVER_IMAGE_URL =
 export default function ProfileScreen() {
     const { reputation } = useReputation();
     const { runs } = useDriveHistory();
+    const [wagerModalVisible, setWagerModalVisible] = useState(false);
 
     const dynamicStats = {
         ...MOCK_PROFILE_USER.stats,
@@ -55,7 +57,19 @@ export default function ProfileScreen() {
                         <Share2 color={theme.colors.primary} size={24} />
                     </TouchableOpacity>
                 </View>
+
+                <CustomButton
+                    title="CHALLENGE RACER"
+                    onPress={() => setWagerModalVisible(true)}
+                    style={{ marginBottom: 20 }}
+                />
             </View>
+
+            <ReputationWagerModal
+                visible={wagerModalVisible}
+                onClose={() => setWagerModalVisible(false)}
+                rivalName={MOCK_PROFILE_USER.name}
+            />
 
             {/* Garage Section */}
             <GarageSection cars={MOCK_PROFILE_USER.garage} />
