@@ -8,6 +8,7 @@ import { useEvents } from '../context/EventContext';
 import GarageQRPassModal from './GarageQRPassModal';
 import EventCardActionButtons from './EventCardActionButtons';
 import EventDroneRecon from './EventDroneRecon';
+import ShowAndShineVotingModal from './ShowAndShineVotingModal';
 
 interface EventCardFooterProps {
     eventId: string;
@@ -28,6 +29,7 @@ export default function EventCardFooter({
     const [rsvp, setRsvp] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [droneReconVisible, setDroneReconVisible] = useState(false);
+    const [showAndShineVisible, setShowAndShineVisible] = useState(false);
     const isLive = startTime?.toLowerCase() === 'agora' || false;
     const { addReputation } = useReputation();
     const { incrementHype } = useEvents();
@@ -92,6 +94,7 @@ export default function EventCardFooter({
                         ? () => setDroneReconVisible(true)
                         : undefined
                 }
+                onShowAndShinePress={isLive ? () => setShowAndShineVisible(true) : undefined}
             />
 
             <GarageQRPassModal
@@ -105,6 +108,14 @@ export default function EventCardFooter({
                     visible={droneReconVisible}
                     eventLocation={{ latitude: eventLatitude, longitude: eventLongitude }}
                     onClose={() => setDroneReconVisible(false)}
+                />
+            )}
+
+            {isLive && (
+                <ShowAndShineVotingModal
+                    visible={showAndShineVisible}
+                    onClose={() => setShowAndShineVisible(false)}
+                    eventId={eventId}
                 />
             )}
         </View>

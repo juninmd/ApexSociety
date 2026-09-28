@@ -22,6 +22,7 @@ export type RootStackParamList = {
     Leaderboard: undefined;
     FriendsList: undefined;
     NotificationCenter: undefined;
+    BlackMarket: undefined;
 };
 
 export type RootTabScreenProps<T extends keyof RootTabParamList> = BottomTabScreenProps<
