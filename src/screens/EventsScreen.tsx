@@ -72,6 +72,7 @@ export default function EventsScreen() {
                             passcode={event.passcode}
                             weather={event.weather}
                             elevatedRisk={heatLevel > 1} // Heat level > 1 triggers warning
+                            status={event.status}
                             eventLatitude={event.location.latitude}
                             eventLongitude={event.location.longitude}
                             onPress={() => {}} // No-op for now

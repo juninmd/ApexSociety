@@ -9,6 +9,10 @@ export default function MapMarkers() {
 
     return (
         <>
+            {sosLocation && (
+                <Marker coordinate={sosLocation} title="CONVOY SOS BEACON" pinColor="#FF00FF" />
+            )}
+
             {/* Display active convoy members if convoy mode is enabled */}
             {isConvoyActive &&
                 crewMembers.map((member) => (

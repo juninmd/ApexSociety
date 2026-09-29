@@ -13,7 +13,7 @@ interface ConvoyContextType {
     isConvoyActive: boolean;
     isBroadcasting: boolean;
     ebsActive: boolean;
-    sosLocation: Location | null;
+    sosLocation?: Location;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
@@ -27,18 +27,16 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [isConvoyActive, setIsConvoyActive] = useState(false);
     const [isBroadcasting, setIsBroadcasting] = useState(false);
     const [ebsActive, setEbsActive] = useState(false);
-    const [sosLocation, setSosLocation] = useState<Location | null>(null);
+    const [sosLocation, setSosLocation] = useState<Location | undefined>(undefined);
 
     const triggerEBS = (location?: Location) => {
         setEbsActive(true);
-        if (location) {
-            setSosLocation(location);
-        }
+        if (location) setSosLocation(location);
 
         setTimeout(() => {
             setEbsActive(false);
-            setSosLocation(null);
-        }, 15000); // Convoy convergence alert stays for 15s
+            setSosLocation(undefined);
+        }, 5000); // Auto dismiss after 5 seconds
     };
 
     const toggleBroadcast = () => {

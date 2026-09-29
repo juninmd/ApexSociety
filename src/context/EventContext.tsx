@@ -6,6 +6,7 @@ interface EventContextType {
     events: Event[];
     addEvent: (event: Event) => void;
     incrementHype: (eventId: string) => void;
+    updateEventStatus: (eventId: string, status: 'active' | 'scatter') => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -41,6 +42,17 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
         );
     };
 
+    const updateEventStatus = (eventId: string, status: 'active' | 'scatter') => {
+        setEvents((prevEvents) =>
+            prevEvents.map((event) => {
+                if (event.id === eventId) {
+                    return { ...event, status };
+                }
+                return event;
+            }),
+        );
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
             setEvents((prevEvents) => {
@@ -60,7 +72,7 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <EventContext.Provider value={{ events, addEvent, incrementHype }}>
+        <EventContext.Provider value={{ events, addEvent, incrementHype, updateEventStatus }}>
             {children}
         </EventContext.Provider>
     );
