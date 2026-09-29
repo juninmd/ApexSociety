@@ -7,6 +7,8 @@ import TuningStatsRow from './TuningStatsRow';
 import TuningPartsContainer from './TuningPartsContainer';
 
 import { styles } from './TuningSimulatorStyles';
+import TuningStatsRow from './tuning/TuningStatsRow';
+import TuningPartsContainer from './tuning/TuningPartsContainer';
 
 interface TuningSimulatorProps {
     initialHp?: string;

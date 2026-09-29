@@ -1,114 +1,102 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { ShoppingCart, ShieldAlert } from 'lucide-react-native';
-import { useReputation } from '../context/ReputationContext';
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { theme } from '../theme';
+import { useReputation } from '../context/ReputationContext';
+import { Lock, Unlock, ShoppingCart } from 'lucide-react-native';
 import CustomButton from '../components/CustomButton';
 
 const MARKET_ITEMS = [
     {
-        id: 'item-1',
+        id: '1',
         name: 'Radar Jammer',
-        description: 'Prevents speed detection for 30 mins.',
-        cost: 500,
-        risk: 'high',
-    },
-    {
-        id: 'item-2',
-        name: 'Fake Plates',
-        description: 'Lowers heat increase rate by 50%.',
+        description: 'Temporarily masks your speed from radars.',
         cost: 1000,
-        risk: 'extreme',
+        type: 'consumable',
     },
     {
-        id: 'item-3',
-        name: 'Ghost Mode Pass',
-        description: 'Hide location on the map for 1 hr.',
-        cost: 200,
-        risk: 'medium',
+        id: '2',
+        name: 'Fake Plates',
+        description: 'Reduces heat level gain during chases.',
+        cost: 2500,
+        type: 'mod',
+    },
+    {
+        id: '3',
+        name: 'VIP Meet Pass',
+        description: 'Guarantees entry to private high-stakes meets.',
+        cost: 5000,
+        type: 'pass',
     },
 ];
 
 export default function BlackMarketScreen() {
-    const { reputation, spendReputation } = useReputation();
+    const { reputation, addReputation } = useReputation();
     const [purchasedItems, setPurchasedItems] = useState<string[]>([]);
 
-    const handlePurchase = (itemId: string, cost: number, name: string) => {
-        if (reputation < cost) {
-            Alert.alert('Insuficiente', 'Você não tem REP suficiente para isso.');
+    const handlePurchase = (item: (typeof MARKET_ITEMS)[0]) => {
+        if (purchasedItems.includes(item.id)) {
+            Alert.alert('Already Owned', `You already own ${item.name}.`);
             return;
         }
 
-        Alert.alert('Confirmar Compra', `Deseja comprar ${name} por ${cost} REP?`, [
-            { text: 'Cancelar', style: 'cancel' },
-            {
-                text: 'Comprar',
-                style: 'destructive',
-                onPress: () => {
-                    if (spendReputation) {
-                        const success = spendReputation(cost);
-                        if (success) {
-                            setPurchasedItems([...purchasedItems, itemId]);
-                            Alert.alert(
-                                'Sucesso',
-                                'Item adquirido e adicionado ao seu inventário.',
-                            );
-                        } else {
-                            Alert.alert('Erro', 'Falha ao processar a compra.');
-                        }
-                    } else {
-                        Alert.alert(
-                            'Erro',
-                            'Contexto de reputação não implementa spendReputation.',
-                        );
-                    }
-                },
-            },
-        ]);
+        if (reputation >= item.cost) {
+            addReputation(-item.cost);
+            setPurchasedItems((prev) => [...prev, item.id]);
+            Alert.alert('Purchase Successful', `You bought ${item.name} for ${item.cost} REP.`);
+        } else {
+            Alert.alert('Insufficient REP', `You need ${item.cost} REP to buy this item.`);
+        }
+    };
+
+    const renderItem = ({ item }: { item: (typeof MARKET_ITEMS)[0] }) => {
+        const isOwned = purchasedItems.includes(item.id);
+        const canAfford = reputation >= item.cost;
+
+        return (
+            <View style={styles.itemCard}>
+                <View style={styles.itemHeader}>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    {isOwned ? (
+                        <Unlock size={20} color={theme.colors.primary} />
+                    ) : (
+                        <Lock size={20} color={theme.colors.textSecondary} />
+                    )}
+                </View>
+                <Text style={styles.itemDescription}>{item.description}</Text>
+                <View style={styles.itemFooter}>
+                    <Text style={[styles.itemCost, !canAfford && !isOwned && styles.cannotAfford]}>
+                        {item.cost} REP
+                    </Text>
+                    <CustomButton
+                        title={isOwned ? 'OWNED' : 'BUY'}
+                        onPress={() => {
+                            if (!isOwned && canAfford) {
+                                handlePurchase(item);
+                            }
+                        }}
+                        variant={isOwned ? 'secondary' : 'primary'}
+                        style={styles.buyButton}
+                    />
+                </View>
+            </View>
+        );
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.header}>
-                <ShoppingCart color={theme.colors.error} size={32} />
-                <Text style={styles.headerTitle}>MERCADO NEGRO</Text>
+                <ShoppingCart color={theme.colors.primary} size={32} />
+                <Text style={styles.title}>BLACK MARKET</Text>
             </View>
+            <Text style={styles.repText}>Current Balance: {reputation} REP</Text>
 
-            <View style={styles.repBanner}>
-                <Text style={styles.repText}>SEU REP: {reputation}</Text>
-            </View>
-
-            <View style={styles.itemsContainer}>
-                {MARKET_ITEMS.map((item) => (
-                    <View key={item.id} style={styles.itemCard}>
-                        <View style={styles.itemInfo}>
-                            <Text style={styles.itemName}>{item.name}</Text>
-                            <Text style={styles.itemDescription}>{item.description}</Text>
-                            <View style={styles.riskBadge}>
-                                <ShieldAlert size={12} color={theme.colors.error} />
-                                <Text style={styles.riskText}>
-                                    Risco: {item.risk.toUpperCase()}
-                                </Text>
-                            </View>
-                        </View>
-                        <CustomButton
-                            title={
-                                purchasedItems.includes(item.id)
-                                    ? 'COMPRADO'
-                                    : `COMPRAR (${item.cost})`
-                            }
-                            onPress={() => {
-                                if (!purchasedItems.includes(item.id)) {
-                                    handlePurchase(item.id, item.cost, item.name);
-                                }
-                            }}
-                            style={styles.buyButton}
-                            variant={purchasedItems.includes(item.id) ? 'secondary' : 'primary'}
-                        />
-                    </View>
-                ))}
-            </View>
-        </ScrollView>
+            <FlatList
+                data={MARKET_ITEMS}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItem}
+                contentContainerStyle={styles.listContainer}
+            />
+        </View>
     );
 }
 
@@ -116,36 +104,30 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,
+        padding: 20,
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 20,
-        paddingTop: 60,
+        marginBottom: 20,
+        marginTop: 40,
+        justifyContent: 'center',
         gap: 10,
     },
-    headerTitle: {
-        color: theme.colors.error,
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 32,
-    },
-    repBanner: {
-        backgroundColor: theme.colors.card,
-        padding: 15,
-        marginHorizontal: 20,
-        marginBottom: 20,
-        borderRadius: 8,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: theme.colors.primary,
+    title: {
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 24,
+        color: theme.colors.primary,
+        letterSpacing: 2,
     },
     repText: {
-        color: theme.colors.primary,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 18,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 16,
+        color: theme.colors.white,
+        textAlign: 'center',
+        marginBottom: 20,
     },
-    itemsContainer: {
-        paddingHorizontal: 20,
+    listContainer: {
         gap: 15,
     },
     itemCard: {
@@ -154,38 +136,38 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 1,
         borderColor: theme.colors.border,
+    },
+    itemHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 5,
+    },
+    itemName: {
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 18,
+        color: theme.colors.white,
+    },
+    itemDescription: {
+        fontFamily: theme.fonts.primary.regular,
+        fontSize: 14,
+        color: theme.colors.textSecondary,
+        marginBottom: 15,
+    },
+    itemFooter: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    itemInfo: {
-        flex: 1,
-        marginRight: 10,
-    },
-    itemName: {
-        color: theme.colors.text,
+    itemCost: {
         fontFamily: theme.fonts.secondary.bold,
         fontSize: 16,
-        marginBottom: 5,
+        color: theme.colors.primary,
     },
-    itemDescription: {
-        color: theme.colors.secondary,
-        fontFamily: theme.fonts.secondary.regular,
-        fontSize: 12,
-        marginBottom: 8,
-    },
-    riskBadge: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 4,
-    },
-    riskText: {
+    cannotAfford: {
         color: theme.colors.error,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 10,
     },
     buyButton: {
-        paddingHorizontal: 15,
-        paddingVertical: 8,
+        minWidth: 100,
     },
 });
