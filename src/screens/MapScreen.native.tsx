@@ -16,11 +16,14 @@ import MapRouteAnalyzer from '../components/MapScreen/MapRouteAnalyzer';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
 import { useNotification } from '../context/NotificationContext';
+import { useConvoy } from '../context/ConvoyContext';
+import { Circle } from 'react-native-maps';
 
 export default function MapScreen() {
     const { region, setRegion } = useMapRegion();
     const { isPlannerActive, waypoints, togglePlanner, addWaypoint } = useCruisePlanner();
     const { addNotification } = useNotification();
+    const { sosLocation } = useConvoy();
     const [isOfflineMapCached, setIsOfflineMapCached] = useState(false);
     const [isAnalyzerActive, setIsAnalyzerActive] = useState(false);
 
@@ -75,6 +78,18 @@ export default function MapScreen() {
                 <MapHotspots />
                 <MapMarkers />
                 <MapHazards />
+                {sosLocation && (
+                    <Circle
+                        center={{
+                            latitude: sosLocation.latitude,
+                            longitude: sosLocation.longitude,
+                        }}
+                        radius={500}
+                        fillColor="rgba(255, 0, 0, 0.3)"
+                        strokeColor={theme.colors.error}
+                        strokeWidth={2}
+                    />
+                )}
             </MapView>
 
             <MapControls

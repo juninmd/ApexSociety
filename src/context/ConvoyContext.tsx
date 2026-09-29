@@ -19,7 +19,8 @@ interface ConvoyContextType {
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
-    triggerEBS: () => void;
+    triggerEBS: (location?: Location) => void;
+    sosLocation: Location | null;
 }
 
 const ConvoyContext = createContext<ConvoyContextType | undefined>(undefined);
@@ -29,12 +30,17 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [isConvoyActive, setIsConvoyActive] = useState(false);
     const [isBroadcasting, setIsBroadcasting] = useState(false);
     const [ebsActive, setEbsActive] = useState(false);
-    const [globalGhostMode, setGlobalGhostMode] = useState(false);
-    const [ghostCoordinates, setGhostCoordinates] = useState<Location[]>([]);
+    const [sosLocation, setSosLocation] = useState<Location | null>(null);
 
-    const triggerEBS = () => {
+    const triggerEBS = (location?: Location) => {
         setEbsActive(true);
-        setTimeout(() => setEbsActive(false), 5000); // Auto dismiss after 5 seconds
+        if (location) {
+            setSosLocation(location);
+        }
+        setTimeout(() => {
+            setEbsActive(false);
+            setSosLocation(null);
+        }, 5000); // Auto dismiss after 5 seconds
     };
 
     const toggleBroadcast = () => {
@@ -151,6 +157,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 toggleBroadcast,
                 updateLocation,
                 triggerEBS,
+                sosLocation,
             }}
         >
             {children}
