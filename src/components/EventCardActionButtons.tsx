@@ -8,6 +8,7 @@ interface EventCardActionButtonsProps {
     onFastTrackPress: () => void;
     onRsvpPress: () => void;
     onDroneReconPress?: () => void;
+    onShowAndShinePress?: () => void;
 }
 
 export default function EventCardActionButtons({
@@ -16,9 +17,15 @@ export default function EventCardActionButtons({
     onFastTrackPress,
     onRsvpPress,
     onDroneReconPress,
+    onShowAndShinePress,
 }: EventCardActionButtonsProps) {
     return (
         <View style={styles.actionButtons}>
+            {onShowAndShinePress && (
+                <TouchableOpacity style={styles.showAndShineButton} onPress={onShowAndShinePress}>
+                    <Text style={styles.showAndShineText}>VOTAR</Text>
+                </TouchableOpacity>
+            )}
             {onDroneReconPress && (
                 <TouchableOpacity style={styles.droneButton} onPress={onDroneReconPress}>
                     <Text style={styles.droneText}>RECON</Text>
@@ -71,6 +78,22 @@ const styles = StyleSheet.create({
     },
     fastTrackText: {
         color: theme.colors.textSecondary,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 10,
+        transform: [{ skewX: '10deg' }],
+    },
+    showAndShineButton: {
+        borderWidth: 1,
+        borderColor: theme.colors.primary,
+        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        marginRight: 8,
+        transform: [{ skewX: '-10deg' }],
+    },
+    showAndShineText: {
+        color: theme.colors.primary,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 10,
         transform: [{ skewX: '10deg' }],
