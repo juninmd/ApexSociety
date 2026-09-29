@@ -4,13 +4,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, DarkTheme, LinkingOptions } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import { EventProvider } from './src/context/EventContext';
-import { AlertProvider } from './src/context/AlertContext';
 import { HazardProvider } from './src/context/HazardContext';
 import { ReputationProvider } from './src/context/ReputationContext';
 import { AuthProvider } from './src/context/AuthContext';
 import { ConvoyProvider } from './src/context/ConvoyContext';
 import { DriveHistoryProvider } from './src/context/DriveHistoryContext';
-import { NotificationProvider } from './src/context/NotificationContext';
+import { UIProvider } from './src/context/UIContext';
 import { FriendProvider } from './src/context/FriendContext';
 import { TurfProvider } from './src/context/TurfContext';
 import { MOCK_FRIENDS } from './src/data/mockExtra';
@@ -68,33 +67,31 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <AuthProvider>
-                <NotificationProvider>
-                    <AlertProvider>
-                        <EventProvider>
-                            <HazardProvider>
-                                <ReputationProvider>
-                                    <ConvoyProvider>
-                                        <DriveHistoryProvider>
-                                            <TurfProvider>
-                                                <FriendProvider initialFriends={MOCK_FRIENDS}>
-                                                    <NavigationContainer
-                                                        theme={customTheme}
-                                                        linking={linking}
-                                                    >
-                                                        <StatusBar style="light" />
-                                                        <AppNavigator />
-                                                        <GlobalAlert />
-                                                        <NotificationToast />
-                                                    </NavigationContainer>
-                                                </FriendProvider>
-                                            </TurfProvider>
-                                        </DriveHistoryProvider>
-                                    </ConvoyProvider>
-                                </ReputationProvider>
-                            </HazardProvider>
-                        </EventProvider>
-                    </AlertProvider>
-                </NotificationProvider>
+                <UIProvider>
+                    <EventProvider>
+                        <HazardProvider>
+                            <ReputationProvider>
+                                <ConvoyProvider>
+                                    <DriveHistoryProvider>
+                                        <TurfProvider>
+                                            <FriendProvider initialFriends={MOCK_FRIENDS}>
+                                                <NavigationContainer
+                                                    theme={customTheme}
+                                                    linking={linking}
+                                                >
+                                                    <StatusBar style="light" />
+                                                    <AppNavigator />
+                                                    <GlobalAlert />
+                                                    <NotificationToast />
+                                                </NavigationContainer>
+                                            </FriendProvider>
+                                        </TurfProvider>
+                                    </DriveHistoryProvider>
+                                </ConvoyProvider>
+                            </ReputationProvider>
+                        </HazardProvider>
+                    </EventProvider>
+                </UIProvider>
             </AuthProvider>
         </SafeAreaProvider>
     );

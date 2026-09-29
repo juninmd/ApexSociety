@@ -6,6 +6,7 @@ export interface DriveRun {
     maxSpeed: number;
     maxRpm: number;
     maxBoost: number;
+    trajectory?: { lat: number; lng: number }[];
 }
 
 interface DriveHistoryContextType {
@@ -31,8 +32,17 @@ export const DriveHistoryProvider: React.FC<DriveHistoryProviderProps> = ({ chil
     const [runs, setRuns] = useState<DriveRun[]>([]);
 
     const addRun = (run: Omit<DriveRun, 'id' | 'date'>) => {
+        // Generate mock trajectory if not provided
+        const mockTrajectory =
+            run.trajectory ||
+            Array.from({ length: 10 }).map((_, i) => ({
+                lat: -23.5505 + Math.sin(i) * 0.01,
+                lng: -46.6333 + Math.cos(i) * 0.01,
+            }));
+
         const newRun: DriveRun = {
             ...run,
+            trajectory: mockTrajectory,
             id: Math.random().toString(36).substring(2, 9),
             date: Date.now(),
         };

@@ -4,13 +4,11 @@ import { AlertTriangle } from 'lucide-react-native';
 import * as Location from 'expo-location';
 import { theme } from '../theme';
 import { useHazards } from '../context/HazardContext';
-import { useAlert } from '../context/AlertContext';
-import { useConvoy } from '../context/ConvoyContext';
+import { useUI } from '../context/UIContext';
 
 export default function PanicButton() {
     const { addHazard } = useHazards();
-    const { showAlert } = useAlert();
-    const { isConvoyActive, triggerEBS } = useConvoy();
+    const { showAlert } = useUI();
 
     const handlePanic = async () => {
         try {

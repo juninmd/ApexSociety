@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../theme';
-import { useAlert } from '../context/AlertContext';
+import { useUI } from '../context/UIContext';
 import { useHazards } from '../context/HazardContext';
 import { useConvoy } from '../context/ConvoyContext';
 import * as Location from 'expo-location';
@@ -13,7 +13,7 @@ interface ReportHazardButtonProps {
 }
 
 export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
-    const { showAlert } = useAlert();
+    const { showAlert } = useUI();
     const { addHazard } = useHazards();
     const { isConvoyActive, triggerEBS } = useConvoy();
 
@@ -76,7 +76,10 @@ export default function ReportHazardButton({ type }: ReportHazardButtonProps) {
             });
 
             if (type === 'sos' && isConvoyActive) {
-                triggerEBS();
+                triggerEBS({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                });
                 showAlert('🚨 CONVOY SOS FLARE ATIVADO 🚨 Membros da equipe notificados.');
             } else {
                 showAlert(config.alertMsg);

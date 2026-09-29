@@ -13,14 +13,11 @@ interface ConvoyContextType {
     isConvoyActive: boolean;
     isBroadcasting: boolean;
     ebsActive: boolean;
-    ghostCoordinates: Location[];
-    globalGhostMode: boolean;
-    setGlobalGhostMode: (active: boolean) => void;
+    sosLocation: Location | null;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
     triggerEBS: (location?: Location) => void;
-    sosLocation: Location | null;
 }
 
 const ConvoyContext = createContext<ConvoyContextType | undefined>(undefined);
@@ -37,10 +34,11 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (location) {
             setSosLocation(location);
         }
+
         setTimeout(() => {
             setEbsActive(false);
             setSosLocation(null);
-        }, 5000); // Auto dismiss after 5 seconds
+        }, 15000); // Convoy convergence alert stays for 15s
     };
 
     const toggleBroadcast = () => {
@@ -150,9 +148,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 isConvoyActive,
                 isBroadcasting,
                 ebsActive,
-                ghostCoordinates,
-                globalGhostMode,
-                setGlobalGhostMode,
+                sosLocation,
                 toggleConvoy,
                 toggleBroadcast,
                 updateLocation,
