@@ -20,20 +20,20 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
     const [ghostStartTime, setGhostStartTime] = useState<number | null>(null);
     const { user } = useAuth();
     const { boostCrewHeat } = useTurf();
-    const { setGlobalGhostMode } = useConvoy();
+    const { toggleGhostMode } = useConvoy();
     const speedingTicksRef = useRef(0);
 
     const handleToggleGhostMode = () => {
         if (!isGhostMode) {
             setGhostStartTime(Date.now());
             setIsGhostMode(true);
-            setGlobalGhostMode(true);
+            toggleGhostMode();
         } else {
             const duration = ghostStartTime ? Math.floor((Date.now() - ghostStartTime) / 1000) : 0;
             showAlert(`GHOST MODE OFFLINE: YOU DROVE OFF THE GRID FOR ${duration} SECONDS`);
             setGhostStartTime(null);
             setIsGhostMode(false);
-            setGlobalGhostMode(false);
+            toggleGhostMode();
         }
     };
 

@@ -5,10 +5,12 @@ import * as Location from 'expo-location';
 import { theme } from '../theme';
 import { useHazards } from '../context/HazardContext';
 import { useUI } from '../context/UIContext';
+import { useConvoy } from '../context/ConvoyContext';
 
 export default function PanicButton() {
     const { addHazard } = useHazards();
     const { showAlert } = useUI();
+    const { isConvoyActive, triggerEBS } = useConvoy();
 
     const handlePanic = async () => {
         try {
