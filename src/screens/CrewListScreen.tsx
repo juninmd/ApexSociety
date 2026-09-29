@@ -8,6 +8,7 @@ import { MOCK_CREWS } from '../data/mock';
 import { Crew } from '../types';
 import CrewBadge from '../components/CrewBadge';
 import CustomButton from '../components/CustomButton';
+import CrewMatchmaker from '../components/CrewMatchmaker';
 import { Users } from 'lucide-react-native';
 
 export default function CrewListScreen() {
@@ -35,6 +36,10 @@ export default function CrewListScreen() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>EQUIPES</Text>
+            </View>
+
+            <View style={{ marginTop: 20 }}>
+                <CrewMatchmaker />
             </View>
 
             <FlatList

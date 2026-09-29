@@ -9,6 +9,7 @@ import CrewsSection from '../components/CrewsSection';
 import ProfileHeader from '../components/ProfileHeader';
 import StickersSection from '../components/StickersSection';
 import DriveHistorySection from '../components/DriveHistorySection';
+import ScoutScoreBadge from '../components/ScoutScoreBadge';
 import { useReputation } from '../context/ReputationContext';
 import { useDriveHistory } from '../context/DriveHistoryContext';
 import { MOCK_PROFILE_USER } from '../data/mock';
@@ -40,6 +41,9 @@ export default function ProfileScreen() {
                     <MapPin color={theme.colors.secondary} size={14} />
                     <Text style={styles.locationText}>{MOCK_PROFILE_USER.location}</Text>
                 </View>
+
+                {/* Scout Badge */}
+                <ScoutScoreBadge />
 
                 {/* Stats */}
                 <ProfileStats stats={dynamicStats} />

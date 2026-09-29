@@ -2,8 +2,9 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ReputationContextType {
     reputation: number;
+    scoutScore: number;
     addReputation: (amount: number) => void;
-    spendReputation: (amount: number) => boolean;
+    addScoutScore: (amount: number) => void;
 }
 
 const ReputationContext = createContext<ReputationContextType | undefined>(undefined);
@@ -23,6 +24,7 @@ interface ReputationProviderProps {
 export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children }) => {
     // Start with some base reputation
     const [reputation, setReputation] = useState(420);
+    const [scoutScore, setScoutScore] = useState(0);
 
     const spendReputation = (amount: number) => {
         if (reputation >= amount) {
@@ -36,8 +38,14 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
         setReputation((prev) => prev + amount);
     };
 
+    const addScoutScore = (amount: number) => {
+        setScoutScore((prev) => prev + amount);
+    };
+
     return (
-        <ReputationContext.Provider value={{ reputation, addReputation, spendReputation }}>
+        <ReputationContext.Provider
+            value={{ reputation, scoutScore, addReputation, addScoutScore }}
+        >
             {children}
         </ReputationContext.Provider>
     );

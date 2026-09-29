@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import CrewListScreen from '../src/screens/CrewListScreen';
 import { MOCK_CREWS } from '../src/data/mock';
+import { ReputationProvider } from '../src/context/ReputationContext';
 
 // Mock navigation
 const mockNavigate = jest.fn();
@@ -12,8 +13,16 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 describe('<CrewListScreen />', () => {
+    const renderScreen = () => {
+        return render(
+            <ReputationProvider>
+                <CrewListScreen />
+            </ReputationProvider>,
+        );
+    };
+
     it('renders correctly', () => {
-        const { getByText } = render(<CrewListScreen />);
+        const { getByText } = renderScreen();
 
         // Header
         expect(getByText('EQUIPES')).toBeTruthy();
@@ -27,7 +36,7 @@ describe('<CrewListScreen />', () => {
     });
 
     it('navigates to CreateCrew on button press', () => {
-        const { getByText } = render(<CrewListScreen />);
+        const { getByText } = renderScreen();
 
         const button = getByText('CRIAR EQUIPE');
         fireEvent.press(button);
@@ -36,7 +45,7 @@ describe('<CrewListScreen />', () => {
     });
 
     it('navigates to CrewDetails on item press', () => {
-        const { getByText } = render(<CrewListScreen />);
+        const { getByText } = renderScreen();
 
         const crewItem = getByText(MOCK_CREWS[0].name);
         fireEvent.press(crewItem);
