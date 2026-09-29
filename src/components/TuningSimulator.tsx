@@ -4,6 +4,7 @@ import { Wrench, Trophy } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import TuningStatsRow from './TuningStatsRow';
+import TuningPartsContainer from './TuningPartsContainer';
 
 import { styles } from './TuningSimulatorStyles';
 
@@ -119,7 +120,7 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 </TouchableOpacity>
             )}
 
-            <TuningPartsContainer upgrades={upgrades} onUpgrade={handleUpgrade} />
+            <TuningPartsContainer upgrades={upgrades} handleUpgrade={handleUpgrade} />
         </View>
     );
 }

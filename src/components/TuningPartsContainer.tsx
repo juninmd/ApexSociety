@@ -1,26 +1,23 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Wrench } from 'lucide-react-native';
 import { theme } from '../theme';
 import { styles } from './TuningSimulatorStyles';
 
-interface Upgrades {
-    ecu: boolean;
-    turbo: boolean;
-    exhaust: boolean;
-}
-
 interface TuningPartsContainerProps {
-    upgrades: Upgrades;
-    onUpgrade: (part: keyof Upgrades, hpBoost: number) => void;
+    upgrades: { ecu: boolean; turbo: boolean; exhaust: boolean };
+    handleUpgrade: (part: 'ecu' | 'turbo' | 'exhaust', hpBoost: number) => void;
 }
 
-export default function TuningPartsContainer({ upgrades, onUpgrade }: TuningPartsContainerProps) {
+export default function TuningPartsContainer({
+    upgrades,
+    handleUpgrade,
+}: TuningPartsContainerProps) {
     return (
         <View style={styles.partsContainer}>
             <TouchableOpacity
                 style={[styles.partButton, upgrades.ecu && styles.partButtonActive]}
-                onPress={() => onUpgrade('ecu', 50)}
+                onPress={() => handleUpgrade('ecu', 50)}
                 disabled={upgrades.ecu}
             >
                 <Wrench
@@ -34,7 +31,7 @@ export default function TuningPartsContainer({ upgrades, onUpgrade }: TuningPart
 
             <TouchableOpacity
                 style={[styles.partButton, upgrades.turbo && styles.partButtonActive]}
-                onPress={() => onUpgrade('turbo', 120)}
+                onPress={() => handleUpgrade('turbo', 120)}
                 disabled={upgrades.turbo}
             >
                 <Wrench
@@ -48,7 +45,7 @@ export default function TuningPartsContainer({ upgrades, onUpgrade }: TuningPart
 
             <TouchableOpacity
                 style={[styles.partButton, upgrades.exhaust && styles.partButtonActive]}
-                onPress={() => onUpgrade('exhaust', 15)}
+                onPress={() => handleUpgrade('exhaust', 15)}
                 disabled={upgrades.exhaust}
             >
                 <Wrench
