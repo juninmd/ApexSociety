@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme';
 import ReportHazardButton from '../components/ReportHazardButton';
@@ -54,6 +54,13 @@ export default function DriveModeScreen() {
                     heatLevel={heatLevel}
                 />
                 {!isGhostMode && <PitWallFeed />}
+                {isGhostMode && (
+                    <View style={styles.ghostDecoyBanner}>
+                        <Text style={styles.ghostDecoyText}>
+                            GHOST DECOY ACTIVE - MOCKING LOCATION
+                        </Text>
+                    </View>
+                )}
                 <View style={styles.content}>
                     {!isGhostMode && <RouteThreatBanner threatInfo={threatInfo} />}
                     {!isGhostMode && <SpotterAssistant />}
@@ -93,5 +100,23 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    ghostDecoyBanner: {
+        position: 'absolute',
+        top: 100,
+        width: '100%',
+        alignItems: 'center',
+        zIndex: 10,
+    },
+    ghostDecoyText: {
+        color: '#00FFFF',
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 14,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#00FFFF',
     },
 });

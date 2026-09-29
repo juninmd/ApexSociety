@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '../../theme';
 import { useHazards } from '../../context/HazardContext';
@@ -11,6 +11,21 @@ interface MapRouteAnalyzerProps {
 export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
     const { heatLevel } = useHazards();
     const { isRaining } = useWeather();
+    const [rivalDetected, setRivalDetected] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (heatLevel > 1) {
+                // 10% chance to trigger rival crew detection
+                if (Math.random() < 0.1) {
+                    setRivalDetected(true);
+                }
+            } else {
+                setRivalDetected(false);
+            }
+        }, 0);
+        return () => clearTimeout(timer);
+    }, [heatLevel]);
 
     if (!visible) return null;
 
@@ -49,6 +64,9 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
                 <Text style={styles.warning}>
                     Warning: Active hazards or poor weather detected on route.
                 </Text>
+            )}
+            {rivalDetected && (
+                <Text style={styles.warning}>CRITICAL: RIVAL CREW DETECTED IN PROXIMITY!</Text>
             )}
         </View>
     );
