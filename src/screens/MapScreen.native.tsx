@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { PROVIDER_DEFAULT, Circle } from 'react-native-maps';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_EVENTS, MOCK_CREWS } from '../data/mock';

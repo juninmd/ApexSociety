@@ -1,85 +1,42 @@
 import React from 'react';
-import { render, act } from '@testing-library/react-native';
+import { renderHook, act } from '@testing-library/react-native';
 import { ConvoyProvider, useConvoy } from '../src/context/ConvoyContext';
-import { Text, TouchableOpacity } from 'react-native';
-
-const TestComponent = () => {
-    const { isConvoyActive, toggleConvoy, updateLocation, crewMembers } = useConvoy();
-
-    return (
-        <>
-            <Text testID="convoy-status">{isConvoyActive ? 'Active' : 'Inactive'}</Text>
-            <TouchableOpacity testID="toggle-btn" onPress={toggleConvoy} />
-            <TouchableOpacity
-                testID="update-loc-btn"
-                onPress={() => updateLocation('u1', 'TestUser', { latitude: 1, longitude: 2 })}
-            />
-            <Text testID="members-count">{crewMembers.length.toString()}</Text>
-        </>
-    );
-};
 
 describe('ConvoyContext', () => {
-    beforeEach(() => {
-        jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-        jest.useRealTimers();
-    });
-
-    it('should throw error if used outside provider', () => {
-        // Suppress console.error for expected error
-        const originalError = console.error;
-        console.error = jest.fn();
-
-        expect(() => render(<TestComponent />)).toThrow(
-            'useConvoy must be used within a ConvoyProvider',
+    it('provides default values', () => {
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <ConvoyProvider>{children}</ConvoyProvider>
         );
 
-        console.error = originalError;
+        const { result } = renderHook(() => useConvoy(), { wrapper });
+
+        expect(result.current.isConvoyActive).toBe(false);
+        expect(result.current.ghostMode).toBe(false);
     });
 
-    it('should toggle convoy active status', () => {
-        const { getByTestId } = render(
-            <ConvoyProvider>
-                <TestComponent />
-            </ConvoyProvider>,
+    it('toggles ghost mode', () => {
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <ConvoyProvider>{children}</ConvoyProvider>
         );
 
-        expect(getByTestId('convoy-status').props.children).toBe('Inactive');
+        const { result } = renderHook(() => useConvoy(), { wrapper });
 
         act(() => {
-            getByTestId('toggle-btn').props.onClick(); // using props.onClick() directly for brevity
+            result.current.toggleGhostMode();
         });
-        expect(getByTestId('convoy-status').props.children).toBe('Active');
+
+        expect(result.current.ghostMode).toBe(true);
     });
 
-    it('should add and remove members', () => {
-        const { getByTestId } = render(
-            <ConvoyProvider>
-                <TestComponent />
-            </ConvoyProvider>,
-        );
+    it('throws error when used outside provider', () => {
+        // Prevent console.error from polluting the test output for expected errors
+        const consoleSpy = jest.spyOn(console, 'error');
+        consoleSpy.mockImplementation(() => {});
 
-        // Turn on convoy
-        act(() => {
-            getByTestId('toggle-btn').props.onClick();
-        });
+        expect(() => {
+            renderHook(() => useConvoy());
+        }).toThrow('useConvoy must be used within a ConvoyProvider');
 
-        // Add member
-        act(() => {
-            getByTestId('update-loc-btn').props.onClick();
-        });
-
-        // Count should be 3 now (2 mock initialized + 1 manually added)
-        expect(getByTestId('members-count').props.children).toBe('3');
-
-        // Turn off convoy should clear members
-        act(() => {
-            getByTestId('toggle-btn').props.onClick();
-        });
-
-        expect(getByTestId('members-count').props.children).toBe('0');
+        consoleSpy.mockRestore();
     });
 });

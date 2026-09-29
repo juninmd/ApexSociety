@@ -3,9 +3,6 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Wrench, Trophy } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
-import TuningStatsRow from './TuningStatsRow';
-import TuningPartsContainer from './TuningPartsContainer';
-
 import { styles } from './TuningSimulatorStyles';
 import TuningStatsRow from './tuning/TuningStatsRow';
 import TuningPartsContainer from './tuning/TuningPartsContainer';
