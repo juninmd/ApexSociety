@@ -5,6 +5,7 @@ interface ReputationContextType {
     scoutScore: number;
     addReputation: (amount: number) => void;
     addScoutScore: (amount: number) => void;
+    spendReputation: (amount: number) => boolean;
 }
 
 const ReputationContext = createContext<ReputationContextType | undefined>(undefined);
@@ -44,7 +45,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
 
     return (
         <ReputationContext.Provider
-            value={{ reputation, scoutScore, addReputation, addScoutScore }}
+            value={{ reputation, scoutScore, addReputation, addScoutScore, spendReputation }}
         >
             {children}
         </ReputationContext.Provider>

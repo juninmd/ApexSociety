@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { PROVIDER_DEFAULT, Circle } from 'react-native-maps';
 import { DARK_MAP_STYLE } from '../constants/mapStyles';
 import { theme } from '../theme';
 import { MOCK_EVENTS, MOCK_CREWS } from '../data/mock';
@@ -16,11 +16,13 @@ import MapRouteAnalyzer from '../components/MapScreen/MapRouteAnalyzer';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
 import { useUI } from '../context/UIContext';
+import { useConvoy } from '../context/ConvoyContext';
 
 export default function MapScreen() {
     const { region, setRegion } = useMapRegion();
     const { isPlannerActive, waypoints, togglePlanner, addWaypoint } = useCruisePlanner();
     const { addNotification } = useUI();
+    const { sosLocation } = useConvoy();
     const [isOfflineMapCached, setIsOfflineMapCached] = useState(false);
     const [isAnalyzerActive, setIsAnalyzerActive] = useState(false);
 

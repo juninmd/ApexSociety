@@ -14,8 +14,12 @@ interface ConvoyContextType {
     isBroadcasting: boolean;
     ebsActive: boolean;
     sosLocation?: Location;
+    ghostMode: boolean;
+    ghostCoordinates: Location[];
+    ghostStartTime?: number;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
+    toggleGhostMode: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
     triggerEBS: (location?: Location) => void;
 }
@@ -28,6 +32,9 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [isBroadcasting, setIsBroadcasting] = useState(false);
     const [ebsActive, setEbsActive] = useState(false);
     const [sosLocation, setSosLocation] = useState<Location | undefined>(undefined);
+    const [ghostMode, setGhostMode] = useState(false);
+    const [ghostCoordinates, setGhostCoordinates] = useState<Location[]>([]);
+    const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
 
     const triggerEBS = (location?: Location) => {
         setEbsActive(true);
@@ -41,6 +48,15 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const toggleBroadcast = () => {
         setIsBroadcasting((prev) => !prev);
+    };
+
+    const toggleGhostMode = () => {
+        setGhostMode((prev) => {
+            const next = !prev;
+            if (next) setGhostStartTime(Date.now());
+            else setGhostStartTime(undefined);
+            return next;
+        });
     };
 
     const toggleConvoy = () => {
@@ -110,12 +126,12 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Ghost Decoy Trail Generator
     useEffect(() => {
         const resetTimer = setTimeout(() => {
-            if (!globalGhostMode) {
+            if (!ghostMode) {
                 setGhostCoordinates([]);
             }
         }, 0);
 
-        if (!globalGhostMode) {
+        if (!ghostMode) {
             return () => clearTimeout(resetTimer);
         }
 
@@ -137,7 +153,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             clearTimeout(resetTimer);
             clearInterval(interval);
         };
-    }, [globalGhostMode]);
+    }, [ghostMode]);
 
     return (
         <ConvoyContext.Provider
@@ -147,11 +163,14 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 isBroadcasting,
                 ebsActive,
                 sosLocation,
+                ghostMode,
+                ghostCoordinates,
+                ghostStartTime,
                 toggleConvoy,
                 toggleBroadcast,
+                toggleGhostMode,
                 updateLocation,
                 triggerEBS,
-                sosLocation,
             }}
         >
             {children}
