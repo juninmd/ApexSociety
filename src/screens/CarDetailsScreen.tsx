@@ -9,9 +9,11 @@ import { theme } from '../theme';
 import { ArrowLeft } from 'lucide-react-native';
 import TuningSimulator from '../components/TuningSimulator';
 import GarageVerificationSystem from '../components/GarageVerificationSystem';
+import GarageShareModal from '../components/GarageShareModal';
 
 export default function CarDetailsScreen() {
     const route = useRoute();
+    const [shareModalVisible, setShareModalVisible] = React.useState(false);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     // Type casting route params since we haven't updated types.ts yet but we will
@@ -47,9 +49,21 @@ export default function CarDetailsScreen() {
                         title="ACELERAR MOTOR (REV)"
                         onPress={handleRevEngine}
                         variant="primary"
+                        style={{ marginBottom: 10 }}
+                    />
+                    <CustomButton
+                        title="COMPARTILHAR CARRO (QR)"
+                        onPress={() => setShareModalVisible(true)}
+                        variant="secondary"
                     />
                 </View>
             </View>
+
+            <GarageShareModal
+                visible={shareModalVisible}
+                onClose={() => setShareModalVisible(false)}
+                carName={car.name}
+            />
         </View>
     );
 }
