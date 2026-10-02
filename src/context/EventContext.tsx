@@ -7,7 +7,12 @@ interface EventContextType {
     addEvent: (event: Event) => void;
     incrementHype: (eventId: string) => void;
     updateEventStatus: (eventId: string, status: 'active' | 'scatter') => void;
-    getEventHeatmaps: () => { id: string; center: { latitude: number; longitude: number }; radius: number; color: string }[];
+    getEventHeatmaps: () => {
+        id: string;
+        center: { latitude: number; longitude: number };
+        radius: number;
+        color: string;
+    }[];
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -87,7 +92,9 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <EventContext.Provider value={{ events, addEvent, incrementHype, updateEventStatus, getEventHeatmaps }}>
+        <EventContext.Provider
+            value={{ events, addEvent, incrementHype, updateEventStatus, getEventHeatmaps }}
+        >
             {children}
         </EventContext.Provider>
     );

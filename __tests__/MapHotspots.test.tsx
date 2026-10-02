@@ -33,7 +33,7 @@ describe('MapHotspots', () => {
             tree = renderer.create(
                 <EventProvider>
                     <MapHotspots />
-                </EventProvider>
+                </EventProvider>,
             );
         });
         expect(tree.toJSON()).toBeTruthy();

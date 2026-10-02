@@ -47,10 +47,17 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
     const addChatMessage = (sender: string, message: string) => {
-        setChatMessages(prev => [
-            ...prev,
-            { id: Math.random().toString(36).substring(7), sender, message, timestamp: Date.now() }
-        ].slice(-50));
+        setChatMessages((prev) =>
+            [
+                ...prev,
+                {
+                    id: Math.random().toString(36).substring(7),
+                    sender,
+                    message,
+                    timestamp: Date.now(),
+                },
+            ].slice(-50),
+        );
     };
 
     const triggerEBS = (location?: Location) => {
