@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import MapHotspots from '../src/components/MapScreen/MapHotspots';
+import { EventProvider } from '../src/context/EventContext';
 
 jest.mock('react-native-maps', () => {
     const React = require('react');
@@ -29,7 +30,11 @@ describe('MapHotspots', () => {
     it('renders without crashing', () => {
         let tree: any;
         renderer.act(() => {
-            tree = renderer.create(<MapHotspots />);
+            tree = renderer.create(
+                <EventProvider>
+                    <MapHotspots />
+                </EventProvider>,
+            );
         });
         expect(tree.toJSON()).toBeTruthy();
     });

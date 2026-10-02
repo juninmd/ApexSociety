@@ -7,6 +7,12 @@ interface EventContextType {
     addEvent: (event: Event) => void;
     incrementHype: (eventId: string) => void;
     updateEventStatus: (eventId: string, status: 'active' | 'scatter') => void;
+    getEventHeatmaps: () => {
+        id: string;
+        center: { latitude: number; longitude: number };
+        radius: number;
+        color: string;
+    }[];
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -53,6 +59,20 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
         );
     };
 
+    const getEventHeatmaps = () => {
+        return events
+            .filter((event) => (event.hypeScore || 0) > 50 && event.location.latitude !== 0)
+            .map((event) => ({
+                id: `heat-${event.id}`,
+                center: {
+                    latitude: event.location.latitude,
+                    longitude: event.location.longitude,
+                },
+                radius: Math.min(2000, 500 + (event.hypeScore || 0) * 10),
+                color: 'rgba(255, 165, 0, 0.4)', // Orange for high hype events
+            }));
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
             setEvents((prevEvents) => {
@@ -72,7 +92,9 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <EventContext.Provider value={{ events, addEvent, incrementHype, updateEventStatus }}>
+        <EventContext.Provider
+            value={{ events, addEvent, incrementHype, updateEventStatus, getEventHeatmaps }}
+        >
             {children}
         </EventContext.Provider>
     );

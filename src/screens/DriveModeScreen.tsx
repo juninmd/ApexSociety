@@ -15,6 +15,7 @@ import SpotterAssistant from '../components/SpotterAssistant';
 import PoliceScannerFeed from '../components/PoliceScannerFeed';
 import RouteThreatBanner from '../components/RouteThreatBanner';
 import EBSFlare from '../components/EBSFlare';
+import ConvoyChat from '../components/ConvoyChat';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 import { useWeather } from '../hooks/useWeather';
 import { useRouteThreat } from '../hooks/useRouteThreat';
@@ -68,6 +69,8 @@ export default function DriveModeScreen() {
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
                     <TelemetryDashboard speed={speed} isRaining={isRaining} />
+
+                    <ConvoyChat />
 
                     <View style={styles.actionsContainer}>
                         <ReportHazardButton type="blitz" />
