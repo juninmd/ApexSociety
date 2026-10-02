@@ -1,6 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Location } from '../types';
 
+export interface ChatMessage {
+    id: string;
+    sender: string;
+    message: string;
+    timestamp: number;
+}
+
 export interface CrewMemberLocation {
     userId: string;
     username: string;
@@ -22,6 +29,8 @@ interface ConvoyContextType {
     toggleGhostMode: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
     triggerEBS: (location?: Location) => void;
+    chatMessages: ChatMessage[];
+    addChatMessage: (sender: string, message: string) => void;
 }
 
 const ConvoyContext = createContext<ConvoyContextType | undefined>(undefined);
@@ -35,6 +44,14 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [ghostMode, setGhostMode] = useState(false);
     const [ghostCoordinates, setGhostCoordinates] = useState<Location[]>([]);
     const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
+    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+
+    const addChatMessage = (sender: string, message: string) => {
+        setChatMessages(prev => [
+            ...prev,
+            { id: Math.random().toString(36).substring(7), sender, message, timestamp: Date.now() }
+        ].slice(-50));
+    };
 
     const triggerEBS = (location?: Location) => {
         setEbsActive(true);
@@ -171,6 +188,8 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 toggleGhostMode,
                 updateLocation,
                 triggerEBS,
+                chatMessages,
+                addChatMessage,
             }}
         >
             {children}

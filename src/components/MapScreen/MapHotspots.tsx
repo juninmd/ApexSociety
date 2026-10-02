@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Animated } from 'react-native';
 import { Circle } from 'react-native-maps';
 import { MOCK_HOTSPOTS } from '../../data/mockExtra';
+import { useEvents } from '../../context/EventContext';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function MapHotspots() {
     const [pulseAnim] = useState(() => new Animated.Value(0.4));
+    const { getEventHeatmaps } = useEvents();
 
     useEffect(() => {
         Animated.loop(
@@ -25,9 +27,11 @@ export default function MapHotspots() {
         ).start();
     }, [pulseAnim]);
 
+    const allHotspots = [...MOCK_HOTSPOTS, ...getEventHeatmaps()];
+
     return (
         <>
-            {MOCK_HOTSPOTS.map((hotspot) => (
+            {allHotspots.map((hotspot) => (
                 <AnimatedCircle
                     key={hotspot.id}
                     center={hotspot.center}

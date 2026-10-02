@@ -6,6 +6,7 @@ import { theme } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 import { useEvents } from '../context/EventContext';
 import { Event } from '../types';
+import { useWeather } from '../hooks/useWeather';
 import FormInput from './FormInput';
 import EventTypeSelector from './EventTypeSelector';
 import CreateEventRiskSelector from './CreateEventRiskSelector';
@@ -14,6 +15,7 @@ import CreateEventDateTimeInput from './CreateEventDateTimeInput';
 export default function CreateEventForm() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { addEvent } = useEvents();
+    const { isRaining } = useWeather();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
@@ -50,6 +52,13 @@ export default function CreateEventForm() {
     return (
         <View style={styles.form}>
             <EventTypeSelector eventType={eventType} setEventType={setEventType} />
+            {isRaining && (
+                <View style={styles.weatherWarning}>
+                    <Text style={styles.weatherWarningText}>
+                        ALERTA: PREVISÃO DE CHUVA NA REGIÃO. RISCO ELEVADO PARA CORRIDAS.
+                    </Text>
+                </View>
+            )}
             <FormInput
                 label="TÍTULO DO EVENTO"
                 placeholder="Ex: Encontro de Sexta à Noite"
@@ -93,6 +102,20 @@ export default function CreateEventForm() {
 
 const styles = StyleSheet.create({
     form: { padding: 20 },
+    weatherWarning: {
+        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+        borderColor: theme.colors.error,
+        borderWidth: 1,
+        padding: 10,
+        marginBottom: 15,
+        borderRadius: 4,
+    },
+    weatherWarningText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 12,
+        textAlign: 'center',
+    },
     createButton: {
         marginTop: 30,
         height: 55,
