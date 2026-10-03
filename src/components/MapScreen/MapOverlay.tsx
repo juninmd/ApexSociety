@@ -56,7 +56,7 @@ export default function MapOverlay({ nextEvent, nextEventHost }: MapOverlayProps
             pulseAnim.setValue(0);
             pulseAnim.stopAnimation();
         }
-    }, [heatLevel, pulseAnim]);
+    }, [heatLevel, hasTurfIntrusion, pulseAnim]);
 
     return (
         <LinearGradient colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0)']} style={styles.overlay}>

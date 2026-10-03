@@ -19,7 +19,7 @@ export default function ChallengeRadar() {
                     toValue: 1,
                     duration: 2000,
                     useNativeDriver: true,
-                })
+                }),
             ).start();
 
             // Simulate finding a random target after 3 seconds
@@ -32,9 +32,17 @@ export default function ChallengeRadar() {
                 // Pulse the target icon
                 Animated.loop(
                     Animated.sequence([
-                        Animated.timing(pulseAnim, { toValue: 1, duration: 500, useNativeDriver: true }),
-                        Animated.timing(pulseAnim, { toValue: 0, duration: 500, useNativeDriver: true }),
-                    ])
+                        Animated.timing(pulseAnim, {
+                            toValue: 1,
+                            duration: 500,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(pulseAnim, {
+                            toValue: 0,
+                            duration: 500,
+                            useNativeDriver: true,
+                        }),
+                    ]),
                 ).start();
             }, 3000);
         }
@@ -66,18 +74,24 @@ export default function ChallengeRadar() {
                     onPress={() => setIsScanning(true)}
                     disabled={isScanning}
                 >
-                    <Animated.View style={[
-                        styles.radarSweep,
-                        {
-                            transform: [{
-                                rotate: radarAnim.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: ['0deg', '360deg']
-                                })
-                            }]
-                        }
-                    ]} />
-                    <Text style={styles.radarText}>{isScanning ? 'SCANNING...' : 'SCAN FOR RACERS'}</Text>
+                    <Animated.View
+                        style={[
+                            styles.radarSweep,
+                            {
+                                transform: [
+                                    {
+                                        rotate: radarAnim.interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: ['0deg', '360deg'],
+                                        }),
+                                    },
+                                ],
+                            },
+                        ]}
+                    />
+                    <Text style={styles.radarText}>
+                        {isScanning ? 'SCANNING...' : 'SCAN FOR RACERS'}
+                    </Text>
                 </TouchableOpacity>
             )}
 
@@ -160,5 +174,5 @@ const styles = StyleSheet.create({
     challengeButtonText: {
         color: '#FFF',
         fontFamily: theme.fonts.primary.bold,
-    }
+    },
 });
