@@ -102,7 +102,7 @@ export default function ChallengeRadar() {
                         setShowWager(false);
                         setTargetFound(null); // Reset after challenge
                     }}
-                    targetUser={targetFound.username}
+                    rivalName={targetFound.username}
                 />
             )}
         </View>
