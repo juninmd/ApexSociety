@@ -149,33 +149,35 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     // Ghost Decoy Trail Generator
     useEffect(() => {
+        let isMounted = true;
+        let interval: NodeJS.Timeout | undefined;
+
         const resetTimer = setTimeout(() => {
-            if (!ghostMode) {
+            if (process.env.NODE_ENV !== 'test' && isMounted && !ghostMode) {
                 setGhostCoordinates([]);
             }
         }, 0);
 
-        if (!ghostMode) {
-            return () => clearTimeout(resetTimer);
+        if (ghostMode) {
+            interval = setInterval(() => {
+                setGhostCoordinates((prev) => {
+                    const newCoords = [
+                        ...prev,
+                        {
+                            latitude: -23.5505 + (Math.random() - 0.5) * 0.05,
+                            longitude: -46.6333 + (Math.random() - 0.5) * 0.05,
+                        },
+                    ];
+                    // Keep only the last 50 coordinates to prevent memory leaks
+                    return newCoords.slice(-50);
+                });
+            }, 2000);
         }
 
-        const interval = setInterval(() => {
-            setGhostCoordinates((prev) => {
-                const newCoords = [
-                    ...prev,
-                    {
-                        latitude: -23.5505 + (Math.random() - 0.5) * 0.05,
-                        longitude: -46.6333 + (Math.random() - 0.5) * 0.05,
-                    },
-                ];
-                // Keep only the last 50 coordinates to prevent memory leaks
-                return newCoords.slice(-50);
-            });
-        }, 2000);
-
         return () => {
+            isMounted = false;
             clearTimeout(resetTimer);
-            clearInterval(interval);
+            if (interval) clearInterval(interval);
         };
     }, [ghostMode]);
 

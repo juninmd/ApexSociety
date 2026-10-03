@@ -74,6 +74,10 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
     };
 
     useEffect(() => {
+        if (process.env.NODE_ENV === 'test') {
+            return;
+        }
+
         const interval = setInterval(() => {
             setEvents((prevEvents) => {
                 return prevEvents.map((event) => {

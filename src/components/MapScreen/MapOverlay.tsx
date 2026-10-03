@@ -6,6 +6,9 @@ import EventCardOverlay from '../EventCardOverlay';
 import { theme } from '../../theme';
 import { Event } from '../../types';
 import { useHazards } from '../../context/HazardContext';
+import { useTurf } from '../../context/TurfContext';
+import { MOCK_USERS } from '../../data/mock';
+import { getDistance } from '../../utils/location';
 
 interface MapOverlayProps {
     nextEvent?: Event;
@@ -14,10 +17,27 @@ interface MapOverlayProps {
 
 export default function MapOverlay({ nextEvent, nextEventHost }: MapOverlayProps) {
     const { heatLevel } = useHazards();
+    const { territories } = useTurf();
     const [pulseAnim] = useState(() => new Animated.Value(0));
 
+    // Check for turf intrusions (rival crew member in turf)
+    const hasTurfIntrusion = territories.some((territory) => {
+        return MOCK_USERS.some((user) => {
+            if (user.crewId !== territory.crewId) {
+                const distKm = getDistance(
+                    territory.center.latitude,
+                    territory.center.longitude,
+                    user.location.latitude,
+                    user.location.longitude,
+                );
+                if (distKm <= territory.radius / 1000) return true;
+            }
+            return false;
+        });
+    });
+
     useEffect(() => {
-        if (heatLevel > 1) {
+        if (heatLevel > 1 || hasTurfIntrusion) {
             Animated.loop(
                 Animated.sequence([
                     Animated.timing(pulseAnim, {
@@ -45,6 +65,11 @@ export default function MapOverlay({ nextEvent, nextEventHost }: MapOverlayProps
                     style={[styles.heatOverlay, { opacity: pulseAnim }]}
                     pointerEvents="none"
                 />
+            )}
+            {hasTurfIntrusion && (
+                <View style={styles.intrusionBanner}>
+                    <Text style={styles.intrusionText}>RIVAL CREW INTRUSION DETECTED</Text>
+                </View>
             )}
             <View style={styles.topOverlay}>
                 <View style={styles.actionsContainer}>
@@ -102,5 +127,21 @@ const styles = StyleSheet.create({
     heatOverlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    },
+    intrusionBanner: {
+        position: 'absolute',
+        top: '40%',
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(211, 47, 47, 0.8)',
+        padding: 10,
+        alignItems: 'center',
+        zIndex: 100,
+    },
+    intrusionText: {
+        color: '#FFF',
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 20,
+        letterSpacing: 2,
     },
 });

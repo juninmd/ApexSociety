@@ -3,12 +3,15 @@ import { Marker, Polyline } from 'react-native-maps';
 import { theme } from '../../theme';
 import { MOCK_USERS, MOCK_EVENTS } from '../../data/mock';
 import { useConvoy } from '../../context/ConvoyContext';
+import GhostEvasionRoute from './GhostEvasionRoute';
 
 export default function MapMarkers() {
     const { crewMembers, isConvoyActive, sosLocation } = useConvoy();
 
     return (
         <>
+            <GhostEvasionRoute />
+
             {sosLocation && (
                 <Marker coordinate={sosLocation} title="CONVOY SOS BEACON" pinColor="#FF00FF" />
             )}

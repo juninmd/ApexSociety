@@ -16,6 +16,7 @@ import PoliceScannerFeed from '../components/PoliceScannerFeed';
 import RouteThreatBanner from '../components/RouteThreatBanner';
 import EBSFlare from '../components/EBSFlare';
 import ConvoyChat from '../components/ConvoyChat';
+import ChallengeRadar from '../components/ChallengeRadar';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 import { useWeather } from '../hooks/useWeather';
 import { useRouteThreat } from '../hooks/useRouteThreat';
@@ -65,6 +66,7 @@ export default function DriveModeScreen() {
                 <View style={styles.content}>
                     {!isGhostMode && <RouteThreatBanner threatInfo={threatInfo} />}
                     {!isGhostMode && <SpotterAssistant />}
+                    {!isGhostMode && <ChallengeRadar />}
                     <PoliceScannerFeed />
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
