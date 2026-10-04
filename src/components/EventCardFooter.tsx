@@ -9,6 +9,7 @@ import GarageQRPassModal from './GarageQRPassModal';
 import EventCardActionButtons from './EventCardActionButtons';
 import EventDroneRecon from './EventDroneRecon';
 import ShowAndShineVotingModal from './ShowAndShineVotingModal';
+import EventLiveFeed from './EventLiveFeed';
 
 interface EventCardFooterProps {
     eventId: string;
@@ -30,6 +31,7 @@ export default function EventCardFooter({
     const [modalVisible, setModalVisible] = useState(false);
     const [droneReconVisible, setDroneReconVisible] = useState(false);
     const [showAndShineVisible, setShowAndShineVisible] = useState(false);
+    const [liveFeedVisible, setLiveFeedVisible] = useState(false);
     const isLive = startTime?.toLowerCase() === 'agora' || false;
     const { addReputation } = useReputation();
     const { incrementHype } = useEvents();
@@ -83,6 +85,23 @@ export default function EventCardFooter({
                 <TouchableOpacity onPress={handleBoostHype} style={styles.boostButton}>
                     <Text style={styles.boostText}>🔥 BOOST</Text>
                 </TouchableOpacity>
+
+                {isLive && (
+                    <TouchableOpacity
+                        onPress={() => setLiveFeedVisible(true)}
+                        style={[
+                            styles.boostButton,
+                            {
+                                borderColor: theme.colors.secondary,
+                                backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                            },
+                        ]}
+                    >
+                        <Text style={[styles.boostText, { color: theme.colors.secondary }]}>
+                            💬 LIVE
+                        </Text>
+                    </TouchableOpacity>
+                )}
             </View>
             <EventCardActionButtons
                 isLive={isLive}
@@ -118,6 +137,12 @@ export default function EventCardFooter({
                     eventId={eventId}
                 />
             )}
+
+            <EventLiveFeed
+                visible={liveFeedVisible}
+                onClose={() => setLiveFeedVisible(false)}
+                eventId={eventId}
+            />
         </View>
     );
 }
