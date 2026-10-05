@@ -1,6 +1,7 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import jestPlugin from 'eslint-plugin-jest';
+import reactPlugin from 'eslint-plugin-react';
 
 const compat = new FlatCompat();
 
@@ -17,6 +18,16 @@ export default [
     },
     ...compat.extends('expo'),
     prettierRecommended,
+    {
+        files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+        plugins: {
+            react: reactPlugin,
+        },
+        rules: {
+            'react/jsx-uses-react': 'error',
+            'react/jsx-uses-vars': 'error',
+        },
+    },
     {
         files: ['**/*.test.ts', '**/*.test.tsx', 'jest.setup.ts', 'jest.config.ts'],
         plugins: {

@@ -5,6 +5,7 @@ import { MapPin } from 'lucide-react-native';
 import { theme } from '../theme';
 import { getDistance } from '../utils/location';
 import { useReputation } from '../context/ReputationContext';
+import { useTurf } from '../context/TurfContext';
 
 interface GeofencedCheckInProps {
     eventId: string;
@@ -20,6 +21,7 @@ export default function GeofencedCheckIn({
     radiusInKm = 0.5, // 500 meters default
 }: GeofencedCheckInProps) {
     const { addReputation } = useReputation();
+    const { territories } = useTurf();
     const [isCheckedIn, setIsCheckedIn] = useState(false);
     const [checking, setChecking] = useState(false);
 
@@ -51,8 +53,33 @@ export default function GeofencedCheckIn({
 
             if (distance <= radiusInKm) {
                 setIsCheckedIn(true);
-                addReputation(50); // Award rep for attending
-                Alert.alert('CHECK-IN SUCESSO', 'Você ganhou 50 REP por comparecer!');
+
+                // Check if the event is inside a claimed turf for bonus
+                let isBonusTurf = false;
+                for (const territory of territories) {
+                    const turfDistance = getDistance(
+                        eventLatitude,
+                        eventLongitude,
+                        territory.center.latitude,
+                        territory.center.longitude,
+                    );
+                    if (turfDistance <= territory.radius / 1000) {
+                        // Assuming radius is in meters based on typical map usage, dividing by 1000 to match km output of getDistance
+                        isBonusTurf = true;
+                        break;
+                    }
+                }
+
+                if (isBonusTurf) {
+                    addReputation(100);
+                    Alert.alert(
+                        'BÔNUS DE TERRITÓRIO!',
+                        'Você ganhou 100 REP (2x) por comparecer em área dominada!',
+                    );
+                } else {
+                    addReputation(50); // Award regular rep for attending
+                    Alert.alert('CHECK-IN SUCESSO', 'Você ganhou 50 REP por comparecer!');
+                }
             } else {
                 Alert.alert(
                     'Fora de Alcance',
