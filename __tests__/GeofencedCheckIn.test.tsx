@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { Alert } from 'react-native';
 
 import { ReputationProvider } from '../src/context/ReputationContext';
+import { TurfProvider } from '../src/context/TurfContext';
 
 // Mock expo-location
 jest.mock('expo-location', () => ({
@@ -17,7 +18,11 @@ jest.mock('expo-location', () => ({
 jest.spyOn(Alert, 'alert');
 
 const renderWithProvider = (component: React.ReactElement) => {
-    return render(<ReputationProvider>{component}</ReputationProvider>);
+    return render(
+        <TurfProvider>
+            <ReputationProvider>{component}</ReputationProvider>
+        </TurfProvider>,
+    );
 };
 
 describe('GeofencedCheckIn', () => {

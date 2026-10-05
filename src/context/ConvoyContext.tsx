@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Location } from '../types';
+import { useGhostTrail } from '../hooks/useGhostTrail';
 
 export interface ChatMessage {
     id: string;
@@ -42,9 +43,9 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [ebsActive, setEbsActive] = useState(false);
     const [sosLocation, setSosLocation] = useState<Location | undefined>(undefined);
     const [ghostMode, setGhostMode] = useState(false);
-    const [ghostCoordinates, setGhostCoordinates] = useState<Location[]>([]);
     const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+    const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');
 
     const addChatMessage = (sender: string, message: string) => {
         setChatMessages((prev) =>
@@ -146,40 +147,6 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
         return () => clearInterval(interval);
     }, [isConvoyActive]);
-
-    // Ghost Decoy Trail Generator
-    useEffect(() => {
-        let isMounted = true;
-        let interval: NodeJS.Timeout | undefined;
-
-        const resetTimer = setTimeout(() => {
-            if (process.env.NODE_ENV !== 'test' && isMounted && !ghostMode) {
-                setGhostCoordinates([]);
-            }
-        }, 0);
-
-        if (ghostMode) {
-            interval = setInterval(() => {
-                setGhostCoordinates((prev) => {
-                    const newCoords = [
-                        ...prev,
-                        {
-                            latitude: -23.5505 + (Math.random() - 0.5) * 0.05,
-                            longitude: -46.6333 + (Math.random() - 0.5) * 0.05,
-                        },
-                    ];
-                    // Keep only the last 50 coordinates to prevent memory leaks
-                    return newCoords.slice(-50);
-                });
-            }, 2000);
-        }
-
-        return () => {
-            isMounted = false;
-            clearTimeout(resetTimer);
-            if (interval) clearInterval(interval);
-        };
-    }, [ghostMode]);
 
     return (
         <ConvoyContext.Provider

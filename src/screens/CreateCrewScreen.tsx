@@ -23,9 +23,6 @@ export default function CreateCrewScreen() {
             return;
         }
 
-        // Mock creation logic
-        console.log('Criando Equipe:', { name, tag, description });
-
         Alert.alert('Sucesso', 'Equipe criada com sucesso!', [
             { text: 'OK', onPress: () => navigation.goBack() },
         ]);

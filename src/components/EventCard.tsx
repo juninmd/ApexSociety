@@ -8,6 +8,7 @@ import EventCardFooter from './EventCardFooter';
 import EventHypeIndicator from './EventHypeIndicator';
 import GeofencedCheckIn from './GeofencedCheckIn';
 import { styles } from './EventCardStyles';
+import { useHazards } from '../context/HazardContext';
 
 interface EventCardProps {
     eventId: string;
@@ -53,6 +54,8 @@ export default function EventCard({
     onPress,
 }: EventCardProps) {
     const [isUnlocked, setIsUnlocked] = React.useState(false);
+    const { heatLevel } = useHazards();
+    const isElevatedRisk = elevatedRisk !== undefined ? elevatedRisk : heatLevel > 2;
 
     if (isSecret && !isUnlocked) {
         return (
@@ -69,7 +72,7 @@ export default function EventCard({
 
     return (
         <TouchableOpacity
-            style={[styles.container, elevatedRisk && styles.containerElevatedRisk]}
+            style={[styles.container, isElevatedRisk && styles.containerElevatedRisk]}
             onPress={onPress}
         >
             <EventHypeIndicator hypeScore={hypeScore} />
@@ -96,7 +99,7 @@ export default function EventCard({
 
             <EventCardInfo time={time} location={location} weather={weather} />
 
-            {elevatedRisk && (
+            {isElevatedRisk && (
                 <View style={styles.elevatedRiskContainer}>
                     <Text style={styles.elevatedRiskText}>⚠️ ELEVATED POLICE RISK</Text>
                 </View>

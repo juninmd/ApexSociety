@@ -3,12 +3,15 @@ import { render } from '@testing-library/react-native';
 import EventCard from '../src/components/EventCard';
 import { ReputationProvider } from '../src/context/ReputationContext';
 import { EventProvider } from '../src/context/EventContext';
+import { HazardProvider } from '../src/context/HazardContext';
 
 describe('EventCard', () => {
     const renderWithContext = (ui: React.ReactElement) => {
         return render(
             <EventProvider>
-                <ReputationProvider>{ui}</ReputationProvider>
+                <ReputationProvider>
+                    <HazardProvider>{ui}</HazardProvider>
+                </ReputationProvider>
             </EventProvider>,
         );
     };

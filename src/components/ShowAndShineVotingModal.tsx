@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Trophy, X } from 'lucide-react-native';
 import { theme } from '../theme';
-import CustomButton from './CustomButton';
+import ShowAndShineVotingList from './ShowAndShineVotingList';
 
 interface ShowAndShineVotingModalProps {
     visible: boolean;
@@ -90,30 +90,12 @@ export default function ShowAndShineVotingModal({
                         ))}
                     </ScrollView>
 
-                    <ScrollView style={styles.entriesList}>
-                        {CAR_ENTRIES.map((entry) => (
-                            <View key={entry.id} style={styles.entryCard}>
-                                <View style={styles.entryInfo}>
-                                    <Text style={styles.entryCar}>{entry.car}</Text>
-                                    <Text style={styles.entryOwner}>{entry.owner}</Text>
-                                </View>
-                                <CustomButton
-                                    title={
-                                        votes[selectedCategory || ''] === entry.id
-                                            ? 'VOTADO'
-                                            : 'VOTAR'
-                                    }
-                                    onPress={() => handleVote(entry.id)}
-                                    variant={
-                                        votes[selectedCategory || ''] === entry.id
-                                            ? 'secondary'
-                                            : 'primary'
-                                    }
-                                    style={styles.voteButton}
-                                />
-                            </View>
-                        ))}
-                    </ScrollView>
+                    <ShowAndShineVotingList
+                        entries={CAR_ENTRIES}
+                        selectedCategory={selectedCategory}
+                        votes={votes}
+                        onVote={handleVote}
+                    />
                 </View>
             </View>
         </Modal>
@@ -178,37 +160,5 @@ const styles = StyleSheet.create({
     },
     categoryTextActive: {
         color: theme.colors.primary,
-    },
-    entriesList: {
-        flex: 1,
-    },
-    entryCard: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 15,
-        backgroundColor: theme.colors.card,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-        marginBottom: 10,
-        borderRadius: 8,
-    },
-    entryInfo: {
-        flex: 1,
-    },
-    entryCar: {
-        color: theme.colors.text,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 16,
-    },
-    entryOwner: {
-        color: theme.colors.secondary,
-        fontFamily: theme.fonts.secondary.regular,
-        fontSize: 12,
-        marginTop: 4,
-    },
-    voteButton: {
-        paddingHorizontal: 15,
-        paddingVertical: 8,
     },
 });
