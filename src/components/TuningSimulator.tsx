@@ -53,7 +53,10 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
         let effectiveHp = hp;
         if (isRaining && tires === 'Slick') {
             effectiveHp -= 150; // Severe penalty for slicks in the rain
-            Alert.alert('WEATHER PENALTY', 'Racing slicks in the rain caused a severe loss of traction (-150 HP equivalent)');
+            Alert.alert(
+                'WEATHER PENALTY',
+                'Racing slicks in the rain caused a severe loss of traction (-150 HP equivalent)',
+            );
         }
 
         const rivalHp = defaultHp + 100; // Mock rival with +100 HP base
@@ -122,12 +125,24 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
 
             <TuningStatsRow engine={engine} hp={hp} defaultHp={defaultHp} wear={wear} />
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
-                <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.fonts.secondary.bold }}>
+            <View
+                style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}
+            >
+                <Text
+                    style={{
+                        color: theme.colors.textSecondary,
+                        fontFamily: theme.fonts.secondary.bold,
+                    }}
+                >
                     TIRE COMPOUND:
                 </Text>
                 <TouchableOpacity onPress={() => setTires(tires === 'Street' ? 'Slick' : 'Street')}>
-                    <Text style={{ color: tires === 'Slick' ? theme.colors.error : theme.colors.primary, fontFamily: theme.fonts.primary.bold }}>
+                    <Text
+                        style={{
+                            color: tires === 'Slick' ? theme.colors.error : theme.colors.primary,
+                            fontFamily: theme.fonts.primary.bold,
+                        }}
+                    >
                         {tires}
                     </Text>
                 </TouchableOpacity>

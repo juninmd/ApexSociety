@@ -76,9 +76,12 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
                 <TouchableOpacity
                     style={styles.evasionButton}
                     onPress={() => {
-                        const waypoints = calculateEvasionRoute(hazards, { latitude: -23.5505, longitude: -46.6333 }); // default SP center
+                        const waypoints = calculateEvasionRoute(hazards, {
+                            latitude: -23.5505,
+                            longitude: -46.6333,
+                        }); // default SP center
                         if (!isPlannerActive) togglePlanner();
-                        waypoints.forEach(wp => addWaypoint(wp));
+                        waypoints.forEach((wp) => addWaypoint(wp));
                     }}
                 >
                     <Text style={styles.evasionText}>
@@ -148,5 +151,5 @@ const styles = StyleSheet.create({
         color: theme.colors.error,
         fontFamily: theme.fonts.primary.bold,
         fontSize: 14,
-    }
+    },
 });

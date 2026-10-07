@@ -14,9 +14,10 @@ export function useEvasionRoute() {
         // Generate 3 safe waypoints
         for (let i = 0; i < 3; i++) {
             // Check if any hazard is nearby (mock simplistic check)
-            const isHazardNear = hazards.some(h =>
-                Math.abs(h.location.latitude - currentLocation.latitude) < 0.05 &&
-                Math.abs(h.location.longitude - currentLocation.longitude) < 0.05
+            const isHazardNear = hazards.some(
+                (h) =>
+                    Math.abs(h.location.latitude - currentLocation.latitude) < 0.05 &&
+                    Math.abs(h.location.longitude - currentLocation.longitude) < 0.05,
             );
 
             // Shift away from the typical grid
@@ -46,6 +47,6 @@ export function useEvasionRoute() {
         evasionRouteActive,
         evasionWaypoints,
         calculateEvasionRoute,
-        clearEvasionRoute
+        clearEvasionRoute,
     };
 }

@@ -67,8 +67,18 @@ export default function CrewScreen() {
                         styles.challengeButton,
                         {
                             marginTop: 10,
-                            borderColor: cooldown > 0 ? theme.colors.textSecondary : (takeoverActive ? theme.colors.error : theme.colors.primary),
-                            backgroundColor: cooldown > 0 ? 'rgba(100, 100, 100, 0.1)' : (takeoverActive ? 'rgba(255, 0, 0, 0.1)' : 'rgba(212, 175, 55, 0.1)'),
+                            borderColor:
+                                cooldown > 0
+                                    ? theme.colors.textSecondary
+                                    : takeoverActive
+                                      ? theme.colors.error
+                                      : theme.colors.primary,
+                            backgroundColor:
+                                cooldown > 0
+                                    ? 'rgba(100, 100, 100, 0.1)'
+                                    : takeoverActive
+                                      ? 'rgba(255, 0, 0, 0.1)'
+                                      : 'rgba(212, 175, 55, 0.1)',
                         },
                     ]}
                     disabled={cooldown > 0}
@@ -81,7 +91,10 @@ export default function CrewScreen() {
 
                         if (!takeoverActive) {
                             setTakeoverActive(true);
-                            Alert.alert('TAKEOVER INITIATED', 'You have begun a Turf Takeover! Win a race on their turf to claim dominance.');
+                            Alert.alert(
+                                'TAKEOVER INITIATED',
+                                'You have begun a Turf Takeover! Win a race on their turf to claim dominance.',
+                            );
                         } else {
                             claimTurf(turfToClaim.id, 10);
                             setTakeoverActive(false);
@@ -90,8 +103,24 @@ export default function CrewScreen() {
                         }
                     }}
                 >
-                    <Text style={[styles.challengeButtonText, { color: cooldown > 0 ? theme.colors.textSecondary : (takeoverActive ? theme.colors.error : theme.colors.primary) }]}>
-                        {cooldown > 0 ? `COOLDOWN (${cooldown}s)` : (takeoverActive ? 'CONFIRM TAKEOVER VICTORY' : 'INITIATE TAKEOVER')}
+                    <Text
+                        style={[
+                            styles.challengeButtonText,
+                            {
+                                color:
+                                    cooldown > 0
+                                        ? theme.colors.textSecondary
+                                        : takeoverActive
+                                          ? theme.colors.error
+                                          : theme.colors.primary,
+                            },
+                        ]}
+                    >
+                        {cooldown > 0
+                            ? `COOLDOWN (${cooldown}s)`
+                            : takeoverActive
+                              ? 'CONFIRM TAKEOVER VICTORY'
+                              : 'INITIATE TAKEOVER'}
                     </Text>
                 </TouchableOpacity>
             </View>
