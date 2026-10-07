@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { theme } from '../../theme';
 import { useHazards } from '../../context/HazardContext';
 import { useWeather } from '../../hooks/useWeather';
+import { useEvasionRoute } from '../../hooks/useEvasionRoute';
+import { useCruisePlanner } from '../../hooks/useCruisePlanner';
 
 interface MapRouteAnalyzerProps {
     visible: boolean;
 }
 
 export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
-    const { heatLevel } = useHazards();
+    const { hazards, heatLevel } = useHazards();
+    const { calculateEvasionRoute, evasionRouteActive } = useEvasionRoute();
+    const { addWaypoint, togglePlanner, isPlannerActive } = useCruisePlanner();
     const { isRaining } = useWeather();
     const [rivalDetected, setRivalDetected] = useState(false);
 
@@ -68,6 +72,20 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
             {rivalDetected && (
                 <Text style={styles.warning}>CRITICAL: RIVAL CREW DETECTED IN PROXIMITY!</Text>
             )}
+            {score > 1.5 && (
+                <TouchableOpacity
+                    style={styles.evasionButton}
+                    onPress={() => {
+                        const waypoints = calculateEvasionRoute(hazards, { latitude: -23.5505, longitude: -46.6333 }); // default SP center
+                        if (!isPlannerActive) togglePlanner();
+                        waypoints.forEach(wp => addWaypoint(wp));
+                    }}
+                >
+                    <Text style={styles.evasionText}>
+                        {evasionRouteActive ? 'EVASION ROUTE PLOTTED' : 'CALCULATE EVASION ROUTE'}
+                    </Text>
+                </TouchableOpacity>
+            )}
         </View>
     );
 }
@@ -117,4 +135,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textAlign: 'center',
     },
+    evasionButton: {
+        marginTop: 15,
+        backgroundColor: 'rgba(211, 47, 47, 0.2)',
+        borderWidth: 1,
+        borderColor: theme.colors.error,
+        paddingVertical: 8,
+        borderRadius: 4,
+        alignItems: 'center',
+    },
+    evasionText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 14,
+    }
 });

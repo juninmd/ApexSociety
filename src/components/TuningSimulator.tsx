@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Wrench, Trophy } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
+import { useWeather } from '../hooks/useWeather';
 import { styles } from './TuningSimulatorStyles';
 import TuningStatsRow from './tuning/TuningStatsRow';
 import TuningPartsContainer from './tuning/TuningPartsContainer';
@@ -23,6 +24,8 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
     });
     const [hasWagered, setHasWagered] = useState(false);
     const [wear, setWear] = useState(0);
+    const [tires, setTires] = useState<'Street' | 'Slick'>('Street');
+    const { isRaining } = useWeather();
 
     const handleUpgrade = (part: keyof typeof upgrades, hpBoost: number) => {
         if (!upgrades[part]) {
@@ -46,11 +49,18 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
             return;
         }
 
+        // Apply weather penalty
+        let effectiveHp = hp;
+        if (isRaining && tires === 'Slick') {
+            effectiveHp -= 150; // Severe penalty for slicks in the rain
+            Alert.alert('WEATHER PENALTY', 'Racing slicks in the rain caused a severe loss of traction (-150 HP equivalent)');
+        }
+
         const rivalHp = defaultHp + 100; // Mock rival with +100 HP base
         setHasWagered(true);
         setWear((prev) => Math.min(prev + 20, 100)); // Increase wear on racing
 
-        if (hp > rivalHp) {
+        if (effectiveHp > rivalHp) {
             addReputation(500); // Win
             Alert.alert(
                 'PINK SLIP WON',
@@ -111,6 +121,17 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
             </View>
 
             <TuningStatsRow engine={engine} hp={hp} defaultHp={defaultHp} wear={wear} />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
+                <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.fonts.secondary.bold }}>
+                    TIRE COMPOUND:
+                </Text>
+                <TouchableOpacity onPress={() => setTires(tires === 'Street' ? 'Slick' : 'Street')}>
+                    <Text style={{ color: tires === 'Slick' ? theme.colors.error : theme.colors.primary, fontFamily: theme.fonts.primary.bold }}>
+                        {tires}
+                    </Text>
+                </TouchableOpacity>
+            </View>
 
             {wear > 0 && (
                 <TouchableOpacity style={styles.repairButton} onPress={handleRepair}>
