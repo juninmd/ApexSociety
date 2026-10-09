@@ -95,28 +95,33 @@ export default function LeaderboardScreen() {
             </View>
 
             <View style={styles.list}>
-                {filter === 'bounties' ? (
-                    activeBounties.map((bounty) => (
-                        <View key={bounty.id} style={styles.bountyCard}>
-                            <View style={styles.bountyHeader}>
-                                <Target color={theme.colors.error} size={24} />
-                                <Text style={styles.bountyTarget}>{bounty.targetUsername}</Text>
-                            </View>
-                            <Text style={styles.bountyAmount}>{bounty.amount} REP</Text>
-                            <Text style={styles.bountyPlacedBy}>Placed by: {bounty.placedBy}</Text>
-                            <TouchableOpacity
-                                style={styles.claimButton}
-                                onPress={() => claimBounty(bounty.id)}
-                            >
-                                <Text style={styles.claimButtonText}>CLAIM BOUNTY</Text>
-                            </TouchableOpacity>
-                        </View>
-                    ))
-                ) : (
-                    sortedCrews.map((crew, index) => (
-                        <LeaderboardCrewCard key={crew.id} crew={crew} index={index} filter={filter} />
-                    ))
-                )}
+                {filter === 'bounties'
+                    ? activeBounties.map((bounty) => (
+                          <View key={bounty.id} style={styles.bountyCard}>
+                              <View style={styles.bountyHeader}>
+                                  <Target color={theme.colors.error} size={24} />
+                                  <Text style={styles.bountyTarget}>{bounty.targetUsername}</Text>
+                              </View>
+                              <Text style={styles.bountyAmount}>{bounty.amount} REP</Text>
+                              <Text style={styles.bountyPlacedBy}>
+                                  Placed by: {bounty.placedBy}
+                              </Text>
+                              <TouchableOpacity
+                                  style={styles.claimButton}
+                                  onPress={() => claimBounty(bounty.id)}
+                              >
+                                  <Text style={styles.claimButtonText}>CLAIM BOUNTY</Text>
+                              </TouchableOpacity>
+                          </View>
+                      ))
+                    : sortedCrews.map((crew, index) => (
+                          <LeaderboardCrewCard
+                              key={crew.id}
+                              crew={crew}
+                              index={index}
+                              filter={filter}
+                          />
+                      ))}
             </View>
         </ScrollView>
     );
