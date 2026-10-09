@@ -57,6 +57,8 @@ export default function EventCard({
     const { heatLevel } = useHazards();
     const isElevatedRisk = elevatedRisk !== undefined ? elevatedRisk : heatLevel > 2;
 
+    const isStormChaserActive = hypeScore >= 100 && (weather === 'rain' || weather === 'fog');
+
     if (isSecret && !isUnlocked) {
         return (
             <EventCardSecret
@@ -85,9 +87,14 @@ export default function EventCard({
                 <Text style={styles.title} numberOfLines={1}>
                     {title}
                 </Text>
-                {hypeScore >= 100 && (
+                {hypeScore >= 100 && !isStormChaserActive && (
                     <View style={styles.hypeBadge}>
                         <Text style={styles.hypeText}>🔥 HIGH HYPE</Text>
+                    </View>
+                )}
+                {isStormChaserActive && (
+                    <View style={[styles.hypeBadge, { backgroundColor: 'rgba(0, 255, 255, 0.2)', borderColor: '#00FFFF' }]}>
+                        <Text style={[styles.hypeText, { color: '#00FFFF' }]}>⛈️ STORM CHASER BONUS</Text>
                     </View>
                 )}
                 {status === 'scatter' && (

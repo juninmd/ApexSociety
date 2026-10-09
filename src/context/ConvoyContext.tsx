@@ -25,6 +25,7 @@ interface ConvoyContextType {
     ghostMode: boolean;
     ghostCoordinates: Location[];
     ghostStartTime?: number;
+    convoyHeatScore: number;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
     toggleGhostMode: () => void;
@@ -45,6 +46,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [ghostMode, setGhostMode] = useState(false);
     const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+    const [convoyHeatScore, setConvoyHeatScore] = useState(0);
     const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');
 
     const addChatMessage = (sender: string, message: string) => {
@@ -130,7 +132,12 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     // Simulate movement
     useEffect(() => {
-        if (!isConvoyActive) return;
+        if (!isConvoyActive) {
+            setTimeout(() => setConvoyHeatScore(0), 0);
+            return;
+        }
+
+        setTimeout(() => setConvoyHeatScore(crewMembers.length * 15), 0);
 
         const interval = setInterval(() => {
             setCrewMembers((prev) =>
@@ -159,6 +166,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 ghostMode,
                 ghostCoordinates,
                 ghostStartTime,
+                convoyHeatScore,
                 toggleConvoy,
                 toggleBroadcast,
                 toggleGhostMode,

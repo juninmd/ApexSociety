@@ -41,7 +41,9 @@ export const EventProvider: React.FC<EventProviderProps> = ({ children }) => {
             prevEvents.map((event) => {
                 if (event.id === eventId) {
                     const currentHype = event.hypeScore || 0;
-                    return { ...event, hypeScore: currentHype + 10 };
+                    const isBadWeather = event.weather === 'rain' || event.weather === 'fog';
+                    const multiplier = isBadWeather ? 2 : 1; // Double hype gain during bad weather
+                    return { ...event, hypeScore: currentHype + (10 * multiplier) };
                 }
                 return event;
             }),
