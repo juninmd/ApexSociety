@@ -20,12 +20,10 @@ import ChallengeRadar from '../components/ChallengeRadar';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 import { useWeather } from '../hooks/useWeather';
 import { useRouteThreat } from '../hooks/useRouteThreat';
-import { useConvoy } from '../context/ConvoyContext';
 
 export default function DriveModeScreen() {
     const [pulseAnim] = useState(() => new Animated.Value(1));
     const { hazards, heatLevel } = useHazards();
-    const { isConvoyActive, convoyHeatScore } = useConvoy();
     const threatInfo = useRouteThreat();
     const { isRaining } = useWeather();
     const { showAlert } = useUI();
@@ -62,13 +60,6 @@ export default function DriveModeScreen() {
                     <View style={styles.ghostDecoyBanner}>
                         <Text style={styles.ghostDecoyText}>
                             GHOST DECOY ACTIVE - MOCKING LOCATION
-                        </Text>
-                    </View>
-                )}
-                {isConvoyActive && !isGhostMode && convoyHeatScore > 0 && (
-                    <View style={styles.convoyHeatBanner}>
-                        <Text style={styles.convoyHeatText}>
-                            CONVOY HEAT AURA: +{convoyHeatScore} NOTORIETY
                         </Text>
                     </View>
                 )}
@@ -132,23 +123,5 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderWidth: 1,
         borderColor: '#00FFFF',
-    },
-    convoyHeatBanner: {
-        position: 'absolute',
-        top: 100,
-        width: '100%',
-        alignItems: 'center',
-        zIndex: 10,
-    },
-    convoyHeatText: {
-        color: '#FF4500',
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 14,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        paddingHorizontal: 15,
-        paddingVertical: 5,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: '#FF4500',
     },
 });

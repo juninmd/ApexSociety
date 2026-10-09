@@ -130,14 +130,18 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         });
     };
 
-    // Simulate movement
+    // Update convoy heat score whenever crew members change or convoy status changes
     useEffect(() => {
         if (!isConvoyActive) {
             setTimeout(() => setConvoyHeatScore(0), 0);
-            return;
+        } else {
+            setTimeout(() => setConvoyHeatScore(crewMembers.length * 15), 0);
         }
+    }, [isConvoyActive, crewMembers.length]);
 
-        setTimeout(() => setConvoyHeatScore(crewMembers.length * 15), 0);
+    // Simulate movement
+    useEffect(() => {
+        if (!isConvoyActive) return;
 
         const interval = setInterval(() => {
             setCrewMembers((prev) =>

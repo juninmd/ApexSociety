@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Trophy, Target } from 'lucide-react-native';
+import { Trophy } from 'lucide-react-native';
 import { theme } from '../theme';
 import { MOCK_CREWS } from '../data/mock';
 import LeaderboardCrewCard from '../components/LeaderboardCrewCard';
-import { useReputation } from '../context/ReputationContext';
 
 export default function LeaderboardScreen() {
-    const [filter, setFilter] = useState<'members' | 'heat' | 'notoriety' | 'bounties'>('members');
-    const { activeBounties, claimBounty } = useReputation();
+    const [filter, setFilter] = useState<'members' | 'heat' | 'notoriety'>('members');
 
     const sortedCrews = [...MOCK_CREWS].sort((a, b) => {
         if (filter === 'heat') {
@@ -75,53 +73,13 @@ export default function LeaderboardScreen() {
                             NOTORIETY
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[
-                            styles.filterButton,
-                            filter === 'bounties' && styles.filterButtonActive,
-                        ]}
-                        onPress={() => setFilter('bounties')}
-                    >
-                        <Text
-                            style={[
-                                styles.filterText,
-                                filter === 'bounties' && styles.filterTextActive,
-                            ]}
-                        >
-                            BOUNTIES
-                        </Text>
-                    </TouchableOpacity>
                 </View>
             </View>
 
             <View style={styles.list}>
-                {filter === 'bounties'
-                    ? activeBounties.map((bounty) => (
-                          <View key={bounty.id} style={styles.bountyCard}>
-                              <View style={styles.bountyHeader}>
-                                  <Target color={theme.colors.error} size={24} />
-                                  <Text style={styles.bountyTarget}>{bounty.targetUsername}</Text>
-                              </View>
-                              <Text style={styles.bountyAmount}>{bounty.amount} REP</Text>
-                              <Text style={styles.bountyPlacedBy}>
-                                  Placed by: {bounty.placedBy}
-                              </Text>
-                              <TouchableOpacity
-                                  style={styles.claimButton}
-                                  onPress={() => claimBounty(bounty.id)}
-                              >
-                                  <Text style={styles.claimButtonText}>CLAIM BOUNTY</Text>
-                              </TouchableOpacity>
-                          </View>
-                      ))
-                    : sortedCrews.map((crew, index) => (
-                          <LeaderboardCrewCard
-                              key={crew.id}
-                              crew={crew}
-                              index={index}
-                              filter={filter}
-                          />
-                      ))}
+                {sortedCrews.map((crew, index) => (
+                    <LeaderboardCrewCard key={crew.id} crew={crew} index={index} filter={filter} />
+                ))}
             </View>
         </ScrollView>
     );
@@ -172,47 +130,5 @@ const styles = StyleSheet.create({
     },
     filterTextActive: {
         color: theme.colors.black,
-    },
-    bountyCard: {
-        backgroundColor: theme.colors.card,
-        padding: 15,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.colors.error,
-        marginBottom: 15,
-    },
-    bountyHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    bountyTarget: {
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 18,
-        color: theme.colors.text,
-        marginLeft: 10,
-    },
-    bountyAmount: {
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 24,
-        color: theme.colors.primary,
-        marginBottom: 5,
-    },
-    bountyPlacedBy: {
-        fontFamily: theme.fonts.secondary.regular,
-        fontSize: 12,
-        color: theme.colors.textSecondary,
-        marginBottom: 15,
-    },
-    claimButton: {
-        backgroundColor: theme.colors.error,
-        paddingVertical: 10,
-        borderRadius: 4,
-        alignItems: 'center',
-    },
-    claimButtonText: {
-        fontFamily: theme.fonts.primary.bold,
-        color: theme.colors.white,
-        fontSize: 14,
     },
 });

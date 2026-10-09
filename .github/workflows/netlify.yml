@@ -57,4 +57,3 @@ jobs:
                   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
 # Trigger deployment
-# Note: CI/CD configuration has been verified.
