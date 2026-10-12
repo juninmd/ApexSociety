@@ -19,6 +19,8 @@ interface HazardContextType {
     verifyHazard: (id: string, isFake?: boolean) => void;
     heatLevel: number;
     getHeatMapDensity: () => number;
+    isJammerActive: boolean;
+    activateJammer: () => void;
 }
 
 const HazardContext = createContext<HazardContextType | undefined>(undefined);
@@ -37,6 +39,27 @@ interface HazardProviderProps {
 
 export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
     const [hazards, setHazards] = useState<Hazard[]>([]);
+    const [isJammerActive, setIsJammerActive] = useState(false);
+    const jammerTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+    const activateJammer = () => {
+        setIsJammerActive(true);
+        if (jammerTimeoutRef.current) {
+            clearTimeout(jammerTimeoutRef.current);
+        }
+        jammerTimeoutRef.current = setTimeout(() => {
+            setIsJammerActive(false);
+            jammerTimeoutRef.current = null;
+        }, 60000); // 60 seconds duration
+    };
+
+    React.useEffect(() => {
+        return () => {
+            if (jammerTimeoutRef.current) {
+                clearTimeout(jammerTimeoutRef.current);
+            }
+        };
+    }, []);
 
     const addHazard = (hazard: Hazard) => {
         setHazards((prev) => [...prev, { ...hazard, verifications: 1, fakes: 0 }]);
@@ -103,14 +126,21 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
         return Math.min(multiplier, 3);
     };
 
+    // Filter out radar/blitz hazards if jammer is active
+    const activeHazards = isJammerActive
+        ? hazards.filter((h) => h.type !== 'radar' && h.type !== 'blitz')
+        : hazards;
+
     return (
         <HazardContext.Provider
             value={{
-                hazards,
+                hazards: activeHazards,
                 addHazard,
                 verifyHazard,
                 heatLevel: heatLevel * getHeatMapDensity(),
                 getHeatMapDensity,
+                isJammerActive,
+                activateJammer,
             }}
         >
             {children}

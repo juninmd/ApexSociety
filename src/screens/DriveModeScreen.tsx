@@ -20,6 +20,8 @@ import ChallengeRadar from '../components/ChallengeRadar';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 import { useWeather } from '../hooks/useWeather';
 import { useRouteThreat } from '../hooks/useRouteThreat';
+import { useSlipstream } from '../hooks/useSlipstream';
+import SlipstreamBanner from '../components/SlipstreamBanner';
 
 export default function DriveModeScreen() {
     const [pulseAnim] = useState(() => new Animated.Value(1));
@@ -32,6 +34,8 @@ export default function DriveModeScreen() {
         hazards,
         showAlert,
     });
+
+    const { isDrafting } = useSlipstream(speed);
 
     useEffect(() => {
         if (speed > 100) {
@@ -65,6 +69,7 @@ export default function DriveModeScreen() {
                 )}
                 <View style={styles.content}>
                     {!isGhostMode && <RouteThreatBanner threatInfo={threatInfo} />}
+                    {!isGhostMode && <SlipstreamBanner isDrafting={isDrafting} />}
                     {!isGhostMode && <SpotterAssistant />}
                     {!isGhostMode && <ChallengeRadar />}
                     <PoliceScannerFeed />

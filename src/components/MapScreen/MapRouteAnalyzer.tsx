@@ -18,7 +18,9 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
     const [rivalDetected, setRivalDetected] = useState(false);
 
     useEffect(() => {
+        let isMounted = true;
         const timer = setTimeout(() => {
+            if (!isMounted) return;
             if (heatLevel > 1) {
                 // 10% chance to trigger rival crew detection
                 if (Math.random() < 0.1) {
@@ -28,7 +30,10 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
                 setRivalDetected(false);
             }
         }, 0);
-        return () => clearTimeout(timer);
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+        };
     }, [heatLevel]);
 
     if (!visible) return null;

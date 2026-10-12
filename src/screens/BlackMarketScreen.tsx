@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
+import { useHazards } from '../context/HazardContext';
 import { Lock, Unlock, ShoppingCart } from 'lucide-react-native';
 import CustomButton from '../components/CustomButton';
 
@@ -31,6 +32,7 @@ const MARKET_ITEMS = [
 
 export default function BlackMarketScreen() {
     const { reputation, addReputation } = useReputation();
+    const { activateJammer, isJammerActive } = useHazards();
     const [purchasedItems, setPurchasedItems] = useState<string[]>([]);
 
     const handlePurchase = (item: (typeof MARKET_ITEMS)[0]) => {
@@ -41,7 +43,11 @@ export default function BlackMarketScreen() {
 
         if (reputation >= item.cost) {
             addReputation(-item.cost);
-            setPurchasedItems((prev) => [...prev, item.id]);
+            if (item.name === 'Radar Jammer') {
+                activateJammer();
+            } else {
+                setPurchasedItems((prev) => [...prev, item.id]);
+            }
             Alert.alert('Purchase Successful', `You bought ${item.name} for ${item.cost} REP.`);
         } else {
             Alert.alert('Insufficient REP', `You need ${item.cost} REP to buy this item.`);
@@ -51,6 +57,7 @@ export default function BlackMarketScreen() {
     const renderItem = ({ item }: { item: (typeof MARKET_ITEMS)[0] }) => {
         const isOwned = purchasedItems.includes(item.id);
         const canAfford = reputation >= item.cost;
+        const isConsumableActive = item.name === 'Radar Jammer' && isJammerActive;
 
         return (
             <View style={styles.itemCard}>
@@ -68,13 +75,13 @@ export default function BlackMarketScreen() {
                         {item.cost} REP
                     </Text>
                     <CustomButton
-                        title={isOwned ? 'OWNED' : 'BUY'}
+                        title={isConsumableActive ? 'ACTIVE' : isOwned ? 'OWNED' : 'BUY'}
                         onPress={() => {
-                            if (!isOwned && canAfford) {
+                            if (!isOwned && canAfford && !isConsumableActive) {
                                 handlePurchase(item);
                             }
                         }}
-                        variant={isOwned ? 'secondary' : 'primary'}
+                        variant={isOwned || isConsumableActive ? 'secondary' : 'primary'}
                         style={styles.buyButton}
                     />
                 </View>
@@ -89,6 +96,12 @@ export default function BlackMarketScreen() {
                 <Text style={styles.title}>BLACK MARKET</Text>
             </View>
             <Text style={styles.repText}>Current Balance: {reputation} REP</Text>
+
+            {isJammerActive && (
+                <View style={styles.jammerBanner}>
+                    <Text style={styles.jammerBannerText}>RADAR JAMMER ACTIVE (60s)</Text>
+                </View>
+            )}
 
             <FlatList
                 data={MARKET_ITEMS}
@@ -169,5 +182,19 @@ const styles = StyleSheet.create({
     },
     buyButton: {
         minWidth: 100,
+    },
+    jammerBanner: {
+        backgroundColor: 'rgba(211, 47, 47, 0.2)',
+        borderWidth: 1,
+        borderColor: theme.colors.error,
+        padding: 10,
+        borderRadius: 8,
+        marginBottom: 15,
+        alignItems: 'center',
+    },
+    jammerBannerText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.primary.bold,
+        fontSize: 16,
     },
 });
