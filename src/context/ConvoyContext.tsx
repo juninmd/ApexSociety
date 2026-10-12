@@ -1,13 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Location } from '../types';
 import { useGhostTrail } from '../hooks/useGhostTrail';
+import { useConvoyChat, ChatMessage } from '../hooks/useConvoyChat';
 
-export interface ChatMessage {
-    id: string;
-    sender: string;
-    message: string;
-    timestamp: number;
-}
+export type { ChatMessage };
 
 export interface CrewMemberLocation {
     userId: string;
@@ -45,23 +41,9 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [sosLocation, setSosLocation] = useState<Location | undefined>(undefined);
     const [ghostMode, setGhostMode] = useState(false);
     const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
-    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
     const [convoyHeatScore, setConvoyHeatScore] = useState(0);
     const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');
-
-    const addChatMessage = (sender: string, message: string) => {
-        setChatMessages((prev) =>
-            [
-                ...prev,
-                {
-                    id: Math.random().toString(36).substring(7),
-                    sender,
-                    message,
-                    timestamp: Date.now(),
-                },
-            ].slice(-50),
-        );
-    };
+    const { chatMessages, addChatMessage } = useConvoyChat();
 
     const triggerEBS = (location?: Location) => {
         setEbsActive(true);

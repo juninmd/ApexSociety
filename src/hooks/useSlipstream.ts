@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useConvoy } from '../context/ConvoyContext';
+import { useReputation } from '../context/ReputationContext';
 
 // Thresholds for the Slipstream Gamification Feature
 const SLIPSTREAM_MIN_SPEED = 80; // km/h
@@ -7,6 +8,7 @@ const SLIPSTREAM_MAX_DISTANCE = 0.005; // Mock latitude/longitude distance thres
 
 export function useSlipstream(currentSpeed: number) {
     const { isConvoyActive, crewMembers } = useConvoy();
+    const { addReputation } = useReputation();
     const [isDrafting, setIsDrafting] = useState(false);
 
     // Simulate current user location to calculate distance (in a real app, use Location context)
@@ -33,6 +35,17 @@ export function useSlipstream(currentSpeed: number) {
             });
         }, 0);
     }, [isConvoyActive, currentSpeed, crewMembers]);
+
+    // Award passive REP while drafting
+    useEffect(() => {
+        if (!isDrafting) return;
+
+        const repInterval = setInterval(() => {
+            addReputation(5); // Award 5 REP every few seconds
+        }, 5000);
+
+        return () => clearInterval(repInterval);
+    }, [isDrafting, addReputation]);
 
     return { isDrafting };
 }
