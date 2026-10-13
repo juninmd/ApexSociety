@@ -19,7 +19,7 @@ const COVER_IMAGE_URL =
     'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=1200';
 
 export default function ProfileScreen() {
-    const { reputation } = useReputation();
+    const { reputation, isDecaying } = useReputation();
     const { runs } = useDriveHistory();
     const [wagerModalVisible, setWagerModalVisible] = useState(false);
 
@@ -46,6 +46,15 @@ export default function ProfileScreen() {
 
                 {/* Scout Badge */}
                 <ScoutScoreBadge />
+
+                {/* Reputation Decay Warning */}
+                {isDecaying && (
+                    <View style={styles.decayWarningContainer}>
+                        <Text style={styles.decayWarningText}>
+                            WARNING: INACTIVITY PENALTY - REP DECAYING!
+                        </Text>
+                    </View>
+                )}
 
                 {/* Stats */}
                 <ProfileStats stats={dynamicStats} />
@@ -136,5 +145,19 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    decayWarningContainer: {
+        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+        borderColor: theme.colors.error,
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 10,
+        marginBottom: 15,
+        alignItems: 'center',
+    },
+    decayWarningText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 12,
     },
 });

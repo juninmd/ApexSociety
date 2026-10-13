@@ -15,6 +15,7 @@ interface UseDriveTrackingProps {
 
 export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) {
     const [speed, setSpeed] = useState(0);
+    const [location, setLocation] = useState<Location.LocationObjectCoords | null>(null);
     const [proximityAlert, setProximityAlert] = useState<string | null>(null);
     const [isGhostMode, setIsGhostMode] = useState(false);
     const [ghostStartTime, setGhostStartTime] = useState<number | null>(null);
@@ -75,6 +76,7 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
                 { accuracy: Location.Accuracy.High, timeInterval: 5000, distanceInterval: 10 },
                 (location) => {
                     if (isCancelled || isGhostMode) return;
+                    setLocation(location.coords);
                     const { latitude, longitude } = location.coords;
 
                     const nearbyHazard = hazards.find((hazard) => {
@@ -136,5 +138,6 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
         speed,
         isGhostMode,
         handleToggleGhostMode,
+        location,
     };
 }

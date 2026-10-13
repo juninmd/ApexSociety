@@ -22,11 +22,13 @@ interface ConvoyContextType {
     ghostCoordinates: Location[];
     ghostStartTime?: number;
     convoyHeatScore: number;
+    evacActive: boolean;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
     toggleGhostMode: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
     triggerEBS: (location?: Location) => void;
+    triggerEvac: () => void;
     chatMessages: ChatMessage[];
     addChatMessage: (sender: string, message: string) => void;
 }
@@ -42,6 +44,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [ghostMode, setGhostMode] = useState(false);
     const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
     const [convoyHeatScore, setConvoyHeatScore] = useState(0);
+    const [evacActive, setEvacActive] = useState(false);
     const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');
     const { chatMessages, addChatMessage } = useConvoyChat();
 
@@ -53,6 +56,11 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setEbsActive(false);
             setSosLocation(undefined);
         }, 5000); // Auto dismiss after 5 seconds
+    };
+
+    const triggerEvac = () => {
+        setEvacActive(true);
+        setTimeout(() => setEvacActive(false), 10000); // Active for 10 seconds
     };
 
     const toggleBroadcast = () => {
@@ -153,11 +161,13 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 ghostCoordinates,
                 ghostStartTime,
                 convoyHeatScore,
+                evacActive,
                 toggleConvoy,
                 toggleBroadcast,
                 toggleGhostMode,
                 updateLocation,
                 triggerEBS,
+                triggerEvac,
                 chatMessages,
                 addChatMessage,
             }}
