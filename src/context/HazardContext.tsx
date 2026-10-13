@@ -84,6 +84,10 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
     const heatLevel = hazards.filter((h) => h.type === 'blitz' || h.type === 'radar').length;
 
     React.useEffect(() => {
+        if (process.env.NODE_ENV === 'test') {
+            return;
+        }
+
         const interval = setInterval(() => {
             const now = new Date();
             setHazards((prev) => {

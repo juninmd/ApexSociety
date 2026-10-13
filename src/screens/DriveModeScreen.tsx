@@ -22,6 +22,7 @@ import { useWeather } from '../hooks/useWeather';
 import { useRouteThreat } from '../hooks/useRouteThreat';
 import { useSlipstream } from '../hooks/useSlipstream';
 import SlipstreamBanner from '../components/SlipstreamBanner';
+import { usePerfectRoute } from '../hooks/usePerfectRoute';
 
 export default function DriveModeScreen() {
     const [pulseAnim] = useState(() => new Animated.Value(1));
@@ -30,7 +31,7 @@ export default function DriveModeScreen() {
     const { isRaining } = useWeather();
     const { showAlert } = useUI();
 
-    const { speed, isGhostMode, handleToggleGhostMode } = useDriveTracking({
+    const { speed, isGhostMode, handleToggleGhostMode, location } = useDriveTracking({
         hazards,
         showAlert,
     });
@@ -47,6 +48,19 @@ export default function DriveModeScreen() {
     }, [speed, pulseAnim]);
 
     const isHighSpeed = speed > 100;
+
+    // We mock destination logic for the demo, calculating a route ahead
+    const mockDestination = location
+        ? {
+              latitude: location.latitude + 0.05,
+              longitude: location.longitude + 0.05,
+          }
+        : null;
+
+    const { routeWaypoints, isCalculating } = usePerfectRoute(
+        location as any,
+        mockDestination as any,
+    );
 
     return (
         <View style={styles.container}>
@@ -70,6 +84,8 @@ export default function DriveModeScreen() {
                 <View style={styles.content}>
                     {!isGhostMode && <RouteThreatBanner threatInfo={threatInfo} />}
                     {!isGhostMode && <SlipstreamBanner isDrafting={isDrafting} />}
+
+                    {/* Note: PerfectRouteVisualizer is designed for map views, but we can hook it up here for UI state if needed, or simply log it for now as part of the architecture evolution. */}
                     {!isGhostMode && <SpotterAssistant />}
                     {!isGhostMode && <ChallengeRadar />}
                     <PoliceScannerFeed />

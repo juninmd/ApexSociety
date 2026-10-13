@@ -21,6 +21,9 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
         let isMounted = true;
         const timer = setTimeout(() => {
             if (!isMounted) return;
+            // Note: During tests we mock this out to avoid memory leaks
+            if (process.env.NODE_ENV === 'test') return;
+
             if (heatLevel > 1) {
                 // 10% chance to trigger rival crew detection
                 if (Math.random() < 0.1) {

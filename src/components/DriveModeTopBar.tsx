@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { Ghost } from 'lucide-react-native';
+import { Ghost, AlertTriangle } from 'lucide-react-native';
 import HeatLevelIndicator from './HeatLevelIndicator';
 import { theme } from '../theme';
+import { useConvoy } from '../context/ConvoyContext';
 
 interface DriveModeTopBarProps {
     isGhostMode: boolean;
@@ -15,8 +16,19 @@ export default function DriveModeTopBar({
     onToggleGhostMode,
     heatLevel,
 }: DriveModeTopBarProps) {
+    const { isConvoyActive, triggerEvac, evacActive } = useConvoy();
+
     return (
         <View style={styles.topBar}>
+            {isConvoyActive && (
+                <TouchableOpacity
+                    style={[styles.evacButton, evacActive && styles.evacButtonActive]}
+                    onPress={triggerEvac}
+                >
+                    <AlertTriangle size={24} color={evacActive ? '#FFFFFF' : theme.colors.error} />
+                    <Text style={[styles.evacText, evacActive && styles.evacTextActive]}>EVAC</Text>
+                </TouchableOpacity>
+            )}
             <TouchableOpacity
                 style={[styles.ghostButton, isGhostMode && styles.ghostButtonActive]}
                 onPress={onToggleGhostMode}
@@ -65,5 +77,27 @@ const styles = StyleSheet.create({
     },
     ghostTextActive: {
         color: theme.colors.primary,
+    },
+    evacButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        padding: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: theme.colors.error,
+        marginLeft: 10,
+    },
+    evacButtonActive: {
+        backgroundColor: theme.colors.error,
+    },
+    evacText: {
+        color: theme.colors.error,
+        fontFamily: theme.fonts.secondary.bold,
+        fontSize: 12,
+        marginLeft: 8,
+    },
+    evacTextActive: {
+        color: '#FFFFFF',
     },
 });
