@@ -25,7 +25,7 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
     const [hasWagered, setHasWagered] = useState(false);
     const [wear, setWear] = useState(0);
     const [tires, setTires] = useState<'Street' | 'Slick'>('Street');
-    const { isRaining } = useWeather();
+    const { isRaining, isFoggy } = useWeather();
 
     const handleUpgrade = (part: keyof typeof upgrades, hpBoost: number) => {
         if (!upgrades[part]) {
@@ -57,6 +57,12 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 'WEATHER PENALTY',
                 'Racing slicks in the rain caused a severe loss of traction (-150 HP equivalent)',
             );
+        } else if (isFoggy && tires === 'Slick') {
+            effectiveHp -= 75; // Moderate penalty for slicks in fog
+            Alert.alert(
+                'WEATHER PENALTY',
+                'Racing slicks in the fog caused reduced traction (-75 HP equivalent)',
+            );
         }
 
         const rivalHp = defaultHp + 100; // Mock rival with +100 HP base
@@ -84,6 +90,8 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
         setWear(0);
         Alert.alert('Repaired', 'Vehicle fully repaired for 100 REP.');
     };
+
+    const weatherPenalty = (isRaining || isFoggy) && tires === 'Slick';
 
     return (
         <View style={styles.container}>
@@ -123,7 +131,13 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 </TouchableOpacity>
             </View>
 
-            <TuningStatsRow engine={engine} hp={hp} defaultHp={defaultHp} wear={wear} />
+            <TuningStatsRow
+                engine={engine}
+                hp={hp}
+                defaultHp={defaultHp}
+                wear={wear}
+                weatherPenalty={weatherPenalty}
+            />
 
             <View
                 style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}

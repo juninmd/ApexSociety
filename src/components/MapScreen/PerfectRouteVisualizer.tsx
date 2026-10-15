@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+
 import { Polyline } from 'react-native-maps';
 import { Location } from '../../types';
 
@@ -19,5 +19,3 @@ export default function PerfectRouteVisualizer({ waypoints }: PerfectRouteVisual
         />
     );
 }
-
-const styles = StyleSheet.create({});

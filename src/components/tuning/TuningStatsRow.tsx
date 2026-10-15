@@ -7,9 +7,16 @@ interface TuningStatsRowProps {
     hp: number;
     defaultHp: number;
     wear: number;
+    weatherPenalty?: boolean;
 }
 
-export default function TuningStatsRow({ engine, hp, defaultHp, wear }: TuningStatsRowProps) {
+export default function TuningStatsRow({
+    engine,
+    hp,
+    defaultHp,
+    wear,
+    weatherPenalty,
+}: TuningStatsRowProps) {
     return (
         <View style={styles.statsRow}>
             <View style={styles.statBox}>
@@ -21,6 +28,11 @@ export default function TuningStatsRow({ engine, hp, defaultHp, wear }: TuningSt
                 <Text style={[styles.statValue, hp > defaultHp && styles.boostedValue]}>
                     {hp} HP
                 </Text>
+                {weatherPenalty && (
+                    <Text style={{ color: 'red', fontSize: 10, marginTop: 2, fontWeight: 'bold' }}>
+                        [WEATHER PENALTY]
+                    </Text>
+                )}
             </View>
             <View style={styles.statBox}>
                 <Text style={styles.statLabel}>WEAR</Text>
