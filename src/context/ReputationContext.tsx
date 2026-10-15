@@ -30,7 +30,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     const [reputation, setReputation] = useState(420);
     const [scoutScore, setScoutScore] = useState(0);
     const [nemesisId, setNemesisId] = useState<string | null>(null);
-    const [lastActive, setLastActive] = useState<number>(() => Date.now());
+    const [lastActive] = useState<number>(() => Date.now());
     const [isDecaying, setIsDecaying] = useState(false);
 
     const toggleNemesis = (userId: string) => {

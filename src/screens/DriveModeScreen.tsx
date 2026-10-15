@@ -57,10 +57,7 @@ export default function DriveModeScreen() {
           }
         : null;
 
-    const { routeWaypoints, isCalculating } = usePerfectRoute(
-        location as any,
-        mockDestination as any,
-    );
+    usePerfectRoute(location as any, mockDestination as any);
 
     return (
         <View style={styles.container}>
