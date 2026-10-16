@@ -32,7 +32,7 @@ const MARKET_ITEMS = [
 
 export default function BlackMarketScreen() {
     const { reputation, addReputation } = useReputation();
-    const { activateJammer, isJammerActive } = useHazards();
+    const { activateJammer, isJammerActive, activateFakePlates, isFakePlatesActive } = useHazards();
     const [purchasedItems, setPurchasedItems] = useState<string[]>([]);
 
     const handlePurchase = (item: (typeof MARKET_ITEMS)[0]) => {
@@ -45,6 +45,8 @@ export default function BlackMarketScreen() {
             addReputation(-item.cost);
             if (item.name === 'Radar Jammer') {
                 activateJammer();
+            } else if (item.name === 'Fake Plates') {
+                activateFakePlates();
             } else {
                 setPurchasedItems((prev) => [...prev, item.id]);
             }
@@ -57,7 +59,9 @@ export default function BlackMarketScreen() {
     const renderItem = ({ item }: { item: (typeof MARKET_ITEMS)[0] }) => {
         const isOwned = purchasedItems.includes(item.id);
         const canAfford = reputation >= item.cost;
-        const isConsumableActive = item.name === 'Radar Jammer' && isJammerActive;
+        const isConsumableActive =
+            (item.name === 'Radar Jammer' && isJammerActive) ||
+            (item.name === 'Fake Plates' && isFakePlatesActive);
 
         return (
             <View style={styles.itemCard}>
@@ -97,9 +101,13 @@ export default function BlackMarketScreen() {
             </View>
             <Text style={styles.repText}>Current Balance: {reputation} REP</Text>
 
-            {isJammerActive && (
+            {(isJammerActive || isFakePlatesActive) && (
                 <View style={styles.jammerBanner}>
-                    <Text style={styles.jammerBannerText}>RADAR JAMMER ACTIVE (60s)</Text>
+                    <Text style={styles.jammerBannerText}>
+                        {isJammerActive ? 'RADAR JAMMER ACTIVE (60s)' : ''}
+                        {isJammerActive && isFakePlatesActive ? ' | ' : ''}
+                        {isFakePlatesActive ? 'FAKE PLATES ACTIVE (120s)' : ''}
+                    </Text>
                 </View>
             )}
 

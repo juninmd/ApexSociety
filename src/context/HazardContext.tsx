@@ -21,6 +21,8 @@ interface HazardContextType {
     getHeatMapDensity: () => number;
     isJammerActive: boolean;
     activateJammer: () => void;
+    isFakePlatesActive: boolean;
+    activateFakePlates: () => void;
 }
 
 const HazardContext = createContext<HazardContextType | undefined>(undefined);
@@ -40,7 +42,9 @@ interface HazardProviderProps {
 export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
     const [hazards, setHazards] = useState<Hazard[]>([]);
     const [isJammerActive, setIsJammerActive] = useState(false);
+    const [isFakePlatesActive, setIsFakePlatesActive] = useState(false);
     const jammerTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+    const fakePlatesTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
     const activateJammer = () => {
         setIsJammerActive(true);
@@ -53,10 +57,24 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
         }, 60000); // 60 seconds duration
     };
 
+    const activateFakePlates = () => {
+        setIsFakePlatesActive(true);
+        if (fakePlatesTimeoutRef.current) {
+            clearTimeout(fakePlatesTimeoutRef.current);
+        }
+        fakePlatesTimeoutRef.current = setTimeout(() => {
+            setIsFakePlatesActive(false);
+            fakePlatesTimeoutRef.current = null;
+        }, 120000); // 120 seconds duration
+    };
+
     React.useEffect(() => {
         return () => {
             if (jammerTimeoutRef.current) {
                 clearTimeout(jammerTimeoutRef.current);
+            }
+            if (fakePlatesTimeoutRef.current) {
+                clearTimeout(fakePlatesTimeoutRef.current);
             }
         };
     }, []);
@@ -126,7 +144,13 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
             }
         }
 
-        const multiplier = 1 + densityAddition;
+        let multiplier = 1 + densityAddition;
+
+        // Fake plates artificially halve the map heat density footprint
+        if (isFakePlatesActive) {
+            multiplier = Math.max(1, multiplier * 0.5);
+        }
+
         return Math.min(multiplier, 3);
     };
 
@@ -145,6 +169,8 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
                 getHeatMapDensity,
                 isJammerActive,
                 activateJammer,
+                isFakePlatesActive,
+                activateFakePlates,
             }}
         >
             {children}
