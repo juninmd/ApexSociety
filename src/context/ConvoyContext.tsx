@@ -23,8 +23,10 @@ interface ConvoyContextType {
     ghostStartTime?: number;
     convoyHeatScore: number;
     evacActive: boolean;
+    rallyPoint?: Location;
     toggleConvoy: () => void;
     toggleBroadcast: () => void;
+    deployRallyFlare: (location: Location) => void;
     toggleGhostMode: () => void;
     updateLocation: (userId: string, username: string, location: Location) => void;
     triggerEBS: (location?: Location) => void;
@@ -45,8 +47,15 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
     const [convoyHeatScore, setConvoyHeatScore] = useState(0);
     const [evacActive, setEvacActive] = useState(false);
+    const [rallyPoint, setRallyPoint] = useState<Location | undefined>(undefined);
     const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');
     const { chatMessages, addChatMessage } = useConvoyChat();
+
+    const deployRallyFlare = (location: Location) => {
+        if (!isConvoyActive) return;
+        setRallyPoint(location);
+        setTimeout(() => setRallyPoint(undefined), 60000); // 60 seconds
+    };
 
     const triggerEBS = (location?: Location) => {
         setEbsActive(true);
@@ -162,8 +171,10 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 ghostStartTime,
                 convoyHeatScore,
                 evacActive,
+                rallyPoint,
                 toggleConvoy,
                 toggleBroadcast,
+                deployRallyFlare,
                 toggleGhostMode,
                 updateLocation,
                 triggerEBS,
