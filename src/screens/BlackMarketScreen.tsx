@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import { useHazards } from '../context/HazardContext';
-import { Lock, Unlock, ShoppingCart } from 'lucide-react-native';
-import CustomButton from '../components/CustomButton';
+import { ShoppingCart } from 'lucide-react-native';
+import BlackMarketItem from '../components/BlackMarketItem';
 
 const MARKET_ITEMS = [
     {
@@ -64,32 +64,13 @@ export default function BlackMarketScreen() {
             (item.name === 'Fake Plates' && isFakePlatesActive);
 
         return (
-            <View style={styles.itemCard}>
-                <View style={styles.itemHeader}>
-                    <Text style={styles.itemName}>{item.name}</Text>
-                    {isOwned ? (
-                        <Unlock size={20} color={theme.colors.primary} />
-                    ) : (
-                        <Lock size={20} color={theme.colors.textSecondary} />
-                    )}
-                </View>
-                <Text style={styles.itemDescription}>{item.description}</Text>
-                <View style={styles.itemFooter}>
-                    <Text style={[styles.itemCost, !canAfford && !isOwned && styles.cannotAfford]}>
-                        {item.cost} REP
-                    </Text>
-                    <CustomButton
-                        title={isConsumableActive ? 'ACTIVE' : isOwned ? 'OWNED' : 'BUY'}
-                        onPress={() => {
-                            if (!isOwned && canAfford && !isConsumableActive) {
-                                handlePurchase(item);
-                            }
-                        }}
-                        variant={isOwned || isConsumableActive ? 'secondary' : 'primary'}
-                        style={styles.buyButton}
-                    />
-                </View>
-            </View>
+            <BlackMarketItem
+                item={item}
+                isOwned={isOwned}
+                canAfford={canAfford}
+                isConsumableActive={isConsumableActive}
+                onPurchase={handlePurchase}
+            />
         );
     };
 
@@ -150,46 +131,6 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         gap: 15,
-    },
-    itemCard: {
-        backgroundColor: theme.colors.card,
-        padding: 15,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-    },
-    itemHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 5,
-    },
-    itemName: {
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 18,
-        color: theme.colors.white,
-    },
-    itemDescription: {
-        fontFamily: theme.fonts.primary.regular,
-        fontSize: 14,
-        color: theme.colors.textSecondary,
-        marginBottom: 15,
-    },
-    itemFooter: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    itemCost: {
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 16,
-        color: theme.colors.primary,
-    },
-    cannotAfford: {
-        color: theme.colors.error,
-    },
-    buyButton: {
-        minWidth: 100,
     },
     jammerBanner: {
         backgroundColor: 'rgba(211, 47, 47, 0.2)',
