@@ -103,7 +103,9 @@ async function main() {
             await titleInput.fill('TRACK DAY - GUARAPIRANGA');
             await page.getByPlaceholder('DD/MM/AAAA').fill('12/08/2026');
             await page.getByPlaceholder('HH:MM').fill('20:00');
-            await page.getByPlaceholder('Onde vamos nos encontrar?').fill('AUTÓDROMO DE INTERLAGOS');
+            await page
+                .getByPlaceholder('Onde vamos nos encontrar?')
+                .fill('AUTÓDROMO DE INTERLAGOS');
             await shot('04-create-event');
         } else {
             // Take a shot anyway if elements can't be filled, as it's just for visualization
