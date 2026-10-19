@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Users } from 'lucide-react-native';
 import * as Location from 'expo-location';
 import { theme } from '../theme';
@@ -10,6 +10,7 @@ import EventCardActionButtons from './EventCardActionButtons';
 import EventDroneRecon from './EventDroneRecon';
 import ShowAndShineVotingModal from './ShowAndShineVotingModal';
 import EventLiveFeed from './EventLiveFeed';
+import { styles } from './EventCardFooterStyles';
 
 interface EventCardFooterProps {
     eventId: string;
@@ -146,38 +147,3 @@ export default function EventCardFooter({
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    footer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderTopWidth: 1,
-        borderTopColor: theme.colors.border,
-        paddingTop: 10,
-    },
-    attendeesContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    attendees: {
-        color: theme.colors.secondary,
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 12,
-        marginLeft: 6,
-    },
-    boostButton: {
-        marginLeft: 15,
-        backgroundColor: 'rgba(255, 69, 0, 0.1)',
-        paddingHorizontal: 8,
-        paddingVertical: 3,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 69, 0, 0.3)',
-    },
-    boostText: {
-        color: '#FF4500',
-        fontFamily: theme.fonts.secondary.bold,
-        fontSize: 10,
-    },
-});

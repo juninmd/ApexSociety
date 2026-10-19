@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
-import Svg, { Polyline } from 'react-native-svg';
+import { View, Animated, Text } from 'react-native';
+import Svg, { Polyline, Circle as SvgCircle, Defs, RadialGradient, Stop } from 'react-native-svg';
 import { DriveRun } from '../context/DriveHistoryContext';
 import { theme } from '../theme';
+import { styles } from './GhostReplayMapStyles';
 
 interface GhostReplayMapProps {
     run: DriveRun;
@@ -10,6 +11,7 @@ interface GhostReplayMapProps {
 
 export default function GhostReplayMap({ run }: GhostReplayMapProps) {
     const [progress] = useState(() => new Animated.Value(0));
+    const [scanAnim] = useState(() => new Animated.Value(0));
 
     useEffect(() => {
         if (!run.trajectory || run.trajectory.length === 0) return;
@@ -19,7 +21,15 @@ export default function GhostReplayMap({ run }: GhostReplayMapProps) {
             duration: 3000,
             useNativeDriver: false, // Polyline strokeDashoffset doesn't support native driver well
         }).start();
-    }, [run, progress]);
+
+        Animated.loop(
+            Animated.timing(scanAnim, {
+                toValue: 1,
+                duration: 2000,
+                useNativeDriver: false,
+            }),
+        ).start();
+    }, [run, progress, scanAnim]);
 
     if (!run.trajectory || run.trajectory.length === 0) {
         return null;
@@ -43,10 +53,32 @@ export default function GhostReplayMap({ run }: GhostReplayMapProps) {
         })
         .join(' ');
 
-    // Very basic animation by animating opacity for now, as dashoffset on web can be tricky without dedicated libs
+    // Get start and end points for AR highlights
+    const startCoords = run.trajectory[0];
+    const endCoords = run.trajectory[run.trajectory.length - 1];
+    const startX = ((startCoords.lng - minLng) / (maxLng - minLng || 1)) * width;
+    const startY = height - ((startCoords.lat - minLat) / (maxLat - minLat || 1)) * height;
+    const endX = ((endCoords.lng - minLng) / (maxLng - minLng || 1)) * width;
+    const endY = height - ((endCoords.lat - minLat) / (maxLat - minLat || 1)) * height;
+
+    const scanTop = scanAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, height + 20],
+    });
+
     return (
         <View style={styles.container}>
+            <View style={styles.arHeader}>
+                <Text style={styles.arTitle}>GHOST REPLAY</Text>
+                <Text style={styles.arSubtitle}>AR TRAJECTORY ANALYSIS</Text>
+            </View>
             <Svg width={width} height={height}>
+                <Defs>
+                    <RadialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <Stop offset="0%" stopColor={theme.colors.primary} stopOpacity="0.5" />
+                        <Stop offset="100%" stopColor={theme.colors.primary} stopOpacity="0" />
+                    </RadialGradient>
+                </Defs>
                 <Polyline
                     points={points}
                     fill="none"
@@ -68,24 +100,21 @@ export default function GhostReplayMap({ run }: GhostReplayMapProps) {
                             fill="none"
                             stroke={theme.colors.primary}
                             strokeWidth="3"
+                            strokeDasharray="5,5"
                         />
+                        <SvgCircle cx={startX} cy={startY} r="5" fill="#00FF00" />
+                        <SvgCircle cx={endX} cy={endY} r="5" fill="#FF0000" />
                     </Svg>
                 </Animated.View>
             </Svg>
+            <Animated.View
+                style={[
+                    styles.scanLine,
+                    {
+                        top: scanTop,
+                    },
+                ]}
+            />
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#0a0a0a', // Darker background for the map
-        borderRadius: 8,
-        padding: 10,
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-    },
-});
