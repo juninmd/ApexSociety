@@ -11,16 +11,25 @@ const ConvoyContext = createContext<ConvoyContextType | undefined>(undefined);
 
 export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const {
-        crewMembers, setCrewMembers,
-        isConvoyActive, setIsConvoyActive,
-        isBroadcasting, setIsBroadcasting,
-        ebsActive, setEbsActive,
-        sosLocation, setSosLocation,
-        ghostMode, setGhostMode,
-        ghostStartTime, setGhostStartTime,
-        convoyHeatScore, setConvoyHeatScore,
-        evacActive, setEvacActive,
-        rallyPoint, setRallyPoint,
+        crewMembers,
+        setCrewMembers,
+        isConvoyActive,
+        setIsConvoyActive,
+        isBroadcasting,
+        setIsBroadcasting,
+        ebsActive,
+        setEbsActive,
+        sosLocation,
+        setSosLocation,
+        ghostMode,
+        setGhostMode,
+        ghostStartTime,
+        setGhostStartTime,
+        convoyHeatScore,
+        evacActive,
+        setEvacActive,
+        rallyPoint,
+        setRallyPoint,
     } = useConvoyState();
 
     const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');

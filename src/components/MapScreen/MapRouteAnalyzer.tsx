@@ -82,10 +82,13 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
             {rivalDetected && (
                 <Text style={styles.warning}>CRITICAL: RIVAL CREW DETECTED IN PROXIMITY!</Text>
             )}
-            {score > 1.5 && (
-                heatLevel > 2 ? (
+            {score > 1.5 &&
+                (heatLevel > 2 ? (
                     <TouchableOpacity
-                        style={[styles.evasionButton, { borderColor: '#00FFFF', backgroundColor: 'rgba(0, 255, 255, 0.1)' }]}
+                        style={[
+                            styles.evasionButton,
+                            { borderColor: '#00FFFF', backgroundColor: 'rgba(0, 255, 255, 0.1)' },
+                        ]}
                         onPress={() => {
                             const waypoints = calculateEvasionRoute(hazards, {
                                 latitude: -23.5505,
@@ -113,11 +116,12 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
                         }}
                     >
                         <Text style={styles.evasionText}>
-                            {evasionRouteActive ? 'EVASION ROUTE PLOTTED' : 'CALCULATE EVASION ROUTE'}
+                            {evasionRouteActive
+                                ? 'EVASION ROUTE PLOTTED'
+                                : 'CALCULATE EVASION ROUTE'}
                         </Text>
                     </TouchableOpacity>
-                )
-            )}
+                ))}
         </View>
     );
 }
