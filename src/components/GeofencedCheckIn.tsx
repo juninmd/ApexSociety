@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import { MapPin } from 'lucide-react-native';
 import { theme } from '../theme';
 import { getDistance } from '../utils/location';
 import { useReputation } from '../context/ReputationContext';
 import { useTurf } from '../context/TurfContext';
+import { styles } from './GeofencedCheckInStyles';
 
 interface GeofencedCheckInProps {
     eventId: string;
@@ -113,40 +114,3 @@ export default function GeofencedCheckIn({
         </TouchableOpacity>
     );
 }
-
-const styles = StyleSheet.create({
-    checkInButton: {
-        backgroundColor: theme.colors.primary,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        borderRadius: 4,
-        marginTop: 15,
-        gap: 8,
-    },
-    checkInButtonText: {
-        color: theme.colors.black,
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 12,
-        letterSpacing: 1,
-    },
-    checkedInContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        borderRadius: 4,
-        marginTop: 15,
-        borderWidth: 1,
-        borderColor: theme.colors.primary,
-        backgroundColor: 'rgba(212, 175, 55, 0.1)',
-        gap: 8,
-    },
-    checkedInText: {
-        color: theme.colors.primary,
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 12,
-        letterSpacing: 1,
-    },
-});

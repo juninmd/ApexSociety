@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { theme } from '../../theme';
 import { useHazards } from '../../context/HazardContext';
 import { useWeather } from '../../hooks/useWeather';
 import { useEvasionRoute } from '../../hooks/useEvasionRoute';
 import { useCruisePlanner } from '../../hooks/useCruisePlanner';
+import { styles } from './MapRouteAnalyzerStyles';
 
 interface MapRouteAnalyzerProps {
     visible: boolean;
@@ -16,6 +17,7 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
     const { addWaypoint, togglePlanner, isPlannerActive } = useCruisePlanner();
     const { isRaining } = useWeather();
     const [rivalDetected, setRivalDetected] = useState(false);
+    const [safehouseRouted, setSafehouseRouted] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -80,84 +82,46 @@ export default function MapRouteAnalyzer({ visible }: MapRouteAnalyzerProps) {
             {rivalDetected && (
                 <Text style={styles.warning}>CRITICAL: RIVAL CREW DETECTED IN PROXIMITY!</Text>
             )}
-            {score > 1.5 && (
-                <TouchableOpacity
-                    style={styles.evasionButton}
-                    onPress={() => {
-                        const waypoints = calculateEvasionRoute(hazards, {
-                            latitude: -23.5505,
-                            longitude: -46.6333,
-                        }); // default SP center
-                        if (!isPlannerActive) togglePlanner();
-                        waypoints.forEach((wp) => addWaypoint(wp));
-                    }}
-                >
-                    <Text style={styles.evasionText}>
-                        {evasionRouteActive ? 'EVASION ROUTE PLOTTED' : 'CALCULATE EVASION ROUTE'}
-                    </Text>
-                </TouchableOpacity>
-            )}
+            {score > 1.5 &&
+                (heatLevel > 2 ? (
+                    <TouchableOpacity
+                        style={[
+                            styles.evasionButton,
+                            { borderColor: '#00FFFF', backgroundColor: 'rgba(0, 255, 255, 0.1)' },
+                        ]}
+                        onPress={() => {
+                            const waypoints = calculateEvasionRoute(hazards, {
+                                latitude: -23.5505,
+                                longitude: -46.6333,
+                            }); // default SP center
+                            if (!isPlannerActive) togglePlanner();
+                            waypoints.forEach((wp) => addWaypoint(wp));
+                            setSafehouseRouted(true);
+                        }}
+                    >
+                        <Text style={[styles.evasionText, { color: '#00FFFF' }]}>
+                            {safehouseRouted ? 'ROUTED TO SAFEHOUSE' : 'FIND NEAREST SAFEHOUSE'}
+                        </Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity
+                        style={styles.evasionButton}
+                        onPress={() => {
+                            const waypoints = calculateEvasionRoute(hazards, {
+                                latitude: -23.5505,
+                                longitude: -46.6333,
+                            }); // default SP center
+                            if (!isPlannerActive) togglePlanner();
+                            waypoints.forEach((wp) => addWaypoint(wp));
+                        }}
+                    >
+                        <Text style={styles.evasionText}>
+                            {evasionRouteActive
+                                ? 'EVASION ROUTE PLOTTED'
+                                : 'CALCULATE EVASION ROUTE'}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        top: 130, // Below top controls
-        left: 20,
-        right: 20,
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        padding: 15,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.colors.primary,
-        zIndex: 10,
-    },
-    title: {
-        fontFamily: theme.fonts.primary.bold,
-        color: theme.colors.primary,
-        fontSize: 18,
-        marginBottom: 10,
-        textAlign: 'center',
-    },
-    statsRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-    statBox: {
-        alignItems: 'center',
-    },
-    statLabel: {
-        fontFamily: theme.fonts.secondary.regular,
-        color: theme.colors.textSecondary,
-        fontSize: 10,
-        marginBottom: 4,
-    },
-    statValue: {
-        fontFamily: theme.fonts.secondary.bold,
-        color: theme.colors.text,
-        fontSize: 16,
-    },
-    warning: {
-        fontFamily: theme.fonts.secondary.regular,
-        color: theme.colors.error,
-        fontSize: 12,
-        marginTop: 10,
-        textAlign: 'center',
-    },
-    evasionButton: {
-        marginTop: 15,
-        backgroundColor: 'rgba(211, 47, 47, 0.2)',
-        borderWidth: 1,
-        borderColor: theme.colors.error,
-        paddingVertical: 8,
-        borderRadius: 4,
-        alignItems: 'center',
-    },
-    evasionText: {
-        color: theme.colors.error,
-        fontFamily: theme.fonts.primary.bold,
-        fontSize: 14,
-    },
-});

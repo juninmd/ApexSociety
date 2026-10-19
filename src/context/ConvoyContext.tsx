@@ -1,53 +1,37 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext } from 'react';
 import { Location } from '../types';
 import { useGhostTrail } from '../hooks/useGhostTrail';
-import { useConvoyChat, ChatMessage } from '../hooks/useConvoyChat';
+import { useConvoyChat } from '../hooks/useConvoyChat';
+import { useConvoyState } from './useConvoyState';
+import { ConvoyContextType, CrewMemberLocation, ChatMessage } from './ConvoyTypes';
 
-export type { ChatMessage };
-
-export interface CrewMemberLocation {
-    userId: string;
-    username: string;
-    location: Location;
-    lastUpdated: number;
-}
-
-interface ConvoyContextType {
-    crewMembers: CrewMemberLocation[];
-    isConvoyActive: boolean;
-    isBroadcasting: boolean;
-    ebsActive: boolean;
-    sosLocation?: Location;
-    ghostMode: boolean;
-    ghostCoordinates: Location[];
-    ghostStartTime?: number;
-    convoyHeatScore: number;
-    evacActive: boolean;
-    rallyPoint?: Location;
-    toggleConvoy: () => void;
-    toggleBroadcast: () => void;
-    deployRallyFlare: (location: Location) => void;
-    toggleGhostMode: () => void;
-    updateLocation: (userId: string, username: string, location: Location) => void;
-    triggerEBS: (location?: Location) => void;
-    triggerEvac: () => void;
-    chatMessages: ChatMessage[];
-    addChatMessage: (sender: string, message: string) => void;
-}
+export type { ChatMessage, CrewMemberLocation };
 
 const ConvoyContext = createContext<ConvoyContextType | undefined>(undefined);
 
 export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [crewMembers, setCrewMembers] = useState<CrewMemberLocation[]>([]);
-    const [isConvoyActive, setIsConvoyActive] = useState(false);
-    const [isBroadcasting, setIsBroadcasting] = useState(false);
-    const [ebsActive, setEbsActive] = useState(false);
-    const [sosLocation, setSosLocation] = useState<Location | undefined>(undefined);
-    const [ghostMode, setGhostMode] = useState(false);
-    const [ghostStartTime, setGhostStartTime] = useState<number | undefined>(undefined);
-    const [convoyHeatScore, setConvoyHeatScore] = useState(0);
-    const [evacActive, setEvacActive] = useState(false);
-    const [rallyPoint, setRallyPoint] = useState<Location | undefined>(undefined);
+    const {
+        crewMembers,
+        setCrewMembers,
+        isConvoyActive,
+        setIsConvoyActive,
+        isBroadcasting,
+        setIsBroadcasting,
+        ebsActive,
+        setEbsActive,
+        sosLocation,
+        setSosLocation,
+        ghostMode,
+        setGhostMode,
+        ghostStartTime,
+        setGhostStartTime,
+        convoyHeatScore,
+        evacActive,
+        setEvacActive,
+        rallyPoint,
+        setRallyPoint,
+    } = useConvoyState();
+
     const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');
     const { chatMessages, addChatMessage } = useConvoyChat();
 
@@ -128,35 +112,6 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
         });
     };
-
-    // Update convoy heat score whenever crew members change or convoy status changes
-    useEffect(() => {
-        if (!isConvoyActive) {
-            setTimeout(() => setConvoyHeatScore(0), 0);
-        } else {
-            setTimeout(() => setConvoyHeatScore(crewMembers.length * 15), 0);
-        }
-    }, [isConvoyActive, crewMembers.length]);
-
-    // Simulate movement
-    useEffect(() => {
-        if (!isConvoyActive) return;
-
-        const interval = setInterval(() => {
-            setCrewMembers((prev) =>
-                prev.map((member) => ({
-                    ...member,
-                    location: {
-                        latitude: member.location.latitude + (Math.random() - 0.5) * 0.001,
-                        longitude: member.location.longitude + (Math.random() - 0.5) * 0.001,
-                    },
-                    lastUpdated: Date.now(),
-                })),
-            );
-        }, 3000);
-
-        return () => clearInterval(interval);
-    }, [isConvoyActive]);
 
     return (
         <ConvoyContext.Provider
