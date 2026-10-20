@@ -60,7 +60,8 @@ export default function BlackMarketScreen() {
     };
 
     const renderItem = ({ item }: { item: (typeof MARKET_ITEMS)[0] }) => {
-        const isOwned = purchasedItems.includes(item.id) || (item.name === 'VIP Meet Pass' && hasVipPass);
+        const isOwned =
+            purchasedItems.includes(item.id) || (item.name === 'VIP Meet Pass' && hasVipPass);
         const canAfford = reputation >= item.cost;
         const isConsumableActive =
             (item.name === 'Radar Jammer' && isJammerActive) ||

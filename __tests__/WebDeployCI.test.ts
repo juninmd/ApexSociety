@@ -15,6 +15,6 @@ describe('Web Deployment CI/CD Configuration Validation', () => {
         expect(fs.existsSync(githubActionPath)).toBe(true);
         const actionContent = fs.readFileSync(githubActionPath, 'utf8');
         expect(actionContent).toContain('pnpm build:web');
-        expect(actionContent).toContain('node-version: 22');
+        expect(actionContent).toContain('node-version: 24');
     });
 });
