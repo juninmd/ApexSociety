@@ -5,10 +5,12 @@ interface ReputationContextType {
     scoutScore: number;
     nemesisId: string | null;
     isDecaying: boolean;
+    hasVipPass: boolean;
     addReputation: (amount: number) => void;
     addScoutScore: (amount: number) => void;
     spendReputation: (amount: number) => boolean;
     toggleNemesis: (userId: string) => void;
+    unlockVipPass: () => void;
 }
 
 const ReputationContext = createContext<ReputationContextType | undefined>(undefined);
@@ -32,6 +34,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     const [nemesisId, setNemesisId] = useState<string | null>(null);
     const [lastActive] = useState<number>(() => Date.now());
     const [isDecaying, setIsDecaying] = useState(false);
+    const [hasVipPass, setHasVipPass] = useState(false);
 
     const toggleNemesis = (userId: string) => {
         setNemesisId((prev) => (prev === userId ? null : userId));
@@ -51,6 +54,10 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
 
     const addScoutScore = (amount: number) => {
         setScoutScore((prev) => prev + amount);
+    };
+
+    const unlockVipPass = () => {
+        setHasVipPass(true);
     };
 
     // Gamified Underground Reputation Decay
@@ -82,10 +89,12 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
                 scoutScore,
                 nemesisId,
                 isDecaying,
+                hasVipPass,
                 addReputation,
                 addScoutScore,
                 spendReputation,
                 toggleNemesis,
+                unlockVipPass,
             }}
         >
             {children}

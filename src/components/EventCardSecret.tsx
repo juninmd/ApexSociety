@@ -3,6 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import EventCardBadges from './EventCardBadges';
 import EventCardSecretAction from './EventCardSecretAction';
 import { theme } from '../theme';
+import CustomButton from './CustomButton';
+import { useReputation } from '../context/ReputationContext';
 
 interface EventCardSecretProps {
     host: string;
@@ -20,6 +22,8 @@ export default function EventCardSecret({
     eventType,
     onUnlock,
 }: EventCardSecretProps) {
+    const { hasVipPass } = useReputation();
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -27,6 +31,14 @@ export default function EventCardSecret({
                 <EventCardBadges isPrivate={isPrivate} eventType={eventType} />
             </View>
             <EventCardSecretAction passcode={passcode} onUnlock={onUnlock} />
+            {hasVipPass && (
+                <CustomButton
+                    title="USE VIP PASS"
+                    onPress={onUnlock}
+                    style={{ marginTop: 10 }}
+                    variant="secondary"
+                />
+            )}
             <View style={styles.cornerDecor} />
         </View>
     );

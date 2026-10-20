@@ -3,12 +3,13 @@ import { View, Text, TouchableOpacity, Animated } from 'react-native';
 import { MOCK_USERS } from '../data/mock';
 import ReputationWagerModal from './ReputationWagerModal';
 import { styles } from './ChallengeRadarStyles';
+import { User } from '../types';
 
 export default function ChallengeRadar() {
     const [isScanning, setIsScanning] = useState(false);
     const [pulseAnim] = useState(() => new Animated.Value(0));
     const [radarAnim] = useState(() => new Animated.Value(0));
-    const [targetFound, setTargetFound] = useState<any>(null);
+    const [targetFound, setTargetFound] = useState<User | null>(null);
     const [showWager, setShowWager] = useState(false);
 
     useEffect(() => {
@@ -95,7 +96,7 @@ export default function ChallengeRadar() {
                 </TouchableOpacity>
             )}
 
-            {showWager && (
+            {showWager && targetFound && (
                 <ReputationWagerModal
                     visible={showWager}
                     onClose={() => {

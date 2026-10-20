@@ -31,7 +31,7 @@ const MARKET_ITEMS = [
 ];
 
 export default function BlackMarketScreen() {
-    const { reputation, addReputation } = useReputation();
+    const { reputation, addReputation, unlockVipPass, hasVipPass } = useReputation();
     const { activateJammer, isJammerActive, activateFakePlates, isFakePlatesActive } = useHazards();
     const [purchasedItems, setPurchasedItems] = useState<string[]>([]);
 
@@ -47,6 +47,9 @@ export default function BlackMarketScreen() {
                 activateJammer();
             } else if (item.name === 'Fake Plates') {
                 activateFakePlates();
+            } else if (item.name === 'VIP Meet Pass') {
+                unlockVipPass();
+                setPurchasedItems((prev) => [...prev, item.id]);
             } else {
                 setPurchasedItems((prev) => [...prev, item.id]);
             }
@@ -57,7 +60,7 @@ export default function BlackMarketScreen() {
     };
 
     const renderItem = ({ item }: { item: (typeof MARKET_ITEMS)[0] }) => {
-        const isOwned = purchasedItems.includes(item.id);
+        const isOwned = purchasedItems.includes(item.id) || (item.name === 'VIP Meet Pass' && hasVipPass);
         const canAfford = reputation >= item.cost;
         const isConsumableActive =
             (item.name === 'Radar Jammer' && isJammerActive) ||

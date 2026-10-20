@@ -15,7 +15,13 @@ interface MarketItemProps {
     isOwned: boolean;
     canAfford: boolean;
     isConsumableActive: boolean;
-    onPurchase: (item: any) => void;
+    onPurchase: (item: {
+        id: string;
+        name: string;
+        description: string;
+        cost: number;
+        type: string;
+    }) => void;
 }
 
 export default function BlackMarketItem({

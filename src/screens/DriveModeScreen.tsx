@@ -24,6 +24,7 @@ import { useSlipstream } from '../hooks/useSlipstream';
 import SlipstreamBanner from '../components/SlipstreamBanner';
 import { usePerfectRoute } from '../hooks/usePerfectRoute';
 import GhostRunnerBounty from '../components/GhostRunnerBounty';
+import { Location } from '../types';
 
 export default function DriveModeScreen() {
     const [pulseAnim] = useState(() => new Animated.Value(1));
@@ -58,7 +59,7 @@ export default function DriveModeScreen() {
           }
         : null;
 
-    usePerfectRoute(location as any, mockDestination as any);
+    usePerfectRoute(location as Location, mockDestination as Location);
 
     return (
         <View style={styles.container}>
