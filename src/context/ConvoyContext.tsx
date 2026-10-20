@@ -56,9 +56,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setTimeout(() => setEvacActive(false), 10000); // Active for 10 seconds
     };
 
-    const toggleBroadcast = () => {
-        setIsBroadcasting((prev) => !prev);
-    };
+    const toggleBroadcast = () => setIsBroadcasting((prev) => !prev);
 
     const toggleGhostMode = () => {
         setGhostMode((prev) => {
@@ -76,7 +74,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 setCrewMembers([]); // Clear when deactivating
             } else {
                 // Initialize with some mock data when activated
-                const initialMockMembers: CrewMemberLocation[] = [
+                setCrewMembers([
                     {
                         userId: 'm1',
                         username: 'NightRider',
@@ -89,8 +87,7 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                         location: { latitude: -23.551, longitude: -46.634 },
                         lastUpdated: Date.now(),
                     },
-                ];
-                setCrewMembers(initialMockMembers);
+                ]);
             }
             return nextState;
         });

@@ -20,9 +20,9 @@ export function useEvasionRoute() {
                     Math.abs(h.location.longitude - currentLocation.longitude) < 0.05,
             );
 
-            // Shift away from the typical grid
-            const offsetLat = isHazardNear ? 0.02 : 0.005;
-            const offsetLng = isHazardNear ? -0.02 : 0.005;
+            // Shift away from the typical grid. Double the distance if dodging hazards.
+            const offsetLat = isHazardNear ? 0.04 : 0.005;
+            const offsetLng = isHazardNear ? -0.04 : 0.005;
 
             const nextPoint = {
                 latitude: currentLocation.latitude + offsetLat,
