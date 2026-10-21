@@ -15,6 +15,7 @@ interface TurfContextType {
     crewHeatScores: Record<string, number>;
     claimTurf: (territoryId: string, amount: number) => void;
     boostCrewHeat: (crewId: string, amount: number) => void;
+    flagCrew: (crewId: string, penalty: number) => void;
 }
 
 const TurfContext = createContext<TurfContextType | undefined>(undefined);
@@ -58,6 +59,18 @@ export function TurfProvider({ children }: { children: ReactNode }) {
         }));
     };
 
+    const flagCrew = (crewId: string, penalty: number) => {
+        setCrewHeatScores((prev) => ({
+            ...prev,
+            [crewId]: Math.max(0, (prev[crewId] || 0) - penalty),
+        }));
+        setTerritories((prev) =>
+            prev.map((t) =>
+                t.crewId === crewId ? { ...t, dominance: Math.max(0, t.dominance - penalty) } : t,
+            ),
+        );
+    };
+
     // Decay crew heat scores over time
     useEffect(() => {
         const interval = setInterval(() => {
@@ -77,7 +90,9 @@ export function TurfProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <TurfContext.Provider value={{ territories, crewHeatScores, claimTurf, boostCrewHeat }}>
+        <TurfContext.Provider
+            value={{ territories, crewHeatScores, claimTurf, boostCrewHeat, flagCrew }}
+        >
             {children}
         </TurfContext.Provider>
     );

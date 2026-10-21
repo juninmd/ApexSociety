@@ -1,13 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Circle } from 'react-native-maps';
+import { Alert } from 'react-native';
+import { Circle, Marker } from 'react-native-maps';
 import { MOCK_USERS } from '../../data/mock';
 import { useTurf } from '../../context/TurfContext';
 import { getDistance } from '../../utils/location';
 import { theme } from '../../theme';
 
 export default function MapTerritories() {
-    const { territories } = useTurf();
+    const { territories, flagCrew } = useTurf();
     const [pulseState, setPulseState] = useState(false);
+
+    const handleFlagTerritory = (crewId: string) => {
+        Alert.alert(
+            'Flag Suspicious Activity',
+            'Report this crew territory for suspicious/bribe activity to lower their standing?',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Flag',
+                    style: 'destructive',
+                    onPress: () => {
+                        flagCrew(crewId, 10);
+                        Alert.alert('Territory Flagged', 'Crew standing has been penalized.');
+                    },
+                },
+            ],
+        );
+    };
 
     // Calculate intrusions synchronously on mount or when data changes (currently static mocks)
     // Avoids setState in useEffect warning
@@ -62,15 +81,22 @@ export default function MapTerritories() {
                 }
 
                 return (
-                    <Circle
-                        key={territory.id}
-                        center={territory.center}
-                        radius={territory.radius}
-                        fillColor={fillColor}
-                        strokeColor={strokeColor}
-                        strokeWidth={strokeWidth}
-                        testID={`territory-circle-${territory.id}`}
-                    />
+                    <React.Fragment key={`group-${territory.id}`}>
+                        <Circle
+                            key={territory.id}
+                            center={territory.center}
+                            radius={territory.radius}
+                            fillColor={fillColor}
+                            strokeColor={strokeColor}
+                            strokeWidth={strokeWidth}
+                            testID={`territory-circle-${territory.id}`}
+                        />
+                        <Marker
+                            coordinate={territory.center}
+                            onPress={() => handleFlagTerritory(territory.crewId)}
+                            opacity={0} // Invisible marker overlay for interactions
+                        />
+                    </React.Fragment>
                 );
             })}
         </>

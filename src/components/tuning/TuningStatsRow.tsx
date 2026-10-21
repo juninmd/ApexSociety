@@ -39,6 +39,11 @@ export default function TuningStatsRow({
                 <Text style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}>
                     {wear}%
                 </Text>
+                {wear >= 100 && (
+                    <Text style={{ color: 'red', fontSize: 10, marginTop: 2, fontWeight: 'bold' }}>
+                        [WAGERS BLOCKED - REPAIR NEEDED]
+                    </Text>
+                )}
             </View>
         </View>
     );

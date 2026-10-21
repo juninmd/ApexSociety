@@ -3,12 +3,13 @@ import { render, act } from '@testing-library/react-native';
 import MapTerritories from '../src/components/MapScreen/MapTerritories';
 import { TurfProvider } from '../src/context/TurfContext';
 
-// Mock react-native-maps Circle
+// Mock react-native-maps Circle and Marker
 jest.mock('react-native-maps', () => {
     const React = require('react');
     const { View } = require('react-native');
     return {
         Circle: (props: any) => <View testID={props.testID} {...props} />,
+        Marker: (props: any) => <View testID={props.testID || 'mock-marker'} {...props} />,
     };
 });
 

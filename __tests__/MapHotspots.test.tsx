@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import MapHotspots from '../src/components/MapScreen/MapHotspots';
 import { EventProvider } from '../src/context/EventContext';
+import { ReputationProvider } from '../src/context/ReputationContext';
 
 jest.mock('react-native-maps', () => {
     const React = require('react');
@@ -11,9 +12,15 @@ jest.mock('react-native-maps', () => {
             return <View testID="mock-circle" {...this.props} />;
         }
     }
+    class MockMarker extends React.Component {
+        render() {
+            return <View testID="mock-marker" {...this.props} />;
+        }
+    }
     return {
         __esModule: true,
         Circle: MockCircle,
+        Marker: MockMarker,
     };
 });
 
@@ -31,9 +38,11 @@ describe('MapHotspots', () => {
         let tree: any;
         renderer.act(() => {
             tree = renderer.create(
-                <EventProvider>
-                    <MapHotspots />
-                </EventProvider>,
+                <ReputationProvider>
+                    <EventProvider>
+                        <MapHotspots />
+                    </EventProvider>
+                </ReputationProvider>,
             );
         });
         expect(tree.toJSON()).toBeTruthy();

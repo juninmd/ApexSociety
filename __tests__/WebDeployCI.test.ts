@@ -7,7 +7,7 @@ describe('Web Deployment CI/CD Configuration Validation', () => {
         expect(fs.existsSync(netlifyPath)).toBe(true);
         const netlifyContent = fs.readFileSync(netlifyPath, 'utf8');
         expect(netlifyContent).toContain('pnpm run build:web');
-        expect(netlifyContent).toContain('NODE_VERSION = "22"');
+        expect(netlifyContent).toContain('NODE_VERSION = "24"');
     });
 
     it('should have the web build command in GitHub Actions deploy workflow', () => {
