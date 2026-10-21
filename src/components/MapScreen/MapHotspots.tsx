@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Animated } from 'react-native';
-import { Circle } from 'react-native-maps';
+import { Animated, Alert } from 'react-native';
+import { Circle, Marker } from 'react-native-maps';
 import { MOCK_HOTSPOTS } from '../../data/mockExtra';
 import { useEvents } from '../../context/EventContext';
+import { useReputation } from '../../context/ReputationContext';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function MapHotspots() {
     const [pulseAnim] = useState(() => new Animated.Value(0.4));
     const { getEventHeatmaps } = useEvents();
+    const { checkInHotspot } = useReputation();
+
+    const handleCheckIn = (id: string, name?: string) => {
+        const success = checkInHotspot(id);
+        if (success) {
+            Alert.alert(
+                'Flash Meet Check-In!',
+                `You earned 50 REP at ${name || 'the flash meet'}!`,
+            );
+        } else {
+            Alert.alert('Already Checked In', 'You have already checked into this flash meet.');
+        }
+    };
 
     useEffect(() => {
         Animated.loop(
@@ -32,14 +46,21 @@ export default function MapHotspots() {
     return (
         <>
             {allHotspots.map((hotspot) => (
-                <AnimatedCircle
-                    key={hotspot.id}
-                    center={hotspot.center}
-                    radius={hotspot.radius}
-                    fillColor={hotspot.color}
-                    strokeColor="transparent"
-                    style={{ opacity: pulseAnim }}
-                />
+                <React.Fragment key={`group-${hotspot.id}`}>
+                    <AnimatedCircle
+                        key={hotspot.id}
+                        center={hotspot.center}
+                        radius={hotspot.radius}
+                        fillColor={hotspot.color}
+                        strokeColor="transparent"
+                        style={{ opacity: pulseAnim }}
+                    />
+                    <Marker
+                        coordinate={hotspot.center}
+                        onPress={() => handleCheckIn(hotspot.id, 'Flash Meet')}
+                        opacity={0} // Invisible marker overlay for interactions
+                    />
+                </React.Fragment>
             ))}
         </>
     );

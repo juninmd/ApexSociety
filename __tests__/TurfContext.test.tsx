@@ -35,6 +35,30 @@ describe('TurfContext', () => {
         expect(updatedTerritory?.dominance).toBe(Math.min(100, initialDominance + 5));
     });
 
+    it('flagCrew reduces heat score and dominance', () => {
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <TurfProvider>{children}</TurfProvider>
+        );
+
+        const { result } = renderHook(() => useTurf(), { wrapper });
+
+        const crewId = result.current.territories[0].crewId;
+        const initialDominance = result.current.territories[0].dominance;
+
+        const initialHeat = result.current.crewHeatScores[crewId] || 0;
+
+        act(() => {
+            result.current.flagCrew(crewId, 20);
+        });
+
+        const updatedTerritory = result.current.territories.find(
+            (t: Territory) => t.crewId === crewId,
+        );
+
+        expect(result.current.crewHeatScores[crewId]).toBe(Math.max(0, initialHeat - 20));
+        expect(updatedTerritory?.dominance).toBe(Math.max(0, initialDominance - 20));
+    });
+
     it('throws error when useTurf is used outside provider', () => {
         const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
 

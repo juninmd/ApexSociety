@@ -6,11 +6,13 @@ interface ReputationContextType {
     nemesisId: string | null;
     isDecaying: boolean;
     hasVipPass: boolean;
+    checkedInHotspots: string[];
     addReputation: (amount: number) => void;
     addScoutScore: (amount: number) => void;
     spendReputation: (amount: number) => boolean;
     toggleNemesis: (userId: string) => void;
     unlockVipPass: () => void;
+    checkInHotspot: (id: string) => boolean;
 }
 
 const ReputationContext = createContext<ReputationContextType | undefined>(undefined);
@@ -35,6 +37,16 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     const [lastActive] = useState<number>(() => Date.now());
     const [isDecaying, setIsDecaying] = useState(false);
     const [hasVipPass, setHasVipPass] = useState(false);
+    const [checkedInHotspots, setCheckedInHotspots] = useState<string[]>([]);
+
+    const checkInHotspot = (id: string) => {
+        if (!checkedInHotspots.includes(id)) {
+            setCheckedInHotspots((prev) => [...prev, id]);
+            addReputation(50);
+            return true; // Successfully checked in
+        }
+        return false; // Already checked in
+    };
 
     const toggleNemesis = (userId: string) => {
         setNemesisId((prev) => (prev === userId ? null : userId));
@@ -90,11 +102,13 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
                 nemesisId,
                 isDecaying,
                 hasVipPass,
+                checkedInHotspots,
                 addReputation,
                 addScoutScore,
                 spendReputation,
                 toggleNemesis,
                 unlockVipPass,
+                checkInHotspot,
             }}
         >
             {children}
