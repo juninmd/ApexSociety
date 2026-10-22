@@ -47,7 +47,9 @@ export default function TuningStatsRow({
                     </Text>
                 ) : (
                     wear >= 100 && (
-                        <Text style={{ color: 'red', fontSize: 10, marginTop: 2, fontWeight: 'bold' }}>
+                        <Text
+                            style={{ color: 'red', fontSize: 10, marginTop: 2, fontWeight: 'bold' }}
+                        >
                             [WAGERS BLOCKED - REPAIR NEEDED]
                         </Text>
                     )
