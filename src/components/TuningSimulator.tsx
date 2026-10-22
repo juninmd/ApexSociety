@@ -26,6 +26,8 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
         handleWager,
         handleRepair,
         weatherPenalty,
+        isImpounded,
+        handlePayBribe,
     } = useTuningSimulation(defaultHp);
 
     return (
@@ -41,10 +43,11 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 <TouchableOpacity
                     onPress={handleWager}
                     style={{ flexDirection: 'row', alignItems: 'center' }}
+                    disabled={isImpounded}
                 >
                     <Trophy
                         color={
-                            hasWagered || wear >= 100
+                            hasWagered || wear >= 100 || isImpounded
                                 ? theme.colors.textSecondary
                                 : theme.colors.primary
                         }
@@ -53,7 +56,7 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                     <Text
                         style={{
                             color:
-                                hasWagered || wear >= 100
+                                hasWagered || wear >= 100 || isImpounded
                                     ? theme.colors.textSecondary
                                     : theme.colors.primary,
                             marginLeft: 4,
@@ -72,6 +75,7 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 defaultHp={defaultHp}
                 wear={wear}
                 weatherPenalty={weatherPenalty}
+                isImpounded={isImpounded}
             />
 
             <View
@@ -97,12 +101,20 @@ export default function TuningSimulator({ initialHp, engine }: TuningSimulatorPr
                 </TouchableOpacity>
             </View>
 
-            {wear > 0 && (
+            {isImpounded ? (
+                <TouchableOpacity
+                    style={[styles.repairButton, { backgroundColor: theme.colors.error }]}
+                    onPress={handlePayBribe}
+                >
+                    <Wrench size={16} color={theme.colors.black} />
+                    <Text style={styles.repairButtonText}>PAY BRIBE (-300 REP)</Text>
+                </TouchableOpacity>
+            ) : wear > 0 ? (
                 <TouchableOpacity style={styles.repairButton} onPress={handleRepair}>
                     <Wrench size={16} color={theme.colors.black} />
                     <Text style={styles.repairButtonText}>REPAIR VEHICLE (-100 REP)</Text>
                 </TouchableOpacity>
-            )}
+            ) : null}
 
             <TuningPartsContainer upgrades={upgrades} handleUpgrade={handleUpgrade} />
         </View>

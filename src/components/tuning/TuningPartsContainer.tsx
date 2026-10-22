@@ -8,6 +8,7 @@ interface Upgrades {
     ecu: boolean;
     turbo: boolean;
     exhaust: boolean;
+    nos: boolean;
 }
 
 interface TuningPartsContainerProps {
@@ -60,6 +61,20 @@ export default function TuningPartsContainer({
                 />
                 <Text style={[styles.partText, upgrades.exhaust && styles.partTextActive]}>
                     RACING EXHAUST (+15)
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={[styles.partButton, upgrades.nos && styles.partButtonActive]}
+                onPress={() => handleUpgrade('nos', 150)}
+                disabled={upgrades.nos}
+            >
+                <Wrench
+                    size={16}
+                    color={upgrades.nos ? theme.colors.black : theme.colors.primary}
+                />
+                <Text style={[styles.partText, upgrades.nos && styles.partTextActive]}>
+                    NITROUS PURGE (+150)
                 </Text>
             </TouchableOpacity>
         </View>
