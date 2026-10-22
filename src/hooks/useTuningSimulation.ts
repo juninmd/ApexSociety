@@ -10,11 +10,13 @@ export function useTuningSimulation(defaultHp: number) {
         ecu: false,
         turbo: false,
         exhaust: false,
+        nos: false,
     });
     const [hasWagered, setHasWagered] = useState(false);
     const [wear, setWear] = useState(0);
     const [tires, setTires] = useState<'Street' | 'Slick'>('Street');
     const { isRaining, isFoggy } = useWeather();
+    const [isImpounded, setIsImpounded] = useState(false);
 
     const handleUpgrade = (part: keyof typeof upgrades, hpBoost: number) => {
         if (!upgrades[part]) {
@@ -25,6 +27,14 @@ export function useTuningSimulation(defaultHp: number) {
     };
 
     const handleWager = () => {
+        if (isImpounded) {
+            Alert.alert(
+                'Vehicle Impounded',
+                'Your vehicle has been impounded by the police. Pay the bribe to release it.',
+            );
+            return;
+        }
+
         if (wear >= 100) {
             Alert.alert(
                 'Vehicle Damaged',
@@ -56,7 +66,7 @@ export function useTuningSimulation(defaultHp: number) {
 
         const rivalHp = defaultHp + 100; // Mock rival with +100 HP base
         setHasWagered(true);
-        setWear((prev) => Math.min(prev + 20, 100)); // Increase wear on racing
+        setWear((prev) => Math.min(prev + (upgrades.nos ? 40 : 20), 100)); // Increase wear on racing
 
         if (effectiveHp > rivalHp) {
             addReputation(500); // Win
@@ -66,11 +76,28 @@ export function useTuningSimulation(defaultHp: number) {
             );
         } else {
             addReputation(-200); // Lose
-            Alert.alert(
-                'BUSTED',
-                "Your build wasn't fast enough. The rival won, you lost 200 REP.",
-            );
+
+            if (Math.random() > 0.5) {
+                setIsImpounded(true);
+                Alert.alert(
+                    'BUSTED & IMPOUNDED',
+                    "Your build wasn't fast enough. The rival won, you lost 200 REP, and the police impounded your vehicle!",
+                );
+            } else {
+                Alert.alert(
+                    'BUSTED',
+                    "Your build wasn't fast enough. The rival won, you lost 200 REP.",
+                );
+            }
         }
+    };
+
+    const handlePayBribe = () => {
+        if (!isImpounded) return;
+        addReputation(-300);
+        setIsImpounded(false);
+        setWear(0);
+        Alert.alert('Bribe Paid', 'You paid 300 REP to release your vehicle from the impound lot.');
     };
 
     const handleRepair = () => {
@@ -93,5 +120,7 @@ export function useTuningSimulation(defaultHp: number) {
         handleWager,
         handleRepair,
         weatherPenalty,
+        isImpounded,
+        handlePayBribe,
     };
 }

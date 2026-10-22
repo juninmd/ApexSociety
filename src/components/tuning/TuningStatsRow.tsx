@@ -8,6 +8,7 @@ interface TuningStatsRowProps {
     defaultHp: number;
     wear: number;
     weatherPenalty?: boolean;
+    isImpounded?: boolean;
 }
 
 export default function TuningStatsRow({
@@ -16,6 +17,7 @@ export default function TuningStatsRow({
     defaultHp,
     wear,
     weatherPenalty,
+    isImpounded,
 }: TuningStatsRowProps) {
     return (
         <View style={styles.statsRow}>
@@ -39,10 +41,18 @@ export default function TuningStatsRow({
                 <Text style={[styles.statValue, wear >= 80 ? styles.highWear : styles.normalWear]}>
                     {wear}%
                 </Text>
-                {wear >= 100 && (
+                {isImpounded ? (
                     <Text style={{ color: 'red', fontSize: 10, marginTop: 2, fontWeight: 'bold' }}>
-                        [WAGERS BLOCKED - REPAIR NEEDED]
+                        [IMPOUNDED - PAY BRIBE]
                     </Text>
+                ) : (
+                    wear >= 100 && (
+                        <Text
+                            style={{ color: 'red', fontSize: 10, marginTop: 2, fontWeight: 'bold' }}
+                        >
+                            [WAGERS BLOCKED - REPAIR NEEDED]
+                        </Text>
+                    )
                 )}
             </View>
         </View>
