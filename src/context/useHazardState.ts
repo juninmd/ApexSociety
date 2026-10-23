@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Hazard } from './HazardContext';
+import { useWeather } from '../hooks/useWeather';
 
 export function useHazardState() {
     const [hazards, setHazards] = useState<Hazard[]>([]);
@@ -7,6 +8,7 @@ export function useHazardState() {
     const [isFakePlatesActive, setIsFakePlatesActive] = useState(false);
     const jammerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const fakePlatesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const { isRaining, isFoggy } = useWeather();
 
     const activateJammer = () => {
         setIsJammerActive(true);
@@ -61,6 +63,35 @@ export function useHazardState() {
         ); // Remove if 5 people flagged it as fake
     };
 
+    const updateWeatherHazards = useCallback(() => {
+        if (isRaining || isFoggy) {
+            const envHazard: Hazard = {
+                id: `env-weather`,
+                type: 'flare', // using flare to mark on map for now
+                location: { latitude: -23.5505, longitude: -46.6333 }, // Mock central location
+                reportedAt: new Date().toISOString(),
+                severity: isRaining ? 'medium' : 'high',
+            };
+
+            setHazards((prev) => {
+                const hasEnvHazard = prev.some((h) => h.id === 'env-weather');
+                if (!hasEnvHazard) {
+                    return [...prev, envHazard];
+                }
+                return prev;
+            });
+        } else {
+            setHazards((prev) => prev.filter((h) => h.id !== 'env-weather'));
+        }
+    }, [isRaining, isFoggy]);
+
+    useEffect(() => {
+        if (process.env.NODE_ENV === 'test') return;
+        // Schedule to avoid calling setState synchronously during render phase
+        const timeoutId = setTimeout(updateWeatherHazards, 0);
+        return () => clearTimeout(timeoutId);
+    }, [updateWeatherHazards]);
+
     useEffect(() => {
         if (process.env.NODE_ENV === 'test') {
             return;
@@ -70,6 +101,9 @@ export function useHazardState() {
             const now = new Date();
             setHazards((prev) => {
                 const filtered = prev.filter((hazard) => {
+                    // Do not timeout environmental hazards based on time
+                    if (hazard.id === 'env-weather') return true;
+
                     const reportedAt = new Date(hazard.reportedAt);
                     const diffMs = now.getTime() - reportedAt.getTime();
                     const diffMinutes = diffMs / (1000 * 60);
