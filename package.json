@@ -146,7 +146,7 @@
             "sharp": ">=0.35.4",
             "multiparty": ">=4.3.0",
             "@opentelemetry/propagator-jaeger": ">=2.9.0",
-            "netlify-cli": "^17.38.1",
+"netlify-cli": "^18.0.0",
             "ipx": ">=2.1.2",
             "qs": ">=6.16.0",
             "file-type": ">=21.3.1",
