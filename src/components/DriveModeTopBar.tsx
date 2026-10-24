@@ -35,7 +35,7 @@ export default function DriveModeTopBar({
             // Deploy a decoy slightly offset from the user to simulate drawing heat away
             deployHeatDecoy({
                 latitude: currentLocation.latitude + 0.01,
-                longitude: currentLocation.longitude + 0.01
+                longitude: currentLocation.longitude + 0.01,
             });
             Alert.alert(
                 'DECOY DEPLOYED',
