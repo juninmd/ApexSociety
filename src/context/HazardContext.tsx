@@ -24,6 +24,7 @@ interface HazardContextType {
     activateJammer: () => void;
     isFakePlatesActive: boolean;
     activateFakePlates: () => void;
+    deployHeatDecoy: (location: Location) => void;
 }
 
 const HazardContext = createContext<HazardContextType | undefined>(undefined);
@@ -49,6 +50,7 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
         activateFakePlates,
         addHazard,
         verifyHazard,
+        deployHeatDecoy,
     } = useHazardState();
 
     const heatLevel = hazards.filter((h) => h.type === 'blitz' || h.type === 'radar').length;
@@ -94,6 +96,7 @@ export const HazardProvider: React.FC<HazardProviderProps> = ({ children }) => {
                 activateJammer,
                 isFakePlatesActive,
                 activateFakePlates,
+                deployHeatDecoy,
             }}
         >
             {children}

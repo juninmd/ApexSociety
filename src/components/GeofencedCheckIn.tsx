@@ -6,6 +6,7 @@ import { theme } from '../theme';
 import { getDistance } from '../utils/location';
 import { useReputation } from '../context/ReputationContext';
 import { useTurf } from '../context/TurfContext';
+import { useWeather } from '../hooks/useWeather';
 import { styles } from './GeofencedCheckInStyles';
 
 interface GeofencedCheckInProps {
@@ -23,6 +24,7 @@ export default function GeofencedCheckIn({
 }: GeofencedCheckInProps) {
     const { addReputation } = useReputation();
     const { territories } = useTurf();
+    const { isRaining } = useWeather();
     const [isCheckedIn, setIsCheckedIn] = useState(false);
     const [checking, setChecking] = useState(false);
 
@@ -71,16 +73,20 @@ export default function GeofencedCheckIn({
                     }
                 }
 
-                if (isBonusTurf) {
-                    addReputation(100);
-                    Alert.alert(
-                        'BÔNUS DE TERRITÓRIO!',
-                        'Você ganhou 100 REP (2x) por comparecer em área dominada!',
-                    );
-                } else {
-                    addReputation(50); // Award regular rep for attending
-                    Alert.alert('CHECK-IN SUCESSO', 'Você ganhou 50 REP por comparecer!');
+                let repAward = isBonusTurf ? 100 : 50;
+                let messageTitle = isBonusTurf ? 'BÔNUS DE TERRITÓRIO!' : 'CHECK-IN SUCESSO';
+                let messageBody = isBonusTurf
+                    ? `Você ganhou ${repAward} REP por comparecer em área dominada!`
+                    : `Você ganhou ${repAward} REP por comparecer!`;
+
+                if (isRaining) {
+                    repAward *= 2;
+                    messageTitle = 'STORM CHASER BONUS!';
+                    messageBody = `Condições extremas! Você ganhou ${repAward} REP (2X)!`;
                 }
+
+                addReputation(repAward);
+                Alert.alert(messageTitle, messageBody);
             } else {
                 Alert.alert(
                     'Fora de Alcance',
@@ -101,6 +107,16 @@ export default function GeofencedCheckIn({
             <View style={styles.checkedInContainer}>
                 <MapPin size={16} color={theme.colors.primary} />
                 <Text style={styles.checkedInText}>CHECKED IN</Text>
+                {isRaining && (
+                    <Text
+                        style={[
+                            styles.checkedInText,
+                            { color: theme.colors.warning, marginLeft: 8 },
+                        ]}
+                    >
+                        STORM CHASER (2X)
+                    </Text>
+                )}
             </View>
         );
     }

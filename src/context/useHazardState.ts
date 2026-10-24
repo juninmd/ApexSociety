@@ -45,6 +45,23 @@ export function useHazardState() {
         setHazards((prev) => [...prev, { ...hazard, verifications: 1, fakes: 0 }]);
     };
 
+    const deployHeatDecoy = (location: {
+        latitude: number;
+        longitude: number;
+        address?: string;
+    }) => {
+        const decoy: Hazard = {
+            id: `decoy-${Date.now()}`,
+            type: 'flare',
+            location,
+            reportedAt: new Date().toISOString(),
+            severity: 'high',
+            verifications: 99, // Max credibility
+            fakes: 0,
+        };
+        addHazard(decoy);
+    };
+
     const verifyHazard = (id: string, isFake?: boolean) => {
         setHazards((prev) =>
             prev
@@ -98,5 +115,6 @@ export function useHazardState() {
         activateFakePlates,
         addHazard,
         verifyHazard,
+        deployHeatDecoy,
     };
 }

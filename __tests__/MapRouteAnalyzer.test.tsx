@@ -20,6 +20,7 @@ describe('MapRouteAnalyzer', () => {
             activateJammer: jest.fn(),
             isFakePlatesActive: false,
             activateFakePlates: jest.fn(),
+            deployHeatDecoy: jest.fn(),
         });
         jest.spyOn(WeatherHook, 'useWeather').mockReturnValue({
             isRaining: false,
@@ -42,6 +43,7 @@ describe('MapRouteAnalyzer', () => {
             activateJammer: jest.fn(),
             isFakePlatesActive: false,
             activateFakePlates: jest.fn(),
+            deployHeatDecoy: jest.fn(),
         });
         jest.spyOn(WeatherHook, 'useWeather').mockReturnValue({
             isRaining: false,
@@ -67,6 +69,7 @@ describe('MapRouteAnalyzer', () => {
             activateJammer: jest.fn(),
             isFakePlatesActive: false,
             activateFakePlates: jest.fn(),
+            deployHeatDecoy: jest.fn(),
         });
         jest.spyOn(WeatherHook, 'useWeather').mockReturnValue({
             isRaining: false,
@@ -92,6 +95,7 @@ describe('MapRouteAnalyzer', () => {
             activateJammer: jest.fn(),
             isFakePlatesActive: false,
             activateFakePlates: jest.fn(),
+            deployHeatDecoy: jest.fn(),
         });
         jest.spyOn(WeatherHook, 'useWeather').mockReturnValue({
             isRaining: true,
