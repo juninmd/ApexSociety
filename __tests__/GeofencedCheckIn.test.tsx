@@ -7,6 +7,13 @@ import { Alert } from 'react-native';
 import { ReputationProvider } from '../src/context/ReputationContext';
 import { TurfProvider } from '../src/context/TurfContext';
 
+// Mock useWeather
+jest.mock('../src/hooks/useWeather', () => ({
+    useWeather: () => ({
+        isRaining: false, // Default for tests
+    }),
+}));
+
 // Mock expo-location
 jest.mock('expo-location', () => ({
     requestForegroundPermissionsAsync: jest.fn(),

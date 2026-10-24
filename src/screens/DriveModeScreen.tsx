@@ -71,6 +71,7 @@ export default function DriveModeScreen() {
                     isGhostMode={isGhostMode}
                     onToggleGhostMode={handleToggleGhostMode}
                     heatLevel={heatLevel}
+                    currentLocation={location as Location}
                 />
                 {!isGhostMode && <PitWallFeed />}
                 <GhostRunnerBounty isGhostMode={isGhostMode} heatLevel={heatLevel} />
