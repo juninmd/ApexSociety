@@ -9,6 +9,7 @@ import CrewHeader from '../components/CrewHeader';
 import CrewBanner from '../components/CrewBanner';
 import ChallengeCrewModal from '../components/ChallengeCrewModal';
 import TakeoverButton from '../components/TakeoverButton';
+import TurfWarDashboard from '../components/TurfWarDashboard';
 import { styles } from './CrewScreenStyles';
 
 export default function CrewScreen() {
@@ -66,6 +67,8 @@ export default function CrewScreen() {
                     setTakeoverActive={setTakeoverActive}
                 />
             </View>
+
+            <TurfWarDashboard crewId={crew.id} />
 
             <Text style={styles.sectionHeader}>GERENCIAR</Text>
 
