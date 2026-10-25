@@ -9,6 +9,7 @@ import EventHypeIndicator from './EventHypeIndicator';
 import GeofencedCheckIn from './GeofencedCheckIn';
 import { styles } from './EventCardStyles';
 import { useHazards } from '../context/HazardContext';
+import { useReputation } from '../context/ReputationContext';
 
 interface EventCardProps {
     eventId: string;
@@ -55,6 +56,7 @@ export default function EventCard({
 }: EventCardProps) {
     const [isUnlocked, setIsUnlocked] = React.useState(false);
     const { heatLevel } = useHazards();
+    const { hasVipPass } = useReputation();
     const isElevatedRisk = elevatedRisk !== undefined ? elevatedRisk : heatLevel > 2;
 
     if (isSecret && !isUnlocked) {
@@ -70,14 +72,22 @@ export default function EventCard({
         );
     }
 
+    const isVipEvent = isPrivate && hasVipPass;
+
     return (
         <TouchableOpacity
-            style={[styles.container, isElevatedRisk && styles.containerElevatedRisk]}
+            style={[
+                styles.container,
+                isElevatedRisk && styles.containerElevatedRisk,
+                isVipEvent && { borderColor: '#FFE600', borderWidth: 2 },
+            ]}
             onPress={onPress}
         >
             <EventHypeIndicator hypeScore={hypeScore} />
             <View style={styles.header}>
-                <Text style={styles.host}>HOSTED BY {host}</Text>
+                <Text style={styles.host}>
+                    HOSTED BY {host} {isVipEvent && <Text style={{ color: '#FFE600' }}>[VIP]</Text>}
+                </Text>
                 <EventCardBadges isPrivate={isPrivate} eventType={eventType} />
             </View>
 

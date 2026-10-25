@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Car } from 'lucide-react-native';
 import { theme } from '../theme';
 import CarCard, { CarItem } from './CarCard';
+import GaragePerformanceRating from './GaragePerformanceRating';
 import { RootStackParamList } from '../navigation/types';
 
 interface GarageSectionProps {
@@ -30,6 +31,7 @@ export default function GarageSection({ cars }: GarageSectionProps) {
                     <Text style={styles.seeAll}>SEE ALL</Text>
                 </TouchableOpacity>
             </View>
+            <GaragePerformanceRating cars={cars} />
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}

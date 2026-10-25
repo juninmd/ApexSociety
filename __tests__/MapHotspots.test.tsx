@@ -3,6 +3,7 @@ import renderer from 'react-test-renderer';
 import MapHotspots from '../src/components/MapScreen/MapHotspots';
 import { EventProvider } from '../src/context/EventContext';
 import { ReputationProvider } from '../src/context/ReputationContext';
+import { HazardProvider } from '../src/context/HazardContext';
 
 jest.mock('react-native-maps', () => {
     const React = require('react');
@@ -38,11 +39,13 @@ describe('MapHotspots', () => {
         let tree: any;
         renderer.act(() => {
             tree = renderer.create(
-                <ReputationProvider>
-                    <EventProvider>
-                        <MapHotspots />
-                    </EventProvider>
-                </ReputationProvider>,
+                <HazardProvider>
+                    <ReputationProvider>
+                        <EventProvider>
+                            <MapHotspots />
+                        </EventProvider>
+                    </ReputationProvider>
+                </HazardProvider>,
             );
         });
         expect(tree.toJSON()).toBeTruthy();
