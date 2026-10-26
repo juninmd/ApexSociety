@@ -17,6 +17,7 @@ import RouteThreatBanner from '../components/RouteThreatBanner';
 import EBSFlare from '../components/EBSFlare';
 import ConvoyChat from '../components/ConvoyChat';
 import ChallengeRadar from '../components/ChallengeRadar';
+import PirateRadio from '../components/PirateRadio';
 import { useDriveTracking } from '../hooks/useDriveTracking';
 import { useWeather } from '../hooks/useWeather';
 import { useRouteThreat } from '../hooks/useRouteThreat';
@@ -86,6 +87,7 @@ export default function DriveModeScreen() {
                     <RadarStatus isHighSpeed={isHighSpeed} />
                     <Speedometer speed={speed} pulseAnim={pulseAnim} isHighSpeed={isHighSpeed} />
                     <TelemetryDashboard speed={speed} isRaining={isRaining} />
+                    <PirateRadio />
 
                     <ConvoyChat />
 

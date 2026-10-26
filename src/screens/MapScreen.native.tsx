@@ -12,6 +12,7 @@ import MapCruisePlanner from '../components/MapScreen/MapCruisePlanner';
 import MapTerritories from '../components/MapScreen/MapTerritories';
 import MapLegend from '../components/MapScreen/MapLegend';
 import MapControls from '../components/MapScreen/MapControls';
+import PoliceChopper from '../components/MapScreen/PoliceChopper';
 import MapRouteAnalyzer from '../components/MapScreen/MapRouteAnalyzer';
 import { useMapRegion } from '../hooks/useMapRegion';
 import { useCruisePlanner } from '../hooks/useCruisePlanner';
@@ -77,6 +78,7 @@ export default function MapScreen() {
                 <MapHotspots />
                 <MapMarkers />
                 <MapHazards />
+                <PoliceChopper />
                 {sosLocation && (
                     <Circle
                         center={{
