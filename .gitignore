@@ -12,6 +12,7 @@ expo-env.d.ts
 # Native
 .kotlin/
 *.orig.*
+*.orig
 *.jks
 *.p8
 *.p12
@@ -58,3 +59,6 @@ config/secrets.yml
 *.p12
 *.key
 serve.log
+
+# logs
+*.log

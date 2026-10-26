@@ -3,7 +3,7 @@
 # 🏔️ ApexSociety (Mobile)
 
 **O app definitivo para entusiastas de carros e corridas underground, inspirado no FIRST2.**<br/>
-Marque corridas de rua, eventos de carro e encontros automotivos, crie sua equipe e receba alertas de blitz, radar e acidentes em tempo real.
+Marque corridas de rua, eventos de carro e encontros automotivos, crie sua equipe e veja alertas de blitz, radar e acidentes (hoje locais, sem fonte em tempo real; ver [Limitações](#-known-limitations)).
 
 [![Expo](https://img.shields.io/badge/Expo-54.x-000000?logo=expo)](https://expo.dev/)
 [![React Native](https://img.shields.io/badge/React_Native-0.81-61DAFB?logo=react)](https://reactnative.dev/)
