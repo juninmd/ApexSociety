@@ -24,6 +24,7 @@ import { useSlipstream } from '../hooks/useSlipstream';
 import SlipstreamBanner from '../components/SlipstreamBanner';
 import { usePerfectRoute } from '../hooks/usePerfectRoute';
 import GhostRunnerBounty from '../components/GhostRunnerBounty';
+import WeatherHazardBanner from '../components/WeatherHazardBanner';
 import { Location } from '../types';
 
 export default function DriveModeScreen() {
@@ -77,6 +78,7 @@ export default function DriveModeScreen() {
                 <GhostRunnerBounty isGhostMode={isGhostMode} heatLevel={heatLevel} />
                 <View style={styles.content}>
                     {!isGhostMode && <RouteThreatBanner threatInfo={threatInfo} />}
+                    <WeatherHazardBanner />
                     {!isGhostMode && <SlipstreamBanner isDrafting={isDrafting} />}
 
                     {/* Note: PerfectRouteVisualizer is designed for map views, but we can hook it up here for UI state if needed, or simply log it for now as part of the architecture evolution. */}
