@@ -17,15 +17,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: Install pnpm
-              uses: pnpm/action-setup@v2
+              uses: pnpm/action-setup@v6
               with:
                   version: 10
 
             - name: Set up Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version: 22
                   cache: 'pnpm'
@@ -43,7 +43,7 @@ jobs:
               run: pnpm build:web
 
             - name: Deploy to Netlify
-              uses: nwtgck/actions-netlify@v3.0
+              uses: nwtgck/actions-netlify@v4.0
               with:
                   publish-dir: './dist'
                   production-branch: main
