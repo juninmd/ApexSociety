@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, getByText, getAllByText, getByPlaceholderText, fireEvent } from '@testing-library/react-native';
 import CreateCrewScreen from '../src/screens/CreateCrewScreen';
 import { Alert } from 'react-native';
 
@@ -20,7 +20,7 @@ describe('<CreateCrewScreen />', () => {
     });
 
     it('renders correctly', () => {
-        const { getAllByText, getByText, getByPlaceholderText } = render(<CreateCrewScreen />);
+        const rendered = render(<CreateCrewScreen />);
 
         expect(getAllByText('CRIAR EQUIPE').length).toBe(2);
         expect(getByText('NOME DA EQUIPE')).toBeTruthy();
@@ -28,7 +28,6 @@ describe('<CreateCrewScreen />', () => {
     });
 
     it('shows error if name or tag is empty', () => {
-        const { getAllByText } = render(<CreateCrewScreen />);
         const createBtn = getAllByText('CRIAR EQUIPE')[1]; // Second one is the button
 
         fireEvent.press(createBtn);
@@ -40,7 +39,7 @@ describe('<CreateCrewScreen />', () => {
     });
 
     it('shows error if tag is more than 5 characters', () => {
-        const { getByPlaceholderText, getAllByText } = render(<CreateCrewScreen />);
+        render(<CreateCrewScreen />);
 
         const nameInput = getByPlaceholderText('Ex: Corredores Noturnos');
         const tagInput = getByPlaceholderText('Ex: CORR');
@@ -55,7 +54,7 @@ describe('<CreateCrewScreen />', () => {
     });
 
     it('creates crew successfully and goes back', () => {
-        const { getByPlaceholderText, getAllByText } = render(<CreateCrewScreen />);
+        render(<CreateCrewScreen />);
 
         const nameInput = getByPlaceholderText('Ex: Corredores Noturnos');
         const tagInput = getByPlaceholderText('Ex: CORR');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, getByText } from '@testing-library/react-native';
 import TelemetryDashboard from '../src/components/TelemetryDashboard';
 import { ConvoyProvider } from '../src/context/ConvoyContext';
 import { DriveHistoryProvider } from '../src/context/DriveHistoryContext';
