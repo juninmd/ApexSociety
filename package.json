@@ -54,7 +54,7 @@
     "expo-linking": "^8.0.12",
     "expo-location": "^19.0.8",
     "expo-status-bar": "~3.0.9",
-    "follow-redirects": "^1.16.0",
+    "follow-redirects": "^1.16.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
