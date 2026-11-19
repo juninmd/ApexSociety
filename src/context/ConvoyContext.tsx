@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { Location } from '../types';
 import { useGhostTrail } from '../hooks/useGhostTrail';
 import { useConvoyChat } from '../hooks/useConvoyChat';
@@ -35,25 +35,40 @@ export const ConvoyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const { ghostCoordinates } = useGhostTrail(ghostMode, process.env.NODE_ENV === 'test');
     const { chatMessages, addChatMessage } = useConvoyChat();
 
+    // One timer per auto-dismiss: a new trigger restarts its window instead of being cut short by the old one.
+    const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+    const schedule = (key: string, fn: () => void, ms: number) => {
+        clearTimeout(timers.current[key]);
+        timers.current[key] = setTimeout(fn, ms);
+    };
+    useEffect(() => {
+        const pending = timers.current;
+        return () => Object.values(pending).forEach(clearTimeout);
+    }, []);
+
     const deployRallyFlare = (location: Location) => {
         if (!isConvoyActive) return;
         setRallyPoint(location);
-        setTimeout(() => setRallyPoint(undefined), 60000); // 60 seconds
+        schedule('rally', () => setRallyPoint(undefined), 60000); // 60 seconds
     };
 
     const triggerEBS = (location?: Location) => {
         setEbsActive(true);
         if (location) setSosLocation(location);
 
-        setTimeout(() => {
-            setEbsActive(false);
-            setSosLocation(undefined);
-        }, 5000); // Auto dismiss after 5 seconds
+        schedule(
+            'ebs',
+            () => {
+                setEbsActive(false);
+                setSosLocation(undefined);
+            },
+            5000, // Auto dismiss after 5 seconds
+        );
     };
 
     const triggerEvac = () => {
         setEvacActive(true);
-        setTimeout(() => setEvacActive(false), 10000); // Active for 10 seconds
+        schedule('evac', () => setEvacActive(false), 10000); // Active for 10 seconds
     };
 
     const toggleBroadcast = () => setIsBroadcasting((prev) => !prev);
