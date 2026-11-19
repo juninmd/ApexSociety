@@ -107,7 +107,7 @@ export default function EventCard({
 
             <EventCardRaceDetails riskLevel={riskLevel} prize={prize} />
 
-            {eventLatitude && eventLongitude && (
+            {eventLatitude !== undefined && eventLongitude !== undefined && (
                 <GeofencedCheckIn
                     eventId={eventId}
                     eventLatitude={eventLatitude}

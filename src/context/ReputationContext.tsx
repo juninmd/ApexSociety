@@ -7,12 +7,14 @@ interface ReputationContextType {
     isDecaying: boolean;
     hasVipPass: boolean;
     checkedInHotspots: string[];
+    checkedInEvents: string[];
     addReputation: (amount: number) => void;
     addScoutScore: (amount: number) => void;
     spendReputation: (amount: number) => boolean;
     toggleNemesis: (userId: string) => void;
     unlockVipPass: () => void;
     checkInHotspot: (id: string) => boolean;
+    markEventCheckedIn: (id: string) => boolean;
 }
 
 const ReputationContext = createContext<ReputationContextType | undefined>(undefined);
@@ -38,6 +40,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     const [isDecaying, setIsDecaying] = useState(false);
     const [hasVipPass, setHasVipPass] = useState(false);
     const [checkedInHotspots, setCheckedInHotspots] = useState<string[]>([]);
+    const [checkedInEvents, setCheckedInEvents] = useState<string[]>([]);
 
     const checkInHotspot = (id: string) => {
         if (!checkedInHotspots.includes(id)) {
@@ -46,6 +49,13 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
             return true; // Successfully checked in
         }
         return false; // Already checked in
+    };
+
+    // Reputation for an event is awarded once per session, even if the card is unmounted and remounted.
+    const markEventCheckedIn = (id: string) => {
+        if (checkedInEvents.includes(id)) return false;
+        setCheckedInEvents((prev) => (prev.includes(id) ? prev : [...prev, id]));
+        return true;
     };
 
     const toggleNemesis = (userId: string) => {
@@ -103,12 +113,14 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
                 isDecaying,
                 hasVipPass,
                 checkedInHotspots,
+                checkedInEvents,
                 addReputation,
                 addScoutScore,
                 spendReputation,
                 toggleNemesis,
                 unlockVipPass,
                 checkInHotspot,
+                markEventCheckedIn,
             }}
         >
             {children}

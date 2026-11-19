@@ -94,4 +94,45 @@ describe('GeofencedCheckIn', () => {
             );
         });
     });
+
+    it('pays the reputation only once per event, even after the card remounts', async () => {
+        (Location.requestForegroundPermissionsAsync as jest.Mock).mockResolvedValue({
+            status: 'granted',
+        });
+        (Location.getCurrentPositionAsync as jest.Mock).mockResolvedValue({
+            coords: { latitude: -23.5, longitude: -46.6 },
+        });
+
+        const Harness = ({ show }: { show: boolean }) => (
+            <TurfProvider>
+                <ReputationProvider>
+                    {show ? (
+                        <GeofencedCheckIn
+                            eventId="e1"
+                            eventLatitude={-23.5}
+                            eventLongitude={-46.6}
+                        />
+                    ) : null}
+                </ReputationProvider>
+            </TurfProvider>
+        );
+        const { getByText, rerender } = render(<Harness show />);
+
+        fireEvent.press(getByText('GEOFENCED CHECK-IN'));
+        await waitFor(() => expect(getByText('CHECKED IN')).toBeTruthy());
+        expect(Alert.alert).toHaveBeenCalledTimes(1);
+
+        // Remounting the card inside the same provider must keep it checked in.
+        rerender(<Harness show={false} />);
+        rerender(<Harness show />);
+        expect(getByText('CHECKED IN')).toBeTruthy();
+        expect(Alert.alert).toHaveBeenCalledTimes(1);
+    });
+
+    it('treats a 0 coordinate as a valid location, not as missing', () => {
+        const { getByText } = renderWithProvider(
+            <GeofencedCheckIn eventId="e0" eventLatitude={0} eventLongitude={0} />,
+        );
+        expect(getByText('GEOFENCED CHECK-IN')).toBeTruthy();
+    });
 });

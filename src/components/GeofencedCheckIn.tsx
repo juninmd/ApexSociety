@@ -22,14 +22,14 @@ export default function GeofencedCheckIn({
     eventLongitude,
     radiusInKm = 0.5, // 500 meters default
 }: GeofencedCheckInProps) {
-    const { addReputation } = useReputation();
+    const { addReputation, checkedInEvents, markEventCheckedIn } = useReputation();
     const { territories } = useTurf();
     const { isRaining } = useWeather();
-    const [isCheckedIn, setIsCheckedIn] = useState(false);
+    const isCheckedIn = checkedInEvents.includes(eventId);
     const [checking, setChecking] = useState(false);
 
     const handleCheckIn = async () => {
-        if (!eventLatitude || !eventLongitude) {
+        if (eventLatitude === undefined || eventLongitude === undefined) {
             Alert.alert('Error', 'Event coordinates not available.');
             return;
         }
@@ -55,7 +55,8 @@ export default function GeofencedCheckIn({
             );
 
             if (distance <= radiusInKm) {
-                setIsCheckedIn(true);
+                // A second tap or a remount must not pay the reputation again.
+                if (!markEventCheckedIn(eventId)) return;
 
                 // Check if the event is inside a claimed turf for bonus
                 let isBonusTurf = false;
@@ -100,7 +101,7 @@ export default function GeofencedCheckIn({
         }
     };
 
-    if (!eventLatitude || !eventLongitude) return null;
+    if (eventLatitude === undefined || eventLongitude === undefined) return null;
 
     if (isCheckedIn) {
         return (
