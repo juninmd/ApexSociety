@@ -16,13 +16,22 @@ interface UseDriveTrackingProps {
 export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) {
     const [speed, setSpeed] = useState(0);
     const [location, setLocation] = useState<Location.LocationObjectCoords | null>(null);
-    const [proximityAlert, setProximityAlert] = useState<string | null>(null);
     const [isGhostMode, setIsGhostMode] = useState(false);
     const [ghostStartTime, setGhostStartTime] = useState<number | null>(null);
     const { user } = useAuth();
     const { boostCrewHeat } = useTurf();
     const { toggleGhostMode } = useConvoy();
     const speedingTicksRef = useRef(0);
+    // Latest values are read from refs so the GPS subscription is created once, not on every alert.
+    const proximityAlertRef = useRef<string | null>(null);
+    const hazardsRef = useRef(hazards);
+    const showAlertRef = useRef(showAlert);
+    const isGhostModeRef = useRef(isGhostMode);
+    useEffect(() => {
+        hazardsRef.current = hazards;
+        showAlertRef.current = showAlert;
+        isGhostModeRef.current = isGhostMode;
+    }, [hazards, showAlert, isGhostMode]);
 
     const handleToggleGhostMode = () => {
         if (!isGhostMode) {
@@ -75,11 +84,11 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
             const sub = await Location.watchPositionAsync(
                 { accuracy: Location.Accuracy.High, timeInterval: 5000, distanceInterval: 10 },
                 (location) => {
-                    if (isCancelled || isGhostMode) return;
+                    if (isCancelled || isGhostModeRef.current) return;
                     setLocation(location.coords);
                     const { latitude, longitude } = location.coords;
 
-                    const nearbyHazard = hazards.find((hazard) => {
+                    const nearbyHazard = hazardsRef.current.find((hazard) => {
                         const dist = getDistance(
                             latitude,
                             longitude,
@@ -89,13 +98,13 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
                         return dist < 2 && (hazard.type === 'blitz' || hazard.type === 'acidente');
                     });
 
-                    if (nearbyHazard && proximityAlert !== nearbyHazard.id) {
+                    if (nearbyHazard && proximityAlertRef.current !== nearbyHazard.id) {
                         const msg =
                             nearbyHazard.type === 'blitz'
                                 ? 'ALERTA: BLITZ POLICIAL A MENOS DE 2KM!'
                                 : 'ALERTA: ACIDENTE A MENOS DE 2KM!';
-                        showAlert(msg);
-                        setProximityAlert(nearbyHazard.id);
+                        showAlertRef.current(msg);
+                        proximityAlertRef.current = nearbyHazard.id;
                         Vibration.vibrate([0, 500, 200, 500]); // Vibrate twice
                     } else if (!nearbyHazard) {
                         // Check for nearby events if no hazard
@@ -109,14 +118,14 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
                             return dist < 3; // Event proximity radius 3km
                         });
 
-                        if (nearbyEvent && proximityAlert !== nearbyEvent.id) {
-                            showAlert(
+                        if (nearbyEvent && proximityAlertRef.current !== nearbyEvent.id) {
+                            showAlertRef.current(
                                 `ALERTA: EVENTO '${nearbyEvent.title.toUpperCase()}' A MENOS DE 3KM!`,
                             );
-                            setProximityAlert(nearbyEvent.id);
+                            proximityAlertRef.current = nearbyEvent.id;
                             Vibration.vibrate([0, 200, 100, 200]); // Vibrate for event
                         } else if (!nearbyEvent) {
-                            setProximityAlert(null);
+                            proximityAlertRef.current = null;
                         }
                     }
                 },
@@ -132,7 +141,7 @@ export function useDriveTracking({ hazards, showAlert }: UseDriveTrackingProps) 
             isCancelled = true;
             if (locationSub) locationSub.remove();
         };
-    }, [hazards, proximityAlert, showAlert, isGhostMode]);
+    }, []);
 
     return {
         speed,
