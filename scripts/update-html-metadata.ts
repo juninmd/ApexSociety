@@ -10,7 +10,7 @@ try {
     let html = fs.readFileSync(templatePath, 'utf8');
 
     // Allow environment variables to override metadata
-    // Check PUBLIC_URL (standard), URL (Netlify), or HOMEPAGE (legacy/GitHub Pages)
+    // Check PUBLIC_URL (standard) or HOMEPAGE (legacy/GitHub Pages)
     const homepage =
         process.env.PUBLIC_URL || process.env.URL || process.env.HOMEPAGE || metadata.homepage;
     // Remove trailing slash if present for consistency

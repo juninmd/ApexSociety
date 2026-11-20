@@ -47,7 +47,6 @@ coverage/
 /android
 public/index.html
 public/sitemap.xml
-.netlify/
 
 # Environment and secrets (added for security)
 secrets/
