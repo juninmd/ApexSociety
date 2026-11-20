@@ -12,6 +12,7 @@ import CreateEventRiskSelector from './CreateEventRiskSelector';
 import CreateEventDateTimeInput from './CreateEventDateTimeInput';
 import { styles } from './CreateEventFormStyles';
 import { showAlert } from '../utils/alert';
+import { validateEventForm } from '../utils/eventValidation';
 
 export default function CreateEventForm() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -27,18 +28,19 @@ export default function CreateEventForm() {
     const [prize, setPrize] = useState('');
 
     const handleCreate = () => {
-        if (!title || !date || !time || !location) {
-            showAlert('Erro', 'Por favor, preencha todos os campos obrigatórios');
+        const error = validateEventForm({ title, date, time, location });
+        if (error) {
+            showAlert('Erro', error);
             return;
         }
         const newEvent: Event = {
             id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-            title,
-            description,
+            title: title.trim(),
+            description: description.trim(),
             hostId: 'user-current',
-            location: { latitude: 0, longitude: 0, address: location },
-            startTime: `${date} @ ${time}`,
-            endTime: `${date} @ ${time}`,
+            location: { latitude: 0, longitude: 0, address: location.trim() },
+            startTime: `${date.trim()} @ ${time.trim()}`,
+            endTime: `${date.trim()} @ ${time.trim()}`,
             attendees: 1,
             isPrivate: false,
             eventType,
