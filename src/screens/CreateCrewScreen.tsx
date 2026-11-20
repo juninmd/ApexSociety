@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { theme } from '../theme';
 import { RootStackParamList } from '../navigation/types';
 import CrewFormInputs from '../components/CrewFormInputs';
+import { showAlert } from '../utils/alert';
 
 export default function CreateCrewScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -14,16 +15,16 @@ export default function CreateCrewScreen() {
 
     const handleCreate = () => {
         if (!name || !tag) {
-            Alert.alert('Erro', 'Por favor, preencha o Nome e a Tag da Equipe');
+            showAlert('Erro', 'Por favor, preencha o Nome e a Tag da Equipe');
             return;
         }
 
         if (tag.length > 5) {
-            Alert.alert('Erro', 'A Tag deve ter 5 caracteres ou menos');
+            showAlert('Erro', 'A Tag deve ter 5 caracteres ou menos');
             return;
         }
 
-        Alert.alert('Sucesso', 'Equipe criada com sucesso!', [
+        showAlert('Sucesso', 'Equipe criada com sucesso!', [
             { text: 'OK', onPress: () => navigation.goBack() },
         ]);
     };

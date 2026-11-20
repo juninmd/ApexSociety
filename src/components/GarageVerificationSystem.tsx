@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { CheckCircle, ShieldAlert } from 'lucide-react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
+import { showAlert } from '../utils/alert';
 
 interface GarageVerificationSystemProps {
     carId: string;
@@ -24,7 +25,7 @@ export default function GarageVerificationSystem({
                 setIsVerifying(false);
                 setIsVerified(true);
                 addReputation(100);
-                Alert.alert(
+                showAlert(
                     'BUILD VERIFIED',
                     'Your vehicle specs have been officially verified. +100 REP awarded!',
                 );

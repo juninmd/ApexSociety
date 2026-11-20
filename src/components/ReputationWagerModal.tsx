@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, Alert, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput } from 'react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import CustomButton from './CustomButton';
+import { showAlert } from '../utils/alert';
 
 interface ReputationWagerModalProps {
     visible: boolean;
@@ -22,12 +23,12 @@ export default function ReputationWagerModal({
         const amount = parseInt(wagerAmount, 10);
 
         if (isNaN(amount) || amount <= 0) {
-            Alert.alert('Invalid Amount', 'Please enter a valid amount greater than 0.');
+            showAlert('Invalid Amount', 'Please enter a valid amount greater than 0.');
             return;
         }
 
         if (amount > reputation) {
-            Alert.alert('Insufficient Funds', 'You do not have enough REP for this wager.');
+            showAlert('Insufficient Funds', 'You do not have enough REP for this wager.');
             return;
         }
 
@@ -36,10 +37,10 @@ export default function ReputationWagerModal({
 
         if (won) {
             addReputation(amount);
-            Alert.alert('Race Won!', `You smoked ${rivalName} and won ${amount} REP!`);
+            showAlert('Race Won!', `You smoked ${rivalName} and won ${amount} REP!`);
         } else {
             addReputation(-amount);
-            Alert.alert('Race Lost', `You were dusted by ${rivalName}. Lost ${amount} REP.`);
+            showAlert('Race Lost', `You were dusted by ${rivalName}. Lost ${amount} REP.`);
         }
 
         onClose();

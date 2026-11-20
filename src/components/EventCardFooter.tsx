@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Users } from 'lucide-react-native';
 import * as Location from 'expo-location';
 import { theme } from '../theme';
@@ -11,6 +11,7 @@ import EventDroneRecon from './EventDroneRecon';
 import ShowAndShineVotingModal from './ShowAndShineVotingModal';
 import EventLiveFeed from './EventLiveFeed';
 import { styles } from './EventCardFooterStyles';
+import { showAlert } from '../utils/alert';
 
 interface EventCardFooterProps {
     eventId: string;
@@ -47,19 +48,19 @@ export default function EventCardFooter({
             try {
                 const { status } = await Location.requestForegroundPermissionsAsync();
                 if (status !== 'granted') {
-                    Alert.alert('Erro', 'Permissão de localização negada.');
+                    showAlert('Erro', 'Permissão de localização negada.');
                     return;
                 }
 
                 // Simulate getting location
                 await Location.getCurrentPositionAsync({});
 
-                Alert.alert('Sucesso', 'Check-in por Localização validado! +20 REP');
+                showAlert('Sucesso', 'Check-in por Localização validado! +20 REP');
                 if (addReputation) addReputation(20);
                 if (incrementHype) incrementHype(eventId);
                 setRsvp(true);
             } catch {
-                Alert.alert('Erro', 'Não foi possível verificar sua localização.');
+                showAlert('Erro', 'Não foi possível verificar sua localização.');
             }
         } else {
             if (addReputation) addReputation(10);

@@ -1,8 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, Text, Alert } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { theme } from '../theme';
 import { useTurf } from '../context/TurfContext';
 import { styles } from '../screens/CrewScreenStyles';
+import { showAlert } from '../utils/alert';
 
 interface TakeoverButtonProps {
     crewId: string;
@@ -24,13 +25,13 @@ export default function TakeoverButton({
     const handlePress = () => {
         const turfToClaim = territories.find((t) => t.crewId === crewId);
         if (!turfToClaim) {
-            Alert.alert('TURF WAR', 'This crew has no turf to claim.');
+            showAlert('TURF WAR', 'This crew has no turf to claim.');
             return;
         }
 
         if (!takeoverActive) {
             setTakeoverActive(true);
-            Alert.alert(
+            showAlert(
                 'TAKEOVER INITIATED',
                 'You have begun a Turf Takeover! Win a race on their turf to claim dominance.',
             );
@@ -38,7 +39,7 @@ export default function TakeoverButton({
             claimTurf(turfToClaim.id, 10);
             setTakeoverActive(false);
             setCooldown(60); // 60 seconds cooldown
-            Alert.alert('TAKEOVER SUCCESS', '+10% DOMINANCE CLAIMED!');
+            showAlert('TAKEOVER SUCCESS', '+10% DOMINANCE CLAIMED!');
         }
     };
 

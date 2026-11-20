@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
@@ -11,6 +11,7 @@ import EventTypeSelector from './EventTypeSelector';
 import CreateEventRiskSelector from './CreateEventRiskSelector';
 import CreateEventDateTimeInput from './CreateEventDateTimeInput';
 import { styles } from './CreateEventFormStyles';
+import { showAlert } from '../utils/alert';
 
 export default function CreateEventForm() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -27,7 +28,7 @@ export default function CreateEventForm() {
 
     const handleCreate = () => {
         if (!title || !date || !time || !location) {
-            Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios');
+            showAlert('Erro', 'Por favor, preencha todos os campos obrigatórios');
             return;
         }
         const newEvent: Event = {
@@ -44,7 +45,7 @@ export default function CreateEventForm() {
             ...(eventType === 'race' ? { riskLevel, prize } : {}),
         };
         addEvent(newEvent);
-        Alert.alert('Sucesso', 'Evento criado com sucesso!', [
+        showAlert('Sucesso', 'Evento criado com sucesso!', [
             { text: 'OK', onPress: () => navigation.goBack() },
         ]);
     };

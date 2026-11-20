@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import { Trophy, X } from 'lucide-react-native';
 import { theme } from '../theme';
 import ShowAndShineVotingList from './ShowAndShineVotingList';
 import { styles } from './ShowAndShineVotingModalStyles';
+import { showAlert } from '../utils/alert';
 
 interface ShowAndShineVotingModalProps {
     visible: boolean;
@@ -35,7 +36,7 @@ export default function ShowAndShineVotingModal({
 
     const handleVote = (carId: string) => {
         if (!selectedCategory) {
-            Alert.alert('Selecione uma Categoria', 'Por favor, escolha uma categoria primeiro.');
+            showAlert('Selecione uma Categoria', 'Por favor, escolha uma categoria primeiro.');
             return;
         }
 
@@ -43,7 +44,7 @@ export default function ShowAndShineVotingModal({
             ...prev,
             [selectedCategory]: carId,
         }));
-        Alert.alert(
+        showAlert(
             'Voto Registrado!',
             `Seu voto para ${CATEGORIES.find((c) => c.id === selectedCategory)?.name} foi computado.`,
         );

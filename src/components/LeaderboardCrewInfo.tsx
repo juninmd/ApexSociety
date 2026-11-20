@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Trophy, AlertTriangle } from 'lucide-react-native';
 import { theme } from '../theme';
 import { Crew } from '../types';
+import { showAlert } from '../utils/alert';
 
 interface LeaderboardCrewInfoProps {
     crew: Crew;
@@ -21,7 +22,7 @@ export default function LeaderboardCrewInfo({
                 <TouchableOpacity
                     style={styles.bountyButton}
                     onPress={() =>
-                        Alert.alert(
+                        showAlert(
                             'Bounty Claimed',
                             `You have challenged ${crew.name} for the bounty!`,
                         )

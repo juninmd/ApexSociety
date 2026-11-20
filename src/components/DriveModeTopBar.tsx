@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Ghost, AlertTriangle, Zap } from 'lucide-react-native';
 import HeatLevelIndicator from './HeatLevelIndicator';
 import { theme } from '../theme';
@@ -8,6 +8,7 @@ import { useHazards } from '../context/HazardContext';
 import { useReputation } from '../context/ReputationContext';
 import { Location } from '../types';
 import { styles } from './DriveModeTopBarStyles';
+import { showAlert } from '../utils/alert';
 
 interface DriveModeTopBarProps {
     isGhostMode: boolean;
@@ -28,7 +29,7 @@ export default function DriveModeTopBar({
 
     const handleDeployDecoy = () => {
         if (!currentLocation) {
-            Alert.alert('LOCATION REQUIRED', 'Cannot deploy decoy without GPS signal.');
+            showAlert('LOCATION REQUIRED', 'Cannot deploy decoy without GPS signal.');
             return;
         }
 
@@ -38,13 +39,13 @@ export default function DriveModeTopBar({
                 latitude: currentLocation.latitude + 0.01,
                 longitude: currentLocation.longitude + 0.01,
             });
-            Alert.alert(
+            showAlert(
                 'DECOY DEPLOYED',
                 'A heat flare was deployed. The police are investigating the fake call.',
                 [{ text: 'OK' }],
             );
         } else {
-            Alert.alert('INSUFFICIENT REP', 'You need 100 REP to deploy a heat decoy.');
+            showAlert('INSUFFICIENT REP', 'You need 100 REP to deploy a heat decoy.');
         }
     };
 

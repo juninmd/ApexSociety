@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { theme } from '../theme';
 import { DriveRun } from '../context/DriveHistoryContext';
 import { BarChart2, Zap } from 'lucide-react-native';
@@ -7,6 +7,7 @@ import DriveHistoryChart from './DriveHistoryChart';
 import GhostReplayMap from './GhostReplayMap';
 
 import { styles } from './DriveHistorySectionStyles';
+import { showAlert } from '../utils/alert';
 
 interface DriveHistorySectionProps {
     runs: DriveRun[];
@@ -64,7 +65,7 @@ export default function DriveHistorySection({ runs }: DriveHistorySectionProps) 
                         <TouchableOpacity
                             style={styles.challengeBtn}
                             onPress={() =>
-                                Alert.alert(
+                                showAlert(
                                     'Challenge Started',
                                     'You are now racing against the ghost run data.',
                                 )
