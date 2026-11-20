@@ -24,15 +24,11 @@ Marque corridas de rua, eventos de carro e encontros automotivos, crie sua equip
 
 ## 🌐 Live Web Version (Visualização Automática)
 
-O aplicativo foi disponibilizado na web via **Netlify** e **GitHub Pages** para facilitar a visualização de encontros e equipes diretamente pelo navegador, sem necessidade de instalação!
+O aplicativo é publicado na web via **GitHub Pages** para facilitar a visualização de encontros e equipes diretamente pelo navegador, sem necessidade de instalação!
 
-- **[🚀 Acessar Versão Netlify](https://apexsociety.netlify.app/)** (Recomendado)
-- **[Acessar Versão GitHub Pages](https://juninmd.github.io/ApexSociety/)**
+- **[🚀 Acessar Versão Web](https://juninmd.github.io/ApexSociety/)**
 
-> [!WARNING]
-> Em 2026-10-23 o endereço do Netlify respondia 404 (site não encontrado) e o do GitHub Pages respondia 200. Use o GitHub Pages até o deploy do Netlify voltar.
-
-_Os deploys para ambas as plataformas são configurados para atualizar automaticamente a cada push na branch `main`. Você também pode acionar o deploy manual para o Netlify rodando `pnpm run deploy:netlify` localmente após a build (`pnpm build:web`)._
+_O deploy é atualizado automaticamente a cada push na branch `main`._
 
 ## ✨ Features
 

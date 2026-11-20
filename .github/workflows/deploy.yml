@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
     group: 'pages'
-    cancel-in-progress: true
+    cancel-in-progress: false
 
 jobs:
     build:
@@ -44,9 +44,7 @@ jobs:
               run: pnpm test
 
             - name: Build web
-              run: pnpm build:web
-              env:
-                  GH_PAGES: 'true'
+              run: pnpm build:gh-pages
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v5
