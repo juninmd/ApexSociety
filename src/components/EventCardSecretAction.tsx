@@ -5,12 +5,12 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
-    Alert,
     ActivityIndicator,
 } from 'react-native';
 import { Lock, MapPin } from 'lucide-react-native';
 import * as Location from 'expo-location';
 import { theme } from '../theme';
+import { showAlert } from '../utils/alert';
 
 interface EventCardSecretActionProps {
     passcode?: string;
@@ -26,17 +26,17 @@ export default function EventCardSecretAction({ passcode, onUnlock }: EventCardS
         try {
             const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                Alert.alert('Erro', 'Permissão de localização negada.');
+                showAlert('Erro', 'Permissão de localização negada.');
                 setIsVerifyingLocation(false);
                 return;
             }
 
             await Location.getCurrentPositionAsync({});
 
-            Alert.alert('Sucesso', 'Você está no local do evento! Acesso liberado.');
+            showAlert('Sucesso', 'Você está no local do evento! Acesso liberado.');
             onUnlock();
         } catch {
-            Alert.alert('Erro', 'Não foi possível obter sua localização.');
+            showAlert('Erro', 'Não foi possível obter sua localização.');
         } finally {
             setIsVerifyingLocation(false);
         }
@@ -46,7 +46,7 @@ export default function EventCardSecretAction({ passcode, onUnlock }: EventCardS
         if (passcodeAttempt === passcode) {
             onUnlock();
         } else {
-            Alert.alert('Erro', 'Senha incorreta.');
+            showAlert('Erro', 'Senha incorreta.');
         }
     };
 

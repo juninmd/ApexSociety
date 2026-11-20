@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
 import { useReputation } from '../context/ReputationContext';
 import { useWeather } from '../hooks/useWeather';
+import { showAlert } from '../utils/alert';
 
 export function useTuningSimulation(defaultHp: number) {
     const [hp, setHp] = useState(defaultHp);
@@ -28,7 +28,7 @@ export function useTuningSimulation(defaultHp: number) {
 
     const handleWager = () => {
         if (isImpounded) {
-            Alert.alert(
+            showAlert(
                 'Vehicle Impounded',
                 'Your vehicle has been impounded by the police. Pay the bribe to release it.',
             );
@@ -36,15 +36,12 @@ export function useTuningSimulation(defaultHp: number) {
         }
 
         if (wear >= 100) {
-            Alert.alert(
-                'Vehicle Damaged',
-                'Your vehicle wear is at 100%. Repair it before racing.',
-            );
+            showAlert('Vehicle Damaged', 'Your vehicle wear is at 100%. Repair it before racing.');
             return;
         }
 
         if (hasWagered) {
-            Alert.alert('Wager Closed', 'You have already raced this build.');
+            showAlert('Wager Closed', 'You have already raced this build.');
             return;
         }
 
@@ -52,13 +49,13 @@ export function useTuningSimulation(defaultHp: number) {
         let effectiveHp = hp;
         if (isRaining && tires === 'Slick') {
             effectiveHp -= 150; // Severe penalty for slicks in the rain
-            Alert.alert(
+            showAlert(
                 'WEATHER PENALTY',
                 'Racing slicks in the rain caused a severe loss of traction (-150 HP equivalent)',
             );
         } else if (isFoggy && tires === 'Slick') {
             effectiveHp -= 75; // Moderate penalty for slicks in fog
-            Alert.alert(
+            showAlert(
                 'WEATHER PENALTY',
                 'Racing slicks in the fog caused reduced traction (-75 HP equivalent)',
             );
@@ -70,7 +67,7 @@ export function useTuningSimulation(defaultHp: number) {
 
         if (effectiveHp > rivalHp) {
             addReputation(500); // Win
-            Alert.alert(
+            showAlert(
                 'PINK SLIP WON',
                 'Your tuning paid off! You beat the rival and gained 500 REP.',
             );
@@ -79,12 +76,12 @@ export function useTuningSimulation(defaultHp: number) {
 
             if (Math.random() > 0.5) {
                 setIsImpounded(true);
-                Alert.alert(
+                showAlert(
                     'BUSTED & IMPOUNDED',
                     "Your build wasn't fast enough. The rival won, you lost 200 REP, and the police impounded your vehicle!",
                 );
             } else {
-                Alert.alert(
+                showAlert(
                     'BUSTED',
                     "Your build wasn't fast enough. The rival won, you lost 200 REP.",
                 );
@@ -97,14 +94,14 @@ export function useTuningSimulation(defaultHp: number) {
         addReputation(-300);
         setIsImpounded(false);
         setWear(0);
-        Alert.alert('Bribe Paid', 'You paid 300 REP to release your vehicle from the impound lot.');
+        showAlert('Bribe Paid', 'You paid 300 REP to release your vehicle from the impound lot.');
     };
 
     const handleRepair = () => {
         if (wear === 0) return;
         addReputation(-100);
         setWear(0);
-        Alert.alert('Repaired', 'Vehicle fully repaired for 100 REP.');
+        showAlert('Repaired', 'Vehicle fully repaired for 100 REP.');
     };
 
     const weatherPenalty = (isRaining || isFoggy) && tires === 'Slick';

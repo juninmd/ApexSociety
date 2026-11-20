@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, Alert } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import { useHazards } from '../context/HazardContext';
 import { ShoppingCart } from 'lucide-react-native';
 import BlackMarketItem from '../components/BlackMarketItem';
 import { styles } from './BlackMarketScreenStyles';
+import { showAlert } from '../utils/alert';
 
 const MARKET_ITEMS = [
     {
@@ -38,7 +39,7 @@ export default function BlackMarketScreen() {
 
     const handlePurchase = (item: (typeof MARKET_ITEMS)[0]) => {
         if (purchasedItems.includes(item.id)) {
-            Alert.alert('Already Owned', `You already own ${item.name}.`);
+            showAlert('Already Owned', `You already own ${item.name}.`);
             return;
         }
 
@@ -54,9 +55,9 @@ export default function BlackMarketScreen() {
             } else {
                 setPurchasedItems((prev) => [...prev, item.id]);
             }
-            Alert.alert('Purchase Successful', `You bought ${item.name} for ${item.cost} REP.`);
+            showAlert('Purchase Successful', `You bought ${item.name} for ${item.cost} REP.`);
         } else {
-            Alert.alert('Insufficient REP', `You need ${item.cost} REP to buy this item.`);
+            showAlert('Insufficient REP', `You need ${item.cost} REP to buy this item.`);
         }
     };
 

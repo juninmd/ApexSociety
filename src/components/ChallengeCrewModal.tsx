@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, Alert, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { styles } from './ChallengeCrewModalStyles';
+import { showAlert } from '../utils/alert';
 
 interface ChallengeCrewModalProps {
     visible: boolean;
@@ -21,14 +22,14 @@ export default function ChallengeCrewModal({
         const wagerAmount = parseInt(wager) || 0;
 
         if (wagerAmount < 10) {
-            Alert.alert('Erro', 'A aposta mínima é 10 REP.');
+            showAlert('Erro', 'A aposta mínima é 10 REP.');
             return;
         }
 
         if (onChallenge) {
             onChallenge(wagerAmount);
         } else {
-            Alert.alert(
+            showAlert(
                 'Desafio Enviado',
                 `Você desafiou a equipe ${crewName} para uma Turf War apostando ${wagerAmount} REP! Eles foram notificados.`,
             );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
 import { MapPin } from 'lucide-react-native';
 import { theme } from '../theme';
@@ -8,6 +8,7 @@ import { useReputation } from '../context/ReputationContext';
 import { useTurf } from '../context/TurfContext';
 import { useWeather } from '../hooks/useWeather';
 import { styles } from './GeofencedCheckInStyles';
+import { showAlert } from '../utils/alert';
 
 interface GeofencedCheckInProps {
     eventId: string;
@@ -30,7 +31,7 @@ export default function GeofencedCheckIn({
 
     const handleCheckIn = async () => {
         if (eventLatitude === undefined || eventLongitude === undefined) {
-            Alert.alert('Error', 'Event coordinates not available.');
+            showAlert('Error', 'Event coordinates not available.');
             return;
         }
 
@@ -38,7 +39,7 @@ export default function GeofencedCheckIn({
         try {
             const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                Alert.alert('Permission Denied', 'Location access is required for check-in.');
+                showAlert('Permission Denied', 'Location access is required for check-in.');
                 setChecking(false);
                 return;
             }
@@ -87,15 +88,15 @@ export default function GeofencedCheckIn({
                 }
 
                 addReputation(repAward);
-                Alert.alert(messageTitle, messageBody);
+                showAlert(messageTitle, messageBody);
             } else {
-                Alert.alert(
+                showAlert(
                     'Fora de Alcance',
                     `Você está a ${distance.toFixed(1)}km do evento. O limite é ${radiusInKm}km.`,
                 );
             }
         } catch {
-            Alert.alert('Erro', 'Não foi possível obter sua localização.');
+            showAlert('Erro', 'Não foi possível obter sua localização.');
         } finally {
             setChecking(false);
         }

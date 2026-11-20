@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Alert } from 'react-native';
 import { Circle, Marker } from 'react-native-maps';
 import { MOCK_USERS } from '../../data/mock';
 import { useTurf } from '../../context/TurfContext';
 import { getDistance } from '../../utils/location';
 import { theme } from '../../theme';
+import { showAlert } from '../../utils/alert';
 
 export default function MapTerritories() {
     const { territories, flagCrew } = useTurf();
     const [pulseState, setPulseState] = useState(false);
 
     const handleFlagTerritory = (crewId: string) => {
-        Alert.alert(
+        showAlert(
             'Flag Suspicious Activity',
             'Report this crew territory for suspicious/bribe activity to lower their standing?',
             [
@@ -21,7 +21,7 @@ export default function MapTerritories() {
                     style: 'destructive',
                     onPress: () => {
                         flagCrew(crewId, 10);
-                        Alert.alert('Territory Flagged', 'Crew standing has been penalized.');
+                        showAlert('Territory Flagged', 'Crew standing has been penalized.');
                     },
                 },
             ],

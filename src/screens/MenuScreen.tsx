@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Alert, Linking } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
 import { useNavigation, CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -9,6 +9,7 @@ import { theme } from '../theme';
 import metadata from '../constants/metadata.json';
 import { useAuth } from '../context/AuthContext';
 import { useConvoy } from '../context/ConvoyContext';
+import { showAlert } from '../utils/alert';
 
 type MenuScreenNavigationProp = CompositeNavigationProp<
     BottomTabNavigationProp<RootTabParamList, 'Menu'>,
@@ -71,7 +72,7 @@ export default function MenuScreen() {
                 />
                 <CustomButton
                     title="CONFIGURAÇÕES"
-                    onPress={() => Alert.alert('Em Breve', 'Configurações em desenvolvimento.')}
+                    onPress={() => showAlert('Em Breve', 'Configurações em desenvolvimento.')}
                     variant="secondary"
                     style={styles.button}
                 />

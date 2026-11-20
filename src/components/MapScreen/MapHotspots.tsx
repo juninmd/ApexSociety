@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Animated, Alert } from 'react-native';
+import { Animated } from 'react-native';
 import { Circle, Marker } from 'react-native-maps';
 import { MOCK_HOTSPOTS } from '../../data/mockExtra';
 import { useEvents } from '../../context/EventContext';
 import { useReputation } from '../../context/ReputationContext';
+import { showAlert } from '../../utils/alert';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -15,12 +16,9 @@ export default function MapHotspots() {
     const handleCheckIn = (id: string, name?: string) => {
         const success = checkInHotspot(id);
         if (success) {
-            Alert.alert(
-                'Flash Meet Check-In!',
-                `You earned 50 REP at ${name || 'the flash meet'}!`,
-            );
+            showAlert('Flash Meet Check-In!', `You earned 50 REP at ${name || 'the flash meet'}!`);
         } else {
-            Alert.alert('Already Checked In', 'You have already checked into this flash meet.');
+            showAlert('Already Checked In', 'You have already checked into this flash meet.');
         }
     };
 
