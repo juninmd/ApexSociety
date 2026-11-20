@@ -45,6 +45,8 @@ export default function CustomButton({
 
     return (
         <TouchableOpacity
+            // Sem role, no web vira <div tabindex> e leitores de tela nao anunciam como botao.
+            accessibilityRole="button"
             style={[styles.container, { backgroundColor: getBackgroundColor() }, style]}
             onPress={onPress}
             activeOpacity={0.8}
