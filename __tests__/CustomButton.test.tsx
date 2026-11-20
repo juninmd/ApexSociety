@@ -51,4 +51,12 @@ describe('<CustomButton />', () => {
             expect.arrayContaining([expect.objectContaining({ color: '#000000' })]),
         );
     });
+
+    it('é exposto como botão acessível com o título como nome', () => {
+        const onPressMock = jest.fn();
+        const { getByRole } = render(<CustomButton title="Entrar" onPress={onPressMock} />);
+
+        fireEvent.press(getByRole('button', { name: 'Entrar' }));
+        expect(onPressMock).toHaveBeenCalledTimes(1);
+    });
 });
