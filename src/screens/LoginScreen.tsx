@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
@@ -11,20 +11,33 @@ import { theme } from '../theme';
 export default function LoginScreen() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    const [submitting, setSubmitting] = useState(false);
     const { login } = useAuth();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+    // Erro inline: Alert.alert e no-op no react-native-web, entao no site o login falhava em silencio.
     const handleLogin = async () => {
-        if (!username) {
-            Alert.alert('Erro', 'Por favor, insira o nome de usuário.');
+        if (submitting) return;
+        if (!username.trim()) {
+            setError('Por favor, insira o nome de usuário.');
             return;
         }
+        setError(null);
+        setSubmitting(true);
         try {
-            await login(username);
+            await login(username.trim());
             // After successful login, navigation should be handled by AppNavigator observing AuthContext
-        } catch (error: unknown) {
-            Alert.alert('Erro no Login', error instanceof Error ? error.message : String(error));
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : String(err));
+        } finally {
+            setSubmitting(false);
         }
+    };
+
+    const onChangeUsername = (text: string) => {
+        setUsername(text);
+        setError(null);
     };
 
     return (
@@ -37,7 +50,7 @@ export default function LoginScreen() {
                     label="USUÁRIO"
                     placeholder="Ex: DriftKingBR"
                     value={username}
-                    onChangeText={setUsername}
+                    onChangeText={onChangeUsername}
                     autoCapitalize="none"
                 />
                 <FormInput
@@ -48,7 +61,21 @@ export default function LoginScreen() {
                     secureTextEntry
                 />
 
-                <CustomButton title="ENTRAR" onPress={handleLogin} style={styles.loginButton} />
+                {error && (
+                    <Text
+                        accessibilityRole="alert"
+                        accessibilityLiveRegion="polite"
+                        style={styles.errorText}
+                    >
+                        {error}
+                    </Text>
+                )}
+
+                <CustomButton
+                    title={submitting ? 'ENTRANDO...' : 'ENTRAR'}
+                    onPress={handleLogin}
+                    style={styles.loginButton}
+                />
 
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Signup')}
@@ -88,6 +115,12 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         marginTop: 20,
+    },
+    errorText: {
+        fontFamily: theme.fonts.secondary.bold,
+        color: theme.colors.errorText,
+        fontSize: 14,
+        textAlign: 'center',
     },
     signupLink: {
         marginTop: 30,
