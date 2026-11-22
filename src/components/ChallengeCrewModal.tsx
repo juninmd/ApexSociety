@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { styles } from './ChallengeCrewModalStyles';
 import { showAlert } from '../utils/alert';
+import { parseWager } from '../utils/parseWager';
 
 interface ChallengeCrewModalProps {
     visible: boolean;
@@ -19,7 +20,12 @@ export default function ChallengeCrewModal({
     const [wager, setWager] = useState('100');
 
     const handleChallenge = () => {
-        const wagerAmount = parseInt(wager) || 0;
+        const wagerAmount = parseWager(wager);
+
+        if (wagerAmount === null) {
+            showAlert('Erro', 'Digite a aposta só com números (ex.: 1000).');
+            return;
+        }
 
         if (wagerAmount < 10) {
             showAlert('Erro', 'A aposta mínima é 10 REP.');

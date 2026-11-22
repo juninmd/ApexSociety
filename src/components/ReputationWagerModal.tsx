@@ -4,6 +4,7 @@ import { theme } from '../theme';
 import { useReputation } from '../context/ReputationContext';
 import CustomButton from './CustomButton';
 import { showAlert } from '../utils/alert';
+import { parseWager } from '../utils/parseWager';
 
 interface ReputationWagerModalProps {
     visible: boolean;
@@ -20,9 +21,9 @@ export default function ReputationWagerModal({
     const [wagerAmount, setWagerAmount] = useState('');
 
     const handleWager = () => {
-        const amount = parseInt(wagerAmount, 10);
+        const amount = parseWager(wagerAmount);
 
-        if (isNaN(amount) || amount <= 0) {
+        if (amount === null || amount <= 0) {
             showAlert('Invalid Amount', 'Please enter a valid amount greater than 0.');
             return;
         }
