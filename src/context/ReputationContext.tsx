@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useRef, useState, ReactNode } from 'react';
 
 interface ReputationContextType {
     reputation: number;
@@ -36,7 +36,12 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     const [reputation, setReputation] = useState(420);
     const [scoutScore, setScoutScore] = useState(0);
     const [nemesisId, setNemesisId] = useState<string | null>(null);
-    const [lastActive] = useState<number>(() => Date.now());
+    // Earning, spending or checking in counts as activity and postpones the decay.
+    const [mountedAt] = useState<number>(() => Date.now());
+    const lastActiveRef = useRef<number>(mountedAt);
+    const markActive = () => {
+        lastActiveRef.current = Date.now();
+    };
     const [isDecaying, setIsDecaying] = useState(false);
     const [hasVipPass, setHasVipPass] = useState(false);
     const [checkedInHotspots, setCheckedInHotspots] = useState<string[]>([]);
@@ -54,6 +59,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     // Reputation for an event is awarded once per session, even if the card is unmounted and remounted.
     const markEventCheckedIn = (id: string) => {
         if (checkedInEvents.includes(id)) return false;
+        markActive();
         setCheckedInEvents((prev) => (prev.includes(id) ? prev : [...prev, id]));
         return true;
     };
@@ -64,6 +70,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
 
     const spendReputation = (amount: number) => {
         if (reputation >= amount) {
+            markActive();
             setReputation((prev) => prev - amount);
             return true;
         }
@@ -71,10 +78,12 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
     };
 
     const addReputation = (amount: number) => {
+        markActive();
         setReputation((prev) => prev + amount);
     };
 
     const addScoutScore = (amount: number) => {
+        markActive();
         setScoutScore((prev) => prev + amount);
     };
 
@@ -90,7 +99,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
 
         const interval = setInterval(() => {
             const now = Date.now();
-            const inactiveTime = now - lastActive;
+            const inactiveTime = now - lastActiveRef.current;
 
             // Decay kicks in if inactive for more than 5 minutes (mocking 5 days in a real app)
             if (inactiveTime > 5 * 60 * 1000) {
@@ -102,7 +111,7 @@ export const ReputationProvider: React.FC<ReputationProviderProps> = ({ children
         }, 60000); // Check every minute
 
         return () => clearInterval(interval);
-    }, [lastActive]);
+    }, []);
 
     return (
         <ReputationContext.Provider
