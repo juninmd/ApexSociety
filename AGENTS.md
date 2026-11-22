@@ -1,82 +1,47 @@
-```markdown
-# AGENTS.md - AI Coding Agent Guidelines
+# AGENTS.md
 
-These guidelines outline the structure and principles for development of AI coding agents within this repository. Adherence to these principles is crucial for maintaining a sustainable, maintainable, and reliable codebase.
+ApexSociety: React Native app built with Expo, with a map, events and crews. It also builds for the web (GitHub Pages). Owner rules (personas, 150-line file limit, strict props, no `any`, `pnpm type-check` before every change, Plan -> Act -> Validate) are in `agents.md`; follow both.
 
-## 1. DRY (Don't Repeat Yourself)
+## Stack
 
-- **Module Decomposition:** Each module or component of the agent should have a single, well-defined purpose. Avoid creating excessive abstractions or shared logic.
-- **Function Reuse:** Wherever possible, reuse existing components and algorithms. Implement common functionalities into dedicated functions or classes.
-- **Abstraction:** Use abstract classes and interfaces to define contracts for common behaviors, reducing code duplication.
-- **Consistent Naming:** Employ consistent naming conventions across the codebase to improve readability and maintainability.
+- React Native and Expo, TypeScript (strict), React Navigation, react-native-maps, react-native-web
+- pnpm 10 (`pnpm-lock.yaml`), Jest, ESLint, Husky
 
-## 2. KISS (Keep It Simple, Stupid)
+## Commands
 
-- **Minimal Complexity:** Strive for simple, easily understandable code. Avoid unnecessary complexity or convoluted logic.
-- **Readability:** Prioritize code readability. Use clear variable names, comments, and indentation.
-- **Small Functions:** Keep functions as small as reasonably possible. Each function should have a single, well-defined task.
-- **Avoid Over-Engineering:** Resist the urge to over-engineer solutions. Prioritize simplicity over cleverness.
-
-## 3. SOLID Principles
-
-- **Single Responsibility Principle:** Each class or module should have one primary responsibility.
-- **Open/Closed Principle:** The agent should be extensible without modifying its existing code. New features should be added through new classes or modules without altering the core logic.
-- **Liskov Substitution Principle:** Subclasses should be able to replace base classes without affecting the correctness of the program.
-- **Interface Segregation Principle:** Clients should not be forced to satisfy abstraction contracts they do not need.
-- **Dependency Inversion Principle:** High-level modules should not depend on low-level modules. Interfaces should define contracts.
-
-## 4. YAGNI (You Aren't Gonna Need It)
-
-- **Future-Proofing:** Only implement functionality that is currently required. Do not add features without a clear justification for their addition.
-- **Avoid Unnecessary Complexity:** Don't introduce complexity early on – build the basic structure first.
-- **Refactor Only When Needed:** Refactor only when the code is fundamentally broken and doesn’t solve a problem.
-
-## 5. Development Workflow & Practices
-
-- **Unit Testing:** All code must be thoroughly unit tested to verify its functionality. Test cases should cover all critical scenarios.
-- **Code Reviews:** All changes should undergo mandatory code reviews by at least two developers before being merged.
-- **Documentation:** Document all functions, classes, and modules with clear and concise comments explaining their purpose and usage.
-- **Version Control:** Use Git for version control and adhere strictly to branching strategies.
-- **Static Analysis:** Utilize static analysis tools to identify potential bugs and code smells.
-
-## 6. Code Structure & File Size
-
-- **Maximum Code Length:** Each file shall not exceed 180 lines of code.
-- **Modular File Design:** Files should be logically grouped based on functionality or scope. Consider using a hierarchical file structure.
-- **File Organization:** Follow a consistent file naming convention.
-
-## 7. Test Coverage Requirements
-
-- **Target Coverage:** Achieve at least 80% test coverage across all files.
-- **Test Data:** Use realistic and representative test data to simulate real-world scenarios.
-- **Test Cases:** Create comprehensive test cases covering various input conditions and expected outputs.
-
-## 8. Tools & Technologies
-
-- Use a language and framework suitable for the agent’s purpose (specify language and framework).
-- Employ appropriate testing frameworks and tools (specify framework and tools).
-
-## 9. Example Code Structure (Illustrative)
+```bash
+pnpm install
+pnpm start            # Expo dev server
+pnpm android | pnpm ios | pnpm web
+pnpm type-check       # tsc --noEmit
+pnpm lint             # eslint .
+pnpm test             # jest
+pnpm test:ci          # jest --ci --coverage
+pnpm build:web        # expo export -p web
+pnpm build:gh-pages   # web build for GitHub Pages + 404 copy
+pnpm test:e2e         # build:web, then e2e/run-e2e.mjs
+scripts/validate.sh   # full suite: install, lint, type-check, tests
 ```
 
-agents.md
-├── **init**.py
-├── module1.py
-├── module2.py
-├── utils.py
-├── data_processing.py
-└── ...
+`preweb`, `prebuild:web` and `prebuild:gh-pages` regenerate HTML metadata, sitemap and security.txt before the build.
 
-```
+## Structure
 
-## 10.  Reporting and Metrics
+- `src/screens/` - one file per screen; `MapScreen.native.tsx` and `MapScreen.web.tsx` split by platform
+- `src/components/` - UI, including `MapScreen/` (13 files), `tuning/` and `WebLanding/`
+- `src/hooks/`, `src/context/` - app state and logic
+- `src/navigation/`, `src/theme/`, `src/types/`, `src/constants/`, `src/data/`, `src/utils/`
+- `__tests__/` - Jest suites
+- `e2e/` - browser run against the web build, with screenshots
+- `scripts/` - build helpers (metadata, sitemap, 404 copy)
+- `.github/workflows/` - `validate.yml` (lint, type-check, test), `deploy.yml` (GitHub Pages on push to `main`), `sast.yml`, `security.yml`
 
-*   **Code Quality Metrics:** Track code complexity metrics (cyclomatic complexity, etc.) using tools.
-*   **Test Coverage Reports:** Generate regular test coverage reports.
-*   **Review Feedback:**  Actively solicit and respond to feedback from reviewers.
+## Conventions
 
-These guidelines are designed to promote high-quality, maintainable, and reliable AI coding agent development. Consistent application of these principles will significantly improve the overall stability and usefulness of this project.
-```
+- Test coverage target is 80%. It is not enforced: `jest.config.js` has no `coverageThreshold`.
+- At least two reviewers before merge (process rule kept from the previous AGENTS.md).
+- Check `package.json` for dependency compatibility before adding a library.
+- Platform-specific code uses the `.native.tsx` and `.web.tsx` suffixes.
 
 <!-- base-actions-main-policy -->
 ## GitHub Actions — padrão obrigatório (@main)
@@ -89,3 +54,9 @@ These guidelines are designed to promote high-quality, maintainable, and reliabl
 - PRs cujos checks não iniciam por billing/spending limit são mesclados pelo bot central
   `juninmd/base-actions/.github/workflows/auto-merge-billing-blocked.yml`.
   Para impedir o merge automático de um PR, aplique a label `do-not-merge`.
+
+## Gotchas
+
+- Two agent docs exist at the root: `AGENTS.md` (this file) and `agents.md` (owner rules). Names differ only by case, which collides on case-insensitive filesystems (macOS, Windows). Keep them distinct until the owner merges them.
+- Never commit keystores (`.jks`, `.p12`, `.keystore`) or `*.mobileprovision`; they are ignored in `.gitignore`.
+- `.agent/` holds Android build rules for release work; read `.agent/rules/android_build.md` before changing signing or CI.
