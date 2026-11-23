@@ -8,7 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DIST = path.join(process.cwd(), 'dist');
+const DIST = path.resolve(process.cwd(), 'dist');
 const SHOTS = path.join(__dirname, 'screenshots');
 const PORT = 8099;
 
@@ -28,8 +28,21 @@ const MIME = {
 function serve() {
     return http
         .createServer((req, res) => {
-            const urlPath = decodeURIComponent(req.url.split('?')[0]);
-            let filePath = path.join(DIST, urlPath);
+            let urlPath;
+            try {
+                urlPath = decodeURIComponent(req.url.split('?')[0]);
+            } catch {
+                res.writeHead(400);
+                res.end('bad request');
+                return;
+            }
+            // Resolve and confine to dist/: "/..%2f..%2fpackage.json" must not escape the build folder.
+            let filePath = path.resolve(DIST, '.' + urlPath);
+            if (filePath !== DIST && !filePath.startsWith(DIST + path.sep)) {
+                res.writeHead(403);
+                res.end('forbidden');
+                return;
+            }
             if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
                 const asHtml = path.join(DIST, urlPath + '.html');
                 filePath = fs.existsSync(asHtml) ? asHtml : path.join(DIST, 'index.html');
@@ -46,7 +59,8 @@ function serve() {
                 res.end(data);
             });
         })
-        .listen(PORT);
+        // Loopback only: the E2E server must not be reachable from the network.
+        .listen(PORT, '127.0.0.1');
 }
 
 async function main() {
@@ -54,7 +68,7 @@ async function main() {
     const server = serve();
     const browser = await chromium.launch();
     const page = await browser.newPage({ viewport: { width: 420, height: 900 } });
-    const base = `http://localhost:${PORT}`;
+    const base = `http://127.0.0.1:${PORT}`;
     const shot = async (name) => {
         await page.screenshot({ path: path.join(SHOTS, `${name}.png`), fullPage: true });
         console.log(`captured ${name}`);
