@@ -1,4 +1,4 @@
 Contact: mailto:security@apexsociety.com
-Expires: 2026-12-31T23:59:59Z
+Expires: 2027-11-23T02:28:11Z
 Preferred-Languages: en
 Canonical: https://juninmd.github.io/ApexSociety/.well-known/security.txt

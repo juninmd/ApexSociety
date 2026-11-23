@@ -48,9 +48,14 @@ try {
             .replace(/\n/g, '\n        '), // Indent for proper HTML formatting
     };
 
+    // Values land in attributes and text; JSON_LD is already escaped for its <script> context.
+    const escapeHtml = (v: string) =>
+        v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
     Object.entries(replacements).forEach(([placeholder, value]) => {
+        const safe = placeholder === '{{JSON_LD}}' ? value || '' : escapeHtml(value || '');
         // Replace all occurrences using split/join as a global replace
-        html = html.split(placeholder).join(value || '');
+        html = html.split(placeholder).join(safe);
     });
 
     fs.writeFileSync(outputPath, html, 'utf8');
