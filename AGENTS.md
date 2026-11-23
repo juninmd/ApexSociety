@@ -39,7 +39,7 @@ scripts/validate.sh   # full suite: install, lint, type-check, tests
 ## Conventions
 
 - Test coverage target is 80%. It is not enforced: `jest.config.js` has no `coverageThreshold`.
-- At least two reviewers before merge (process rule kept from the previous AGENTS.md).
+- Antonio (juninmd) is the sole maintainer: no minimum reviewer count; merge once CI is green and the change is reviewed.
 - Check `package.json` for dependency compatibility before adding a library.
 - Platform-specific code uses the `.native.tsx` and `.web.tsx` suffixes.
 
