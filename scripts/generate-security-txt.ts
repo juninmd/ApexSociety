@@ -14,8 +14,11 @@ try {
     // Remove trailing slash if present for consistency
     const cleanHomepage = homepage.endsWith('/') ? homepage.slice(0, -1) : homepage;
 
+    // RFC 9116: Expires must stay in the future (and under a year), so derive it from the build date.
+    const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z');
+
     const securityTxtContent = `Contact: mailto:security@apexsociety.com
-Expires: 2026-12-31T23:59:59Z
+Expires: ${expires}
 Preferred-Languages: en
 Canonical: ${cleanHomepage}/.well-known/security.txt
 `;
